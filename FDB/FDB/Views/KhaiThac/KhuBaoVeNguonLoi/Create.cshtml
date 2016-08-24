@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "Khu bảo vệ nguồn lợi thủy sản";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+
+        <div class="form-group">
+            <div class="col-md-2 control-label">Tên khu bảo vệ nguồn lợi</div>
+            <div class="col-md-10">
+                <input type="text" value="Nam Du" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2 control-label">Địa chỉ</div>
+            <div class="col-md-10">
+                <input type="text" value="Cam Ranh, Khánh Hòa" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2 control-label">Tổng diện tích (ha)</div>
+            <div class="col-md-10">
+                <input type="text" value="15000" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2 control-label">Thời gian cấm đánh bắt</div>
+            <div class="col-md-10">
+                <input type="text" value="01/11/2015" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2 control-label"></div>
+            <div class="col-md-10">
+                <input type="text" value="31/12/2015" class="form-control" />
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <div class="col-md-2 control-label">Đối tượng cấm khai thác</div>
+            <div class="col-md-10">
+                <textarea class="form-control fdb_textarea">Tôm, cua, ghẹ, mực</textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Cập nhật" class="btn btn-primary" />
+                &nbsp;
+                @Html.ActionLink("Quay lại", "Index")
+            </div>
+        </div>
+    </div>
+}

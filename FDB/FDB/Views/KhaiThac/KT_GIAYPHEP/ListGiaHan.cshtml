@@ -1,0 +1,254 @@
+﻿@model FDB.Models.ViewModelSearchKT_GIAYPHEP
+@using PagedList.Mvc;
+@using FDB.Helpers;
+
+@{
+    ViewBag.Title = "Danh sách giấy phép hết hạn";
+}
+
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/datepicker.js"></script>
+<script>
+    $(document).ready(function () {
+        // mask edit cho truong ngay thang (su dung jquery.maskedinput)
+        $("#NGAY_GP_TU").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#NGAY_GP_DEN").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#NGAY_HL_TU").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#NGAY_HL_DEN").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#NGAY_HHL_TU").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#NGAY_HHL_DEN").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+
+    });
+</script>
+
+
+<div class="container fdb-div-content fdb-div-corner-all">
+
+    <h3 class="text-center fdb-title-search-form">Danh sách giấy phép khai thác hết hạn</h3>
+
+
+    @using (Html.BeginForm("ListGiaHan", "KT_GIAYPHEP", FormMethod.Get))
+    {
+
+        <br />
+        <fieldset class="fdb-scheduler-border">
+            <legend class="fdb-scheduler-search-border">Chỉ tiêu tìm kiếm</legend>
+            <div class="row">
+                <div class="col-md-2 control-label">
+                    Số đăng ký
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.SO_DK, new { @class = "form-control" })
+                </div>
+                <div class="col-md-2 control-label">
+                    Số giấy phép
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.SO_GP, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Tỉnh/thành phố
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.MA_TINHTP, (SelectList)ViewBag.TINH_THANHPHOs, string.Empty, new { @class = "form-control" })
+                </div>
+                <div class="col-md-2 control-label">
+                    Cảng đăng ký
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.CANG_DANG_KY, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Ngày cấp từ
+                </div>
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.NGAY_GP_TU)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Đến
+                </div>
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.NGAY_GP_DEN)
+                </div>
+            </div>
+
+            @*<div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Ngày hiệu lực từ
+                    </div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.NGAY_HL_TU)
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        Đến
+                    </div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.NGAY_HL_DEN)
+                    </div>
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Ngày hết hiệu lực từ
+                    </div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.NGAY_HHL_TU)
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        Đến
+                    </div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.NGAY_HHL_DEN)
+                    </div>
+                </div>*@
+
+            <p class="margin-top-05">
+                <button type="submit" class="btn btn-primary btn-sm">
+                    <span class="glyphicon glyphicon-search"></span> Tìm kiếm
+                </button>
+                <button type="submit" class="btn btn-primary btn-sm" name="SearchButton" value="Xuất Excel">
+                    <i class='fa fa-file-excel-o'></i> Xuất Excel
+                </button>
+                
+            </p>
+        </fieldset>
+    }
+
+    <fieldset class="fdb-scheduler-border">
+        <legend class="fdb-scheduler-search-border">Kết quả tìm kiếm</legend>
+        <label id="lblMessageTotal" style="color:blue; font-weight:bold">Tổng số bản ghi: @ViewBag.TotalRow</label>
+        <table class="table table-hover table-bordered table-condensed">
+            <tr>
+                <th>
+                    Số giấy phép
+                </th>
+                <th>
+                    Số đăng ký
+                </th>
+                <th>
+                    Tên tàu
+                </th>
+                <th>
+                    Chủ tàu
+                </th>
+                <th>
+                    Ngày cấp
+                </th>
+                <th>
+                    Ngày hiệu lực
+                </th>
+                <th>
+                    Ngày hết hạn
+                </th>
+                <th>
+                    Tỉnh/TP
+                </th>
+                <th></th>
+            </tr>
+            @{
+                if (Model.SearchResults != null)
+                {
+                    foreach (var item in Model.SearchResults)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(m => item.SO_GP)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.SO_DK)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.TEN_TAU)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.CHU_PHUONG_TIEN)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.NGAY_GP)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.NGAY_HL_GP)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.NGAY_HHL_GP)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.DTINHTP.TEN_TINHTP)
+                            </td>
+                            <td>
+                                <div class="pull-right">
+
+                                    @*<a href="@Url.Action("Details", "KT_GIAYPHEP", new { id = item.KT_GIAYPHEPID })" data-modal="">
+                                        <img src="@Url.Content("~/fonts/grid-view-icon.png")" title="Xem chi tiết" />
+                                    </a>*@
+
+                                    <a href="@Url.Action("GiaHan", "KT_GIAYPHEP", new { id = item.KT_GIAYPHEPID })">
+                                        <img src="@Url.Content("~/fonts/grid-approve-icon.png")" title="Gia hạn giấy phép" />
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+                }
+            }
+
+        </table>
+    </fieldset>
+
+
+
+    <div class="pagination-sm">
+        @Html.PagedListPager(Model.SearchResults, page => Url.Action("Index", new
+   {
+       page,
+       Model.SO_GP,
+       Model.SO_DK,
+       Model.MA_TINHTP,
+       Model.CANG_DANG_KY,
+       Model.NGAY_GP_TU,
+       Model.NGAY_GP_DEN,
+       Model.NGAY_HL_TU,
+       Model.NGAY_HL_DEN,
+       Model.NGAY_HHL_TU,
+       Model.NGAY_HHL_DEN
+   }))
+    </div>
+
+</div>
+
+
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- delete modal placeholder-->
+<div id='deleteModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='deleteModalContent'></div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/modalform")
+}

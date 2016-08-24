@@ -1,0 +1,105 @@
+﻿@{
+    ViewBag.Title = "Cảng cá";
+}
+
+<h3 class="text-center">Thông tin cảng cá</h3>
+<hr />
+
+<div class="container">
+    @using (Html.BeginForm("Index", "ThongTinCangCa", FormMethod.Get))
+    {
+        <div class="row">
+            <div class="col-md-2 control-label">
+                Tên cảng
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" />
+            </div>
+
+            <div class="col-md-2 control-label">
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+
+        <div class="row margin-top-05">
+            <div class="col-md-2 control-label">
+                Ngày
+            </div>
+            <div class="col-md-4">
+                <input type="text" value="20/07/2015" class="form-control" />
+            </div>
+
+            <div class="col-md-2 control-label">
+
+            </div>
+            <div class="col-md-4">
+                <input type="text" value="26/07/2015" class="form-control" />
+            </div>
+        </div>
+
+        <p class="margin-top-05">
+            <input type="submit" value="Tìm kiếm" class="btn btn-primary btn-sm" />
+            @Html.ActionLink("Thêm mới", "Create", null, new { @class = "btn btn-primary btn-sm" })
+            @Html.ActionLink("Xuất Excel", "ExportExcel", null, new { @class = "btn btn-primary btn-sm" })
+        </p>
+    }
+
+
+    <table class="table table-hover table-bordered table-condensed">
+        <tr>
+            <th>
+                Tên cảng
+            </th>
+            <th>
+                Tổng lượng hàng qua cảng
+            </th>
+            <th>
+                Sản lượng thủy sản
+            </th>
+            <th>
+                Số lượt tàu cập cảng
+            </th>
+            <th>
+                Ngày ghi nhận
+            </th>
+            <th></th>
+        </tr>
+        @{
+            for (var i = 0; i < 5; i++)
+            {
+                <tr>
+                    <td>
+                        Cảng Tam Quan
+                    </td>
+                    <td>
+                        2500
+                    </td>
+                    <td>
+                        2200
+                    </td>
+                    <td>
+                        500
+                    </td>
+                    <td>
+                        25/11/2015
+                    </td>
+                    <td>
+                        <a href="#">
+                            <img src="@Url.Content("~/fonts/btn-details.png")" />
+                        </a>
+
+                        <a href="#">
+                            <img src="@Url.Content("~/fonts/btn-delete.png")" />
+                        </a>
+                    </td>
+                </tr>
+            }
+
+        }
+
+    </table>
+
+
+
+</div>

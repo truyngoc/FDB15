@@ -1,0 +1,39 @@
+﻿@model FDB.Models.RoleViewModel
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <br />
+    <h4>Bạn có chắc chắn muốn xóa quyền này không ?</h4>
+    <div>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.RoleName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.RoleName)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+        </dl>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-group no-color">
+                <button type="submit" class="btn btn-danger btn-sm">
+                    <span class="glyphicon glyphicon-trash"></span> Đồng ý
+                </button>
+                &nbsp;&nbsp;
+                @Html.ActionLink("Quay lại", "Index", "Roles", null, new { @class = "btn btn-primary btn-sm" })
+            </div>
+        }
+    </div>
+</div>

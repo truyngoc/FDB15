@@ -1,0 +1,29 @@
+﻿@model FDB.Models.Group
+@{ ViewBag.Title = "Delete"; }
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <h4>Bạn có chắc chắn muốn xóa nhóm này không ?</h4>
+    <div>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+        </dl>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-actions no-color">
+                <button type="submit" class="btn btn-danger btn-sm">
+                    <span class="glyphicon glyphicon-trash"></span> Đồng ý
+                </button>
+                &nbsp;&nbsp;
+                @Html.ActionLink("Quay lại", "Index", "Groups", null, new { @class = "btn btn-primary btn-sm" })
+            </div>
+            <br />
+        }
+    </div>
+</div>

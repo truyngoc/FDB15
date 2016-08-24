@@ -1,0 +1,275 @@
+﻿@{
+    ViewBag.Title = "Tàu thuyền";
+}
+
+<h3 class="text-center">Danh sách đăng ký tàu thuyền</h3>
+<br />
+
+<div class="container">
+    @using (Html.BeginForm("Index", "TauThuyen", FormMethod.Get))
+    {
+        <div class="row">
+            <div class="col-md-2 control-label">
+                Số đăng ký
+            </div>
+            <div class="col-md-4">
+                <input type="text" value="" class="form-control" />
+            </div>
+            <div class="col-md-2 control-label">
+                Chủ phương tiện
+            </div>
+            <div class="col-md-4">
+                <input type="text" value="" class="form-control" />
+            </div>
+        </div>
+
+        <div class="row margin-top-05">
+            <div class="col-md-2 control-label">
+                Tỉnh/thành phố
+            </div>
+            <div class="col-md-4">
+                <select class="form-control">
+                    <option value="">Khánh Hòa</option>
+                    <option value="">Phú Yên</option>
+                    <option value="">...</option>
+                </select>
+            </div>
+            <div class="col-md-2 control-label">
+                Huyện
+            </div>
+            <div class="col-md-4">
+                <select class="form-control">
+                    <option value="">Cam Ranh</option>
+                    <option value="">Nha Trang</option>
+                    <option value="">Ba Ngòi</option>
+                    <option value="">...</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row margin-top-05">
+            <div class="col-md-2 control-label">
+                Xã/phường
+            </div>
+            <div class="col-md-4">
+                <select class="form-control">
+                    <option value="">Tô Châu</option>
+                    <option value="">Mường Thanh</option>
+                    <option value="">...</option>
+                </select>
+            </div>
+            <div class="col-md-2 control-label">
+                Công dụng tàu cá
+            </div>
+            <div class="col-md-4">
+                <select class="form-control">
+                    <option value="">Hậu cần dịch vụ</option>
+                    <option value="">Khai thác thủy sản</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row margin-top-05">
+            <div class="col-md-2 control-label">
+                Nhóm tàu
+            </div>
+            <div class="col-md-4">
+                <select class="form-control">
+                    <option value="">Không lắp máy</option>
+                    <option value="">Lắp máy dưới 20cv</option>
+                    <option value="">Từ 20 - &lt; 50cv</option>
+                    <option value="">...</option>
+                </select>
+            </div>
+            <div class="col-md-2 control-label">
+                Tình trạng tàu
+            </div>
+            <div class="col-md-4">
+                <select class="form-control">
+                    <option value="">Đóng mới</option>
+                    <option value="">Mua lại</option>
+                    <option value="">Giải bản</option>
+                    <option value="">Bán</option>
+                </select>
+            </div>
+        </div>
+
+        @*<div class="row margin-top-05">
+            <div class="col-md-2 control-label">
+                Đăng kiểm
+            </div>
+            <div class="col-md-4">
+                <select class="form-control">
+                    <option value="">Chưa đăng kiểm</option>
+                    <option value="">Lần đầu</option>
+                    <option value="">Đăng kiểm lại</option>
+                </select>
+            </div>
+            <div class="col-md-2 control-label">
+                Tình trạng đăng kiểm
+            </div>
+            <div class="col-md-4">
+                <select class="form-control">
+                    <option value="">Thỏa mãn</option>
+                    <option value="">Hạn chế</option>
+                    <option value="">Cấm hoạt động</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row margin-top-05">
+            <div class="col-md-2 control-label">
+                Hết hạn đăng kiểm
+            </div>
+            <div class="col-md-4">
+                <input type="checkbox" checked />
+            </div>
+
+            <div class="col-md-2 control-label">
+                Hết hạn GPKT
+            </div>
+            <div class="col-md-4">
+                <input type="checkbox"/>
+            </div>
+        </div>
+        
+        <div class="row margin-top-05">
+            <div class="col-md-2 control-label">
+                Ngày cấp phép từ
+            </div>
+            <div class="col-md-4">
+                <input type="text" value="" class="form-control" />
+            </div>
+
+            <div class="col-md-2 control-label">
+                Đến
+            </div>
+            <div class="col-md-4">
+                <input type="text" value="" class="form-control" />
+            </div>
+        </div>*@
+        
+        <div class="row margin-top-05">
+            <div class="col-md-2 control-label">
+                Công suất từ
+            </div>
+            <div class="col-md-4">
+                <input type="text" value="" class="form-control" />
+            </div>
+
+            <div class="col-md-2 control-label">
+                Đến
+            </div>
+            <div class="col-md-4">
+                <input type="text" value="" class="form-control" />
+            </div>
+        </div>
+        
+        <div class="row margin-top-05">
+            <div class="col-md-2 control-label">
+                Nghề chính
+            </div>
+            <div class="col-md-4">
+                <select class="form-control">
+                    <option value="">Vây</option>
+                    <option value="">Rê</option>
+                    <option value="">Câu</option>
+                    <option value="">Kéo</option>
+                    <option value="">Chụp mực</option>
+                </select>
+            </div>
+
+            <div class="col-md-2 control-label">
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+        
+        <p class="margin-top-05">
+            <input type="submit" value="Tìm kiếm" class="btn btn-primary btn-sm" />
+            @Html.ActionLink("Thêm mới", "Create", null, new { @class = "btn btn-primary btn-sm" })
+            @Html.ActionLink("Xuất Excel", "ExportExcel", null, new { @class = "btn btn-primary btn-sm" })
+        </p>
+    }
+
+    <table class="table table-hover table-bordered table-condensed">
+        <tr>
+            <th>
+                Số đăng ký
+            </th>
+            <th>
+                Ngày đăng ký
+            </th>
+            <th>
+                Chủ phương tiện
+            </th>
+            <th>
+                Địa chỉ
+            </th>
+            <th>
+                Tên tàu
+            </th>
+            <th>
+                Nhóm tàu
+            </th>
+            <th>
+                Công suất tàu
+            </th>
+            <th>
+                Tình trạng tàu
+            </th>
+            <th>
+                Vật liệu vỏ
+            </th>
+            <th></th>
+        </tr>
+        @{
+            for (var i = 0; i < 5; i++)
+            {
+                <tr>
+                    <td>
+                        ĐK05234
+                    </td>
+                    <td>
+                        20/02/2016
+                    </td>
+                    <td>
+                        Trần Văn Truyền
+                    </td>
+                    <td>
+                        Hà đông - Hà Nội
+                    </td>
+                    <td>
+                        Trường Sa
+                    </td>
+                    <td>
+                        Từ 20 - &lt;50cv
+                    </td>
+                    <td>
+                        50
+                    </td>
+                    <td>
+                        Đóng mới
+                    </td>
+                    <td>
+                       Thép
+                    </td>
+                    <td>
+                        <a href="#">
+                            @*<img src="@Url.Content("~/fonts/button-edit-icon.png")" title="Sửa" />*@
+                            @Html.ImageActionLink("Sửa", "Create", "TauThuyen", null, null, @Url.Content("~/fonts/button-edit-icon.png"))
+                        </a>
+
+                        <a href="#">
+                            <img src="@Url.Content("~/fonts/delete.gif")" title="Xóa" />
+                        </a>
+                    </td>
+                </tr>
+            }
+
+        }
+
+    </table>
+
+
+</div>

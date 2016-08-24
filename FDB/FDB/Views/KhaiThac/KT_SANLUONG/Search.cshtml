@@ -1,0 +1,320 @@
+﻿@model FDB.Models.ViewModelSearchKT_SANLUONG_TRUCTIEP
+@using PagedList.Mvc;
+@using FDB.Helpers;
+@using FDB.Models
+@using FDB.DataAccessLayer
+
+@{
+    ViewBag.Title = "Báo cáo sản lượng trực tiếp";
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/datepicker.js"></script>
+
+<div class="container fdb-div-content fdb-div-corner-all">
+
+    <h3 class="text-center fdb-title-search-form">Báo cáo sản lượng trực tiếp</h3>
+
+
+    @using (Html.BeginForm("Search", "KT_SANLUONG", FormMethod.Get))
+    {
+
+        <br />
+        <fieldset class="fdb-scheduler-border">
+            <legend class="fdb-scheduler-search-border">Chỉ tiêu thống kê</legend>
+
+            <div class="row margin-top-05">
+
+                <div class="col-md-2 control-label">
+                    Năm
+                </div>
+                <div class="col-md-2">
+                    @Html.DropDownListFor(model => model.Nam, new List<SelectListItem>
+                    {
+                                        new SelectListItem() {Text = "2010", Value="2010"},
+                                        new SelectListItem() {Text = "2011", Value="2011"},
+                                        new SelectListItem() {Text = "2012", Value="2012"},
+                                        new SelectListItem() {Text = "2013", Value="2013"},
+                                        new SelectListItem() {Text = "2014", Value="2014"},
+                                        new SelectListItem() {Text = "2015", Value="2015"},
+                                        new SelectListItem() {Text = "2016", Value="2016"},
+                                        new SelectListItem() {Text = "2017", Value="2017"},
+                                        new SelectListItem() {Text = "2018", Value="2018"},
+                                        new SelectListItem() {Text = "2019", Value="2019"},
+                                        new SelectListItem() {Text = "2020", Value="2020"},
+                                        new SelectListItem() {Text = "2021", Value="2021"},
+                                        new SelectListItem() {Text = "2022", Value="2022"},
+                                        new SelectListItem() {Text = "2023", Value="2023"},
+                                        new SelectListItem() {Text = "2024", Value="2024"},
+                                        new SelectListItem() {Text = "2025", Value="2025"},
+                                        new SelectListItem() {Text = "2026", Value="2026"},
+                                        new SelectListItem() {Text = "2027", Value="2027"},
+                                        new SelectListItem() {Text = "2028", Value="2028"},
+                                        new SelectListItem() {Text = "2029", Value="2029"},
+                                        new SelectListItem() {Text = "2030", Value="2030"}
+                    }, new { @class = "form-control" })
+                </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-2 control-label">
+                    Tháng
+                </div>
+                <div class="col-md-2">
+                    @Html.DropDownListFor(model => model.Thang, new List<SelectListItem>
+                    {
+                                        new SelectListItem() {Text = "Tháng 1", Value="1"},
+                                        new SelectListItem() {Text = "Tháng 2", Value="2"},
+                                        new SelectListItem() {Text = "Tháng 3", Value="3"},
+                                        new SelectListItem() {Text = "Tháng 4", Value="4"},
+                                        new SelectListItem() {Text = "Tháng 5", Value="5"},
+                                        new SelectListItem() {Text = "Tháng 6", Value="6"},
+                                        new SelectListItem() {Text = "Tháng 7", Value="7"},
+                                        new SelectListItem() {Text = "Tháng 8", Value="8"},
+                                        new SelectListItem() {Text = "Tháng 9", Value="9"},
+                                        new SelectListItem() {Text = "Tháng 10", Value="10"},
+                                        new SelectListItem() {Text = "Tháng 11", Value="11"},
+                                        new SelectListItem() {Text = "Tháng 12", Value="12"}
+                    }, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Tỉnh/TP
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.TinhTP, (SelectList)ViewBag.TINH_THANHPHOs, string.Empty, new { @class = "form-control" })
+                </div>
+                <div class="col-md-2 control-label">
+                    Thống kê SL theo:
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.LoaiThongKe, new List<SelectListItem>
+                    {
+                                        new SelectListItem() {Text = "Theo nhóm nghề", Value="1"},
+                                        new SelectListItem() {Text = "Theo nhóm loài", Value="2"}
+
+                    }, new { @class = "form-control" })
+                </div>
+            </div>
+
+
+            <p class="margin-top-05">
+                <button type="submit" class="btn btn-primary btn-sm" name="SearchButton" value="Tìm kiếm">
+                    <span class="glyphicon glyphicon-search"></span> Báo cáo sản lượng
+                </button>
+
+                @*@Html.NoEncodeActionLink("<span class='glyphicon glyphicon-plus'></span> Tính sản lượng theo FAO", "Tính sản lượng theo FAO", "KTSanLuongFAO", "KT_SANLUONG_FAO", null, htmlAttributes: new { @class = "btn btn-primary btn-sm" })
+                    @Html.NoEncodeActionLink("<i class='fa fa-file-excel-o'></i> Export Excel", "Export Excel", "ExportExcel", "KT_SANLUONG_FAO", null, htmlAttributes: new { @class = "btn btn-primary btn-sm" })*@
+            </p>
+
+        </fieldset>
+    }
+    <style type="text/css">
+        /*table {
+            min-width: 100%;
+        }
+
+            table th {
+                border: 1px solid silver;
+                position: relative;
+            }
+
+                table th#crossed {
+                    background-image: linear-gradient(to top right, transparent calc(50% - 1px), white, transparent calc(50% + 1px));
+                }*/
+        div#container {
+            /*width: 200px;*/
+            /*height: 50px;*/
+            padding-top: 30px;
+        }
+
+
+        div#line {
+            position: relative;
+            z-index: 1;
+            left: 0px;
+            top: -15px;
+            height: 1px;
+            background-color: #000;
+            transform: rotate(6deg);
+            -ms-transform: rotate(6deg); /* IE 9 */
+            -webkit-transform: rotate(6deg); /* Safari and Chrome */
+        }
+    </style>
+
+    <fieldset class="fdb-scheduler-border">
+        <legend class="fdb-scheduler-search-border">@ViewBag.strTitle</legend>
+        <label id="lblMessageTotal" style="color:blue; font-weight:bold"></label>
+
+        @{
+
+            if (Model.San_Luong_Theo_Nghe != null)
+            {
+                string _MA_TTP = Model.TinhTP;
+                int _THANG = Model.Thang.Value;
+                int _NAM = Model.Nam.Value;
+
+                FDBContext _db = new FDBContext();
+                List<DM_NHOMNGHE> _lstDMNhomNghe = _db.DM_NHOMNGHE.ToList();
+                List<DNHOM_TAU> _lstDMNhomTau = _db.DNHOM_TAU.ToList();
+                List<DM_NHOMDOITUONG_KT> _lstDMNHOM_DT_KT = _db.DM_NHOMDOITUONG_KT.ToList();
+
+
+
+
+
+
+                if (Model.LoaiThongKe == 1)
+                {
+                    <table class="table table-hover table-bordered table-condensed">
+                        <tr>
+                            <th rowspan="2" style="height: 30px; width: 16.666666666666664%; position:relative; border: 1px solid #4f93e3; ">
+                                <div id="container">
+                                    <div id="line"></div>
+
+                                </div>
+                                <span style="position:absolute; top:5px; right:30px;">Nghề</span>
+                                <span style="position:absolute; bottom:5px; left:30px;">Nhóm tàu</span>
+
+                            </th>
+                            @foreach (var columnNghe in _lstDMNhomNghe)
+                            {
+                                <th valign="middle" style="text-align: center;text-align: center; width: 8.333333333333332%; border: 1px solid #4f93e3; ">
+                                    @columnNghe.TenNhomNghe
+                                    <br />
+                                    (kg)
+                                </th>
+                            }
+                        </tr>
+                        <tr></tr>
+                        @foreach (var rowNhomTau in _lstDMNhomTau)
+                        {
+                            <tr>
+                                <td style="text-align:left">@rowNhomTau.Name</td>
+                                @foreach (var columnNghe1 in _lstDMNhomNghe)
+                                {
+                                    <td style="text-align:right">
+                                        @String.Format(Model.San_Luong_Theo_Nghe[_MA_TTP + "#" + _THANG.ToString() + "#" + _NAM.ToString() + "#" + rowNhomTau.ID.ToString() + "#" + columnNghe1.DM_NhomNgheID.ToString()] > 0
+                                             ? "{0:0,0.##}" : "{0:0.#}"
+                                             , Model.San_Luong_Theo_Nghe[_MA_TTP + "#" + _THANG.ToString() + "#" + _NAM.ToString() + "#" + rowNhomTau.ID.ToString() + "#" + columnNghe1.DM_NhomNgheID.ToString()])
+                                    </td>
+                                }
+                            </tr>
+                        }
+                        <tr></tr>
+
+                        <tr>
+                            <td style="text-align:left; font-size:12px; font-weight:bold">
+                                Tổng sản lượng theo nhóm nghề:
+                            </td>
+                            @foreach (var columnNghe in _lstDMNhomNghe)
+                            {
+                                <td style="text-align:right; font-size:14px; font-weight:bold">
+                                    @String.Format(Model.San_Luong_Theo_Nhom_Nghe[_MA_TTP + "#" + _THANG.ToString() + "#" + _NAM.ToString() + "#" + columnNghe.DM_NhomNgheID.ToString()] > 0
+                                      ? "{0:0,0.##}" : "{0:0.#}"
+                                     , Model.San_Luong_Theo_Nhom_Nghe[_MA_TTP + "#" + _THANG.ToString() + "#" + _NAM.ToString() + "#" + columnNghe.DM_NhomNgheID.ToString()]
+                                    )
+                                </td>
+                            }
+                        </tr>
+
+                        <tr>
+                            <td style="text-align:left; font-size:12px; font-weight:bold">
+                                Tổng sản lượng theo tháng:
+                            </td>
+                            <td style="text-align:right; font-size:16px; font-weight:bold" colspan="@_lstDMNhomNghe.Count">
+                                @String.Format(Model.San_Luong_Thang > 0
+             ? "{0:0,0.##}" : "{0:0.#}"
+                         , Model.San_Luong_Thang
+            )
+                            </td>
+                        </tr>
+                    </table>
+                }
+                else
+                {
+                    <table class="table table-hover table-bordered table-condensed">
+                        <tr>
+                            <th rowspan="2" style="height: 30px; width: 16.666666666666664%; position:relative; border: 1px solid #4f93e3; ">
+                                <div id="container">
+                                    <div id="line"></div>
+
+                                </div>
+                                <span style="position:absolute; top:5px; right:30px;">Nghề</span>
+                                <span style="position:absolute; bottom:5px; left:30px;">Nhóm loài</span>
+
+                            </th>
+                            @foreach (var columnNghe in _lstDMNhomNghe)
+                            {
+                                <th valign="middle" style="text-align: center;text-align: center; width: 8.333333333333332%; border: 1px solid #4f93e3; ">@columnNghe.TenNhomNghe</th>
+                            }
+                        </tr>
+                        <tr></tr>
+                        @*@for (int i = 0; i < FDB.Common.CategoryCommon.lstDMDoiTuongCPUE.Count; i++)*@
+                            @for (int i = 0; i < _lstDMNHOM_DT_KT.Count; i++)
+                        {
+                            var _SL = 0.0;
+                            <tr>
+                                @*<td style="text-align:left">@FDB.Common.CategoryCommon.lstDMDoiTuongCPUE[i].NAME</td>*@
+                                <td style="text-align:left">@_lstDMNHOM_DT_KT[i].TEN_NHOM</td>
+
+                                @foreach (var columnNghe1 in _lstDMNhomNghe)
+                                {
+                                    //_SL = Model.San_Luong_Theo_Loai[_MA_TTP + "#" + _THANG.ToString() + "#" + _NAM.ToString() + "#" + FDB.Common.CategoryCommon.lstDMDoiTuongCPUE[i].ID + "#" + columnNghe1.DM_NhomNgheID.ToString()];
+                                    _SL = Model.San_Luong_Theo_Loai[_MA_TTP + "#" + _THANG.ToString() + "#" + _NAM.ToString() + "#" + _lstDMNHOM_DT_KT[i].ID + "#" + columnNghe1.DM_NhomNgheID.ToString()];
+
+
+
+                                    <td style="text-align:right">
+                                        @String.Format(_SL > 0 ? "{0:0,0.##}" : "{0:0.#}", _SL)
+
+                                    </td>
+                                    _SL = 0.0;
+                                }
+
+                            </tr>
+                        }
+                        <tr></tr>
+
+                        <tr>
+                            <td style="text-align:left; font-size:12px; font-weight:bold">
+                                Tổng sản lượng theo nhóm nghề:
+                            </td>
+                            @foreach (var columnNghe in _lstDMNhomNghe)
+                            {
+                                <td style="text-align:right; font-size:14px; font-weight:bold">
+                                    @String.Format(Model.San_Luong_Theo_Nhom_Loai[_MA_TTP + "#" + _THANG.ToString() + "#" + _NAM.ToString() + "#" + columnNghe.DM_NhomNgheID.ToString()] > 0
+                                         ? "{0:0,0.##}" : "{0:0.#}"
+                                         , Model.San_Luong_Theo_Nhom_Loai[_MA_TTP + "#" + _THANG.ToString() + "#" + _NAM.ToString() + "#" + columnNghe.DM_NhomNgheID.ToString()]
+                                        )
+                                </td>
+                            }
+
+
+                        </tr>
+
+                        <tr>
+                            <td style="text-align:left; font-size:12px; font-weight:bold">
+                                Tổng sản lượng theo tháng:
+                            </td>
+                            <td style="text-align:right; font-size:16px; font-weight:bold" colspan="@_lstDMNhomNghe.Count">
+                                @String.Format(Model.San_Luong_Loai_Thang > 0
+                                     ? "{0:0,0.##}" : "{0:0.#}"
+                         , Model.San_Luong_Loai_Thang
+                                    )
+                            </td>
+                        </tr>
+
+                    </table>
+                }
+
+            }
+        }
+
+    </fieldset>
+
+
+</div>

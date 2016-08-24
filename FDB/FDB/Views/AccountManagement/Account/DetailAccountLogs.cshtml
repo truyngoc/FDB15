@@ -1,0 +1,120 @@
+﻿@model  PagedList.IPagedList<FDB.Models.AccountLog>
+@using PagedList.Mvc;
+@using FDB.Helpers;
+@{
+    ViewBag.Title = "Chi tiết account truy cập";
+}
+
+<div id="partial-view-content">
+    <div class="modal-header fdb-panel-header-10">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h5 class="modal-title" id="myModalLabel">Thông tin chi tiết người dùng truy cập</h5>
+    </div>
+
+
+    <div class="modal-body fdb-panel-body-0">
+        <table class="table table-hover table-striped table-condensed">
+            <tr>
+                <th>
+                    Tên truy cập
+                </th>
+                <th>
+                    Thời gian đăng nhập
+                </th>
+                <th>
+                    Thời gian đăng xuất
+                </th>
+                <th>
+                    Tên người dùng
+                </th>
+                <th>
+                    Tỉnh/TP
+                </th>
+            </tr>
+            @{
+            var username = String.Empty;
+            var ma_ttp = String.Empty;
+            }
+            @{
+            if (Model != null)
+            {
+
+                foreach (var item in Model)
+                {
+
+                    <tr>
+
+                        <td>
+
+                            @Html.DisplayFor(modelItem => item.Username)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Logtime)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LogtimeEnd)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Fullname)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TEN_TTP)
+                        </td>
+
+                    </tr>
+                    username = item.Username.ToString();
+                    ma_ttp = item.MA_TTP.ToString();
+
+
+                }
+
+
+            }
+            }
+
+        </table>
+
+        <br />
+        <div id="myPager">
+            @Html.PagedListPager(Model, page => Url.Action("DetailAccountLogs", 
+                                                            new { page, ma_ttp, username }), 
+                                                            PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.TwitterBootstrapPagerAligned, new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "DetailAccountLogs" }))
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/jquery.number.js"></script>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+
+
+<script type="text/javascript">
+    $(function () {
+        var lpage;
+        $('#myPager').on('click', 'a', function () {
+
+            if (this.href == "") {
+                return;
+            }
+
+            $.ajax({
+                url: this.href,
+                type: 'GET',
+                cache: false,
+                success: function (result) {
+                    $('#partial-view-content').html(result);
+                }
+            });
+
+            return false;
+        });
+    });
+
+</script>

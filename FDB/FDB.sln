@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FDB", "FDB\FDB.csproj", "{5A49D2A2-6DBF-491C-9E02-0D899D2E1692}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FDB.Common", "FDB.Common\FDB.Common.csproj", "{6D9B2271-AC9F-433A-84BE-4BCA5925A9C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FDB.DataAccessLayer", "FDB.DataAccessLayer\FDB.DataAccessLayer.csproj", "{DF557AEF-FFFB-4A71-AE48-BB148880AC41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FDB.Models", "FDB.Models\FDB.Models.csproj", "{BDFC616A-91E8-4394-BF61-7B18570F063A}"
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5A49D2A2-6DBF-491C-9E02-0D899D2E1692}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A49D2A2-6DBF-491C-9E02-0D899D2E1692}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A49D2A2-6DBF-491C-9E02-0D899D2E1692}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A49D2A2-6DBF-491C-9E02-0D899D2E1692}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D9B2271-AC9F-433A-84BE-4BCA5925A9C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D9B2271-AC9F-433A-84BE-4BCA5925A9C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D9B2271-AC9F-433A-84BE-4BCA5925A9C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D9B2271-AC9F-433A-84BE-4BCA5925A9C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF557AEF-FFFB-4A71-AE48-BB148880AC41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF557AEF-FFFB-4A71-AE48-BB148880AC41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF557AEF-FFFB-4A71-AE48-BB148880AC41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF557AEF-FFFB-4A71-AE48-BB148880AC41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDFC616A-91E8-4394-BF61-7B18570F063A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDFC616A-91E8-4394-BF61-7B18570F063A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDFC616A-91E8-4394-BF61-7B18570F063A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDFC616A-91E8-4394-BF61-7B18570F063A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45
+	EndGlobalSection
+EndGlobal

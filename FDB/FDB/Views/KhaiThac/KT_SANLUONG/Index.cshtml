@@ -1,0 +1,248 @@
+﻿@model FDB.Models.ViewModelSearchKT_SANLUONG
+@using PagedList.Mvc; @*Mo*@
+@using FDB.Helpers;
+
+<link rel="stylesheet" type="text/css" href="~/Content/PagedList.css" />
+@{
+    ViewBag.Title = "Sản lượng";
+}
+
+<!-- Cac div de chua noi dung cho dialog -->
+<div id="dialog-delete-confirm" style="display: none">
+    <p>
+        <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+        Bạn có chắc chắn muốn xóa không?
+    </p>
+</div>
+
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <h3 class="text-center fdb-title-search-form">Tra cứu thông tin sản lượng</h3>
+    <br />
+
+    <div class="container">
+        <fieldset class="fdb-scheduler-border">
+            <legend class="fdb-scheduler-search-border">Chỉ tiêu tìm kiếm</legend>
+
+            <label id="lblMessage" style="color:blue; font-weight:bold">@*@TempData["_SUCCESS"]*@</label>
+            @using (Html.BeginForm("Index", "KT_SANLUONG", FormMethod.Get))
+            {
+                <div class="row">
+                   
+                    <div class="col-md-2 control-label">
+                        Nhóm đối tượng khai thác:
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.NhomDoiTuongKhaiThac, (SelectList)ViewBag.DMNhomDoiTuongKT, string.Empty, new { @class = "form-control", @id = "NhomDoiTuongKhaiThac" })
+
+                    </div>
+                    <div class="col-md-2 control-label">
+                        Nghề khai thác
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.NgheKhaiThac, (SelectList)ViewBag.DMNgheKhaiThac, string.Empty, new { @class = "form-control", @id = "NgheKhaiThac" })
+
+                    </div>
+
+                </div>
+                <div class="row margin-top-05">
+                    
+                    <div class="col-md-2 control-label">
+                        Công suất tàu
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.LoaiCongSuat, (SelectList)ViewBag.DMLoaiCongSuat, string.Empty, new { @class = "form-control", @id = "LoaiCongSuat" })
+
+                    </div>
+                    <div class="col-md-2 control-label">
+                        Tỉnh/TP
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.DonVi, (SelectList)ViewBag.DM_DonVis, string.Empty, new { @class = "form-control" })
+
+                    </div>
+
+                </div>
+
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Tháng
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.Thang, new List<SelectListItem>
+                    {                   new SelectListItem() {Text = "", Value=""},
+                                        new SelectListItem() {Text = "Tháng 1", Value="1"},
+                                        new SelectListItem() {Text = "Tháng 2", Value="2"},
+                                        new SelectListItem() {Text = "Tháng 3", Value="3"},
+                                        new SelectListItem() {Text = "Tháng 4", Value="4"},
+                                        new SelectListItem() {Text = "Tháng 5", Value="5"},
+                                        new SelectListItem() {Text = "Tháng 6", Value="6"},
+                                        new SelectListItem() {Text = "Tháng 7", Value="7"},
+                                        new SelectListItem() {Text = "Tháng 8", Value="8"},
+                                        new SelectListItem() {Text = "Tháng 9", Value="9"},
+                                        new SelectListItem() {Text = "Tháng 10", Value="10"},
+                                        new SelectListItem() {Text = "Tháng 11", Value="11"},
+                                        new SelectListItem() {Text = "Tháng 12", Value="12"}
+                    }, new { @class = "form-control" })
+
+                    </div>
+                    <div class="col-md-2 control-label">
+                        Năm
+                    </div>
+                    <div class="col-md-4">
+
+                        @Html.TextBoxFor(model => model.Nam, new { @class = "form-control", @type = "text" })
+
+                    </div>
+                </div>
+                <div class="row margin-top-05">
+                   
+
+                    <div class="col-md-2 control-label">
+
+                    </div>
+                    <div class="col-md-4">
+
+                    </div>
+
+                </div>
+
+
+                <p class="margin-top-05">
+
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <span class="glyphicon glyphicon-search"></span> Tìm kiếm
+                    </button>
+
+                    @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-plus'></span> Thêm mới", "Thêm mới", "Create", "KT_SANLUONG", null, htmlAttributes: new { @class = "btn btn-primary btn-sm" })
+                </p>
+            }
+
+        </fieldset>
+
+        <fieldset class="fdb-scheduler-border">
+            <legend class="fdb-scheduler-search-border">Kết quả tìm kiếm</legend>
+            <label id="lblMessageTotal" style="color:blue; font-weight:bold">Tổng số bản ghi: @ViewBag.TotalRow</label>
+            <table class="table table-hover table-bordered table-condensed">
+                <tr>
+                    <th>
+                        Tỉnh/TP
+                    </th>
+                    <th>
+                        Tháng
+                    </th>
+                    <th>
+                        Năm
+                    </th>
+                    <th>
+                        Người nhập
+                    </th>
+                    <th>
+                        Ngày nhập
+                    </th>
+                    <th></th>
+                </tr>
+                @{
+                    if (Model.SearchResults != null)
+                    {
+                        foreach (var item in Model.SearchResults)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DTinhTP.TEN_TINHTP)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.THANG)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NAM)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NGUOI_NHAP)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NGAY_NHAP)
+                                </td>
+                                <td>
+                                    <div class="text-center" style="position:relative">
+                                        @Html.EncodedActionLink("", "<img src=\"/fonts/grid-edit-icon.png\" title=\"Sửa\" />", "Edit", "KT_SANLUONG", new { questionId = item.ID }, new { @style = "margin-right: 10px;" })
+
+                                        @using (Html.BeginForm("Delete", "KT_SANLUONG", new { id = item.ID }, FormMethod.Post, new { @style = "margin: 0px 15px;padding: 0px 0px;width: 5px;/* float:right; *//* height:16px; */position: absolute;top: 0px;right: 15px;" }))
+                                        {
+                                            <input type="image" src="@Url.Content("~/fonts/grid-delete-icon1.gif")" title="Xóa" onclick="return confirm('Bạn chắc chắn muốn xóa không?');" />
+
+                                        }
+
+
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+
+
+                }
+
+            </table>
+
+        </fieldset>
+        <br />
+        <br />
+        @Html.PagedListPager(Model.SearchResults, page => Url.Action("Index", new { page, Model.Thang, Model.Nam, Model.LoaiCongSuat, Model.NgheKhaiThac, Model.DonVi, Model.NhomDoiTuongKhaiThac }))
+    </div>
+</div>
+
+<script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.8.1/jquery.validate.min.js" type="text/javascript"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+@*<script src="~/Scripts/jquery.maskedinput.js"></script>*@
+<script src="~/Scripts/datepicker.js"></script>
+<script src="~/Scripts/jquery.masknumber.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    //$("#Nam").number(true, 0, '', '');
+    $('#Nam').maskNumber({ integer: true, decimal: '', thousands: '' });
+
+    $(function () {
+        $(document).tooltip();
+    });
+
+
+
+    // load district by province when change in dropdownlist
+    $("#LoaiKhaiThac").change(function () {
+        $.ajax({
+            url: '@Url.Action("getNhomDoiTuongByMatNuoc", "KT_SANLUONG")',
+            type: 'post',
+            data: {
+                ma_MatNuoc: $('#LoaiKhaiThac').val()
+            }//NhomDoiTuongKhaiThac
+        }).done(function (response) {
+            // update district by province
+            var a = '<option value></option>' + response;   // defaut value
+            $("#NhomDoiTuongKhaiThac").html(a);
+
+            // reset ward
+            var b = '<option value></option>'
+            $('#DoiTuongKhaiThac').html(b);
+        });
+    });
+
+
+    // load ward by disctrict when change in dropdownlist
+    $("#NhomDoiTuongKhaiThac").change(function () {
+        $.ajax({
+            url: '@Url.Action("getDoiTuongByNhom", "KT_SANLUONG")',
+            type: 'post',
+            data: {
+                ma_NhomDoiTuong: $('#NhomDoiTuongKhaiThac').val()
+            }
+        }).done(function (response) {
+            var a = '<option value></option>' + response;   // defaut value
+            $("#DoiTuongKhaiThac").html(a);
+        });
+    });
+
+</script>

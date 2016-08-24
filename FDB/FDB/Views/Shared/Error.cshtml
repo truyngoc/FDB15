@@ -1,0 +1,30 @@
+﻿@*@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Error</title>
+</head>
+<body>
+    <hgroup>
+        <h1>Error.</h1>
+        <h2>An error occurred while processing your request: @ViewBag.Message.</h2>
+    </hgroup>
+    <div>
+        @Html.ActionLink("Back", "Index")
+    </div>
+</body>
+</html>*@
+
+<div style="z-index:1000; float:left; width:100%; height:100%; background-color:aqua">
+    <hgroup>
+        <h3>Error.</h3>
+        <h4>An error occurred while processing your request: @ViewBag.Message</h4>
+    </hgroup>
+    <div>
+        @Html.ActionLink("Back", "Index")
+    </div>
+</div>

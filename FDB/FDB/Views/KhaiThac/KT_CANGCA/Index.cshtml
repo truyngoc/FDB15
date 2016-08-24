@@ -1,0 +1,223 @@
+﻿@model FDB.Models.ViewModelSearchKT_CANGCA
+@using PagedList.Mvc;
+@using FDB.Helpers;
+
+<link rel="stylesheet" type="text/css" href="~/Content/PagedList.css" />
+@{
+    ViewBag.Title = "Thực trạng hoạt động cảng cá";
+}
+
+<script src="~/Scripts/datepicker.js"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script>
+    $(document).ready(function () {
+        var url = "";
+
+        $("#dialog-delete-confirm").dialog({
+            autoOpen: false,
+            resizable: false,
+            height: 170,
+            width: 350,
+            show: { effect: 'drop', direction: "up" },
+            modal: true,
+            draggable: true,
+            open: function (event, ui) {
+                $(".ui-dialog-titlebar-close").hide();
+            },
+            buttons: {
+                "OK": function () {
+                    $(this).dialog("close");
+                    window.location.href = url;
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        // hien thi confirm dialog khi click delete tren grid
+        $(".lnkDelete").click(function () {
+            url = $(this).attr('href');
+            $("#dialog-delete-confirm").dialog('open');
+
+
+
+            return false;
+        });
+
+        //$("#TU_NGAY").datepicker({
+        //    changeMonth: true,
+        //    changeYear: true,
+
+        //    dateFormat: 'dd/mm/yy'
+        //});
+
+        //$("#DEN_NGAY").datepicker({
+        //    changeMonth: true,
+        //    changeYear: true,
+
+        //    dateFormat: 'dd/mm/yy'
+        //});
+
+        $("#TU_NGAY").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#DEN_NGAY").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+    });
+</script>
+
+
+
+<!-- Cac div de chua noi dung cho dialog -->
+<div id="dialog-delete-confirm" style="display: none">
+    <p>
+        <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+        Bạn có chắc chắn muốn xóa không?
+    </p>
+</div>
+
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <h3 class="text-center fdb-title-search-form">Thực trạng hoạt động cảng cá</h3>
+    <br />
+    <div class="container">
+        @using (Html.BeginForm("Index", "KT_CANGCA", FormMethod.Get))
+        {
+            <fieldset class="fdb-scheduler-border">
+                <legend class="fdb-scheduler-search-border">Chỉ tiêu tìm kiếm</legend>
+                <div class="row">
+                    <div class="col-md-2 control-label">
+                        Tên cảng
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.DM_CANGCAID, (SelectList)ViewBag.DM_CANGCAs, "--Chọn cảng cá--", new { @class = "form-control" })
+
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Ngày ghi nhận từ
+                    </div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.TU_NGAY)
+                        @Html.ValidationMessageFor(model => model.TU_NGAY)
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        Đến ngày
+                    </div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.DEN_NGAY)
+                        @Html.ValidationMessageFor(model => model.DEN_NGAY)
+                    </div>
+                </div>
+
+                <p class="margin-top-05">
+                    @*<input type="submit" value="Tìm kiếm" class="btn btn-primary btn-sm" />
+                        @Html.ActionLink("Thêm mới", "Create", null, new { @class = "btn btn-primary btn-sm" })
+                        @Html.ActionLink("Xuất Excel", "ExportExcel", null, new { @class = "btn btn-primary btn-sm" })*@
+
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <span class="glyphicon glyphicon-search"></span> Tìm kiếm
+                    </button>
+
+                    @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-plus'></span> Thêm mới", "Thêm mới", "Create", "KT_CANGCA", null, htmlAttributes: new { @class = "btn btn-primary btn-sm" })
+
+                    @*@Html.NoEncodeActionLink("<i class='fa fa-file-excel-o'></i> Xuất Excel", "Xuất Excel", "ExportExcel", "KT_CANGCA", null, htmlAttributes: new { @class = "btn btn-primary btn-sm" })*@
+                </p>
+            </fieldset>
+        }
+        <fieldset class="fdb-scheduler-border">
+            <legend class="fdb-scheduler-search-border">Kết quả tìm kiếm</legend>
+            <label id="lblMessageTotal" style="color:blue; font-weight:bold">Tổng số bản ghi: @ViewBag.TotalRow</label>
+            <table class="table table-hover table-bordered table-condensed">
+                <tr>
+                    <th>
+                        Tên cảng
+                    </th>
+                    <th style="width:30px">
+                        Sản lượng cá(tấn)
+                    </th>
+                    <th class="text-wrap">
+                        Sản lượng mực(tấn)
+                    </th>
+                    <th class="text-wrap">
+                        Sản lượng tôm (tấn)
+                    </th>
+
+
+                    <th class="text-wrap">
+                        Hàng nước đá (tấn)
+                    </th>
+                    <th class="text-center">
+                        Hàng xăng dầu(lít)
+                    </th>
+                    <th class="text-center">
+                        Hàng nước ngọt (khối)
+                    </th>
+
+                    <th class="text-center">Ngày ghi nhận</th>
+                    <th></th>
+                </tr>
+                @{
+                    if (Model.SearchResults != null)
+                    {
+                        foreach (var item in Model.SearchResults)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DM_CANGCA.TEN_CANG)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SANLUONG_CA)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SANLUONG_MUC)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SANLUONG_TOM)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.HANG_NUOCDA)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.HANG_NUOCNGOT)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.HANG_XANGDAU)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NGAY_GHINHAN)
+                                </td>
+                                <td class="text-center">
+                                    <a href="@Url.Action("Edit","KT_CANGCA",new { id = item.ID })">
+                                        <img src="@Url.Content("~/fonts/grid-edit-icon.png")" title="Sửa" />
+                                    </a>
+
+                                    <a href="@Url.Action("Delete", "KT_CANGCA", new { id = item.ID })" onclick="return confirm('Bạn chắc chắn muốn xóa không?');">
+                                        <img src="@Url.Content("~/fonts/grid-delete-icon1.gif")" title="Xóa" />
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+
+            </table>
+        </fieldset>
+        <br />
+
+
+        <br />
+
+
+        @Html.PagedListPager(Model.SearchResults, page => Url.Action("Index", new { page, Model.DM_CANGCAID, Model.TU_NGAY, Model.DEN_NGAY }))
+    </div>
+
+</div>

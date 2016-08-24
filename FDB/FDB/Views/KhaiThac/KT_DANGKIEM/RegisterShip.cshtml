@@ -1,0 +1,85 @@
+﻿@model FDB.Models.RegisterShip
+
+@{
+    ViewBag.Title = "RegisterShip";
+}
+
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+
+@using (Html.BeginForm("RegisterShip", "KT_DANGKIEM", FormMethod.Post))
+{
+    <div class="container fdb-div-content fdb-div-corner-all">
+        <br />
+
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true)
+
+            <div class="row">
+                <div class="col-md-2 control-label text-left">
+                    Đăng ký cho
+
+                </div>
+                <div class="col-md-4 rdseleted">
+                    @Html.RadioButtonFor(model => model.TAU_PHAI_DANG_KIEM, "1", new { @checked=true }) Tàu không thuộc trường hợp phải đăng kiểm<br>
+                    @Html.RadioButtonFor(model => model.TAU_PHAI_DANG_KIEM, "2") Tàu thuộc trường hợp phải đăng kiểm<br>                                                       
+                </div>
+
+                <div class="col-md-2 control-label text-left">                    
+                </div>
+                <div class="col-md-4">                    
+                </div>
+            </div>
+
+            <div class="row margin-top-05" id="dang_kiem">
+                <div class="col-md-2 control-label text-left">
+                    Số sổ đăng kiểm
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.SO_SO_DANG_KIEM, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.SO_SO_DANG_KIEM)
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Đăng ký
+                    </button>                    
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        // default
+        var type = $('input[name="TAU_PHAI_DANG_KIEM"]:checked', '.rdseleted').val();
+        if (type == '2') {
+            $("#dang_kiem").show();
+        } else {
+            $("#dang_kiem").hide();
+        }
+
+        $('.rdseleted input').on('change', function () {
+            var loai = $('input[name="TAU_PHAI_DANG_KIEM"]:checked', '.rdseleted').val();
+
+            if (loai == '2') {
+                $("#dang_kiem").show();
+            } else {
+                $("#dang_kiem").hide();
+            }
+        });
+    });
+</script>

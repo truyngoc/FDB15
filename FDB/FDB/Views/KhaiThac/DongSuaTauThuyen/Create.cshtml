@@ -1,0 +1,135 @@
+﻿@{
+    ViewBag.Title = "Cơ sở đóng sửa tàu thuyền";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        <div class="form-group">
+            <div class="col-md-2 control-label">Tên cơ sở</div>
+            <div class="col-md-10">
+                <input type="text" value="Út Mập" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2 control-label">Địa chỉ</div>
+            <div class="col-md-10">
+                <input type="text" value="Thành phố Tuy Hòa, Phú Yên" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2 control-label">Điện thoại</div>
+            <div class="col-md-10">
+                <input type="text" value="0912333333" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2 control-label">Tên chủ cơ sở</div>
+            <div class="col-md-10">
+                <input type="text" value="Nguyễn Văn A" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                <table class="table table-hover table-bordered table-condensed">
+                    <tr>
+                        <th>
+                            Đóng mới vỏ gỗ
+                        </th>
+                        <th>
+                            Đóng mới vỏ thép
+                        </th>
+                        <th>
+                            Đóng mới vỏ Composite
+                        </th>
+                        <th>
+                            Sửa chữa
+                        </th>
+                        <th>
+                            Giải bản
+                        </th>
+                        <th>
+                            Bán sang tỉnh khác
+                        </th>
+                        <th>
+                            Năm
+                        </th>
+                        <th></th>
+                    </tr>
+                    @{
+    for (var i = 0; i < 5; i++)
+    {
+        <tr>
+            <td>
+                <input type="text" value="10" class="form-control" />
+            </td>
+            <td>
+                <input type="text" value="10" class="form-control" />
+            </td>
+            <td>
+                <input type="text" value="3" class="form-control" />
+            </td>
+            <td>
+                <input type="text" value="5" class="form-control" />
+            </td>
+            <td>
+                <input type="text" value="2" class="form-control" />
+            </td>
+            <td>
+                <input type="text" value="4" class="form-control" />
+            </td>
+            <td>
+                <input type="text" value="2015" class="form-control" />
+            </td>
+            <td>
+                <a href="#">
+                    <img src="@Url.Content("~/fonts/button-add-icon.png")" />
+                </a>
+
+                <a href="#">
+                    <img src="@Url.Content("~/fonts/DELETE.GIF")" />
+                </a>
+            </td>
+        </tr>
+    }
+
+                    }
+
+                </table>
+            </div>
+
+
+            <div class="col-md-push-4"></div>
+        </div>
+
+
+        @*<div class="form-group">
+                <div class="col-md-2 control-label">Ngày cập nhật</div>
+                <div class="col-md-10">
+                    <input type="text" value="26/07/2015" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-2 control-label">Người cập nhật</div>
+                <div class="col-md-10">
+                    <input type="text" value="TungND" class="form-control" />
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Cập nhật" class="btn btn-primary" />
+                &nbsp;
+                @Html.ActionLink("Quay lại", "Index")
+            </div>
+        </div>
+    </div>
+}

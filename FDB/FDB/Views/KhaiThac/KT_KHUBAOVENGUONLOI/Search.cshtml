@@ -1,0 +1,118 @@
+﻿@model FDB.Models.ViewModelSearchKT_KHUBAOVENGUONLOI
+@using PagedList.Mvc;
+@using FDB.Helpers;
+
+<link rel="stylesheet" type="text/css" href="~/Content/PagedList.css" />
+@{
+    ViewBag.Title = "Tra cứu khu bảo vệ nguồn lợi thủy sản";
+}
+
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <h3 class="text-center fdb-title-search-form">Tra cứu khu bảo vệ nguồn lợi thủy sản</h3>
+    <br />
+
+    <div class="container">
+        @using (Html.BeginForm("Search", "KT_KHUBAOVENGUONLOI", FormMethod.Get))
+        {
+            <fieldset class="fdb-scheduler-border">
+                <legend class="fdb-scheduler-search-border">Chỉ tiêu tra cứu</legend>
+
+                <div class="row">
+                    <div class="col-md-2 control-label">
+                        Tên khu bảo vệ nguồn lợi
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.TEN_KHUBAOVENGUONLOI, new { @class = "form-control" })
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        Địa chỉ
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.DIA_CHI, new { @class = "form-control" })
+                    </div>
+                </div>
+
+
+                <p class="margin-top-05">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <span class="glyphicon glyphicon-search"></span> Tìm kiếm
+                    </button>
+
+                    <button type="submit" class="btn btn-primary btn-sm" name="SearchButton" value="Xuất Excel">
+                        <i class='fa fa-file-excel-o'></i>
+                        Xuất Excel
+                    </button>
+                </p>
+
+            </fieldset>
+        }
+        <label id="lblMessageExport" style="color:blue; font-weight:bold">@ViewBag.MSG_EXPORT</label>
+        <fieldset class="fdb-scheduler-border">
+            <legend class="fdb-scheduler-search-border">Kết quả tra cứu</legend>
+            <label id="lblMessageTotal" style="color:blue; font-weight:bold">Tổng số bản ghi: @ViewBag.TotalRow</label>
+            <table class="table table-hover table-bordered table-condensed">
+                <tr>
+                    <th>
+                        Tên khu bảo vệ nguồn lợi
+                    </th>
+                    <th>
+                        Địa chỉ
+                    </th>
+                    <th>
+                        Tổng diện tích
+                    </th>
+                    <th>
+                        Thời gian cấm đánh bắt
+                    </th>
+                    <th>
+                        Đối tượng cấm khai thác
+                    </th>
+                </tr>
+                @{
+                    if (Model.SearchResults != null)
+                    {
+                        foreach (var item in Model.SearchResults)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TEN_KHUBAOVENGUONLOI)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DIA_CHI)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TONG_DIENTICH)
+                                </td>
+                                <td>
+                                    @if (item.THOIGIAN_CAM_TU.HasValue || item.THOIGIAN_CAM_DEN.HasValue)
+                                    {
+                                        @(String.Format("{0} đến {1}", item.THOIGIAN_CAM_TU == null ? string.Empty : item.THOIGIAN_CAM_TU.Value.ToString("d"), @item.THOIGIAN_CAM_DEN == null ? string.Empty : item.THOIGIAN_CAM_DEN.Value.ToString("d")))
+                                    }
+                                    @*@(String.Format("{0} đến {1}", item.THOIGIAN_CAM_TU.Value.ToString("d"), @item.THOIGIAN_CAM_DEN.Value.ToString("d")))*@
+
+
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DOITUONG_CAM_KHAITHAC)
+
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                }
+
+            </table>
+        </fieldset>
+        <br />
+
+
+        <br />
+
+
+        @Html.PagedListPager(Model.SearchResults, page => Url.Action("Search", new { page, Model.TEN_KHUBAOVENGUONLOI, Model.DIA_CHI }))
+    </div>
+</div>

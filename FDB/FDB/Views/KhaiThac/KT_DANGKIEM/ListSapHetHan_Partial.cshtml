@@ -1,0 +1,101 @@
+﻿@model FDB.Models.ViewModelSearchKT_DANGKIEM
+@using PagedList.Mvc;
+@using FDB.Helpers;
+
+@{
+    ViewBag.Title = "Danh sách đăng kiểm tàu thuyền sắp hết hạn";
+}
+
+
+
+
+    <div class="modal-header fdb-panel-header-10">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h5 class="modal-title" id="myModalLabel">Danh sách đăng kiểm tàu thuyền sắp hết hạn</h5>
+    </div>
+
+
+
+    <div class="modal-body fdb-panel-body-0">
+        <table class="table table-hover table-striped table-condensed">
+            <tr>
+                <th>
+                    Số sổ đăng kiểm
+                </th>
+                <th>
+                    Hình thức kiểm tra
+                </th>
+                <th>
+                    Số đăng ký
+                </th>
+                <th>
+                    Tên tàu
+                </th>
+                <th>
+                    Tên chủ tàu
+                </th>
+                <th>
+                    Kết luận kiểm tra
+                </th>
+                <th>
+                    Cấp tàu
+                </th>
+                <th>
+                    Ngày hết hạn đăng kiểm
+                </th>
+                <th>
+                    Tỉnh/TP
+                </th>
+            </tr>
+            @{
+                if (Model.SearchResults != null)
+                {
+                    foreach (var item in Model.SearchResults)
+                    {
+                      <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SO_SO_DANG_KIEM)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DLOAI_KIEM_TRA_KT.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SO_DK)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TEN_TAU)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CHU_PHUONG_TIEN)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DTINH_TRANG_DANG_KIEM.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DCAP_TAU_DANG_KIEM.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.HAN_DANG_KIEM)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DTINHTP.TEN_TINHTP)
+                            </td>
+                          
+                        </tr>
+                    }
+
+                }
+            }
+
+        </table>
+
+
+    </div>
+
+   
+
+
+
+
+
+

@@ -1,0 +1,200 @@
+﻿@model FDB.Models.KT_GIAYPHEP_GIAHAN_ViewModel
+
+@{
+    ViewBag.Title = "Gia hạn giấy phép";
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/datepicker.js"></script>
+
+<script src="~/Scripts/moment.js"></script>
+<script src="~/Scripts/CustomValidation.js"></script>
+
+
+@using (Html.BeginForm())
+{
+    <div class="container fdb-div-content fdb-div-corner-all">
+
+        <h3 class="text-center fdb-title-search-form">Gia hạn giấy phép</h3>
+
+        <hr class="fdb-hr" />
+
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true)
+
+            @Html.HiddenFor(model => model.KT_GIAYPHEPID)
+
+            <div class="row">
+                <div class="col-md-2 control-label">
+                    Số đăng ký
+                </div>
+                <div class="col-md-4 fdb-text-display">
+                    @Html.DisplayFor(model => model.SO_DK)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Ngày đăng ký
+                </div>
+                <div class="col-md-4 fdb-text-display">
+                    @Html.DisplayFor(model => model.NGAY_DK)
+                </div>
+            </div>
+
+            <div class="row margin-top-03">
+                <div class="col-md-2 control-label">
+                    Số giấy phép
+                </div>
+                <div class="col-md-4 fdb-text-display">
+                    @Html.DisplayFor(model => model.SO_GP)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Ngày cấp
+                </div>
+                <div class="col-md-4 fdb-text-display">
+                    @Html.DisplayFor(model => model.NGAY_GP)
+                </div>
+            </div>
+
+            <div class="row margin-top-03">
+                <div class="col-md-2 control-label">
+                    Ngày hiệu lực
+                </div>
+                <div class="col-md-4 fdb-text-display">
+                    @Html.DisplayFor(model => model.NGAY_HL_GP)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Ngày hết hạn
+                </div>
+                <div class="col-md-4 fdb-text-display">
+                    @Html.DisplayFor(model => model.NGAY_HHL_GP)
+                    @Html.HiddenFor(model => model.NGAY_HHL_GP)
+                    @Html.HiddenFor(model => model.NGAY_GIA_HAN_DEN_OLD)
+                </div>
+            </div>
+
+            <div class="row margin-top-03">
+                <div class="col-md-2 control-label">
+                    Gia hạn từ ngày <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.NGAY_GIA_HAN_TU)
+                    @Html.ValidationMessageFor(model => model.NGAY_GIA_HAN_TU)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Gia hạn đến ngày <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.NGAY_GIA_HAN_DEN)
+                    @Html.ValidationMessageFor(model => model.NGAY_GIA_HAN_DEN)
+                </div>
+            </div>
+
+            <div class="row margin-top-03">
+                <div class="col-md-2 control-label">
+                    Ngày gia hạn <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.NGAY_GIA_HAN)
+                    @Html.ValidationMessageFor(model => model.NGAY_GIA_HAN)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Ghi chú
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.GHI_CHU, new { @class = "form-control" })
+                </div>
+            </div>
+            <br />
+
+            @if ((Model.KT_GIAYPHEP_NKs != null) && (Model.KT_GIAYPHEP_NKs.Count > 0))
+            {
+                <h4 class="text-center">Nhật ký gia hạn</h4>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-10 center-table">
+                        <table class="table table-hover table-bordered table-condensed">
+                            <tr>
+                                <th>STT</th>
+                                <th>Ngày gia hạn</th>
+                                <th>
+                                    Từ ngày
+                                </th>
+                                <th>
+                                    Đến ngày
+                                </th>
+                                <th>
+                                    Ghi chú
+                                </th>
+                            </tr>
+                            @{ int i = 1; }
+                            @foreach (var item in Model.KT_GIAYPHEP_NKs)
+                            {
+                                <tr>
+                                    <td>@i</td>
+                                    <td>
+                                        @Html.DisplayFor(m => item.NGAY_GP)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(m => item.NGAY_HL_GP)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(m => item.NGAY_HHL_GP)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(m => item.GHI_CHU)
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+
+
+                        </table>
+                    </div>
+
+                </div>
+            }
+        </div>
+
+    </div>
+
+    <br />
+
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-danger btn-sm">
+                <span class="glyphicon glyphicon-floppy-disk"></span> Cập nhật
+            </button>
+            &nbsp;&nbsp;
+            @Html.ActionLink("Quay lại", "ListGiaHan", "KT_GIAYPHEP", null, new { @class = "btn btn-primary btn-sm" })
+        </div>
+
+    </div>
+}
+
+
+
+
+<script type="text/javascript">
+    // phan hien thi tooltip cho validation message
+    $("form input").tooltipValidation({
+        placement: "right"
+    });
+
+    $("form select").tooltipValidation({
+        placement: "right"
+    });
+
+
+    $("#NGAY_GIA_HAN").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+    $("#NGAY_GIA_HAN_TU").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+    $("#NGAY_GIA_HAN_DEN").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+
+</script>

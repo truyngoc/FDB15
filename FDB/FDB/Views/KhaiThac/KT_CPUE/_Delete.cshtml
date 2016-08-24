@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "Xóa mẫu phỏng vấn sản lượng";
+}
+
+<div class="modal-header fdb-panel-header-15">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h5 class="modal-title" id="myModalLabel">Xóa mẫu phỏng vấn sản lượng</h5>
+</div>
+
+<div class="modal-body">
+    <p>Bạn có chắc chắn muốn xóa không ?</p>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal">Không</button>
+        <button type="submit" class="btn btn-danger">
+            <span class="glyphicon glyphicon-trash"></span> Đồng ý
+        </button>
+    </div>
+}

@@ -1,0 +1,653 @@
+﻿@model FDB.Models.KT_TAUTHUYEN
+
+@{
+    ViewBag.Title = "Cập nhật thông tin tàu thuyền";
+}
+
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/jquery.number.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#tabs").tabs();
+
+        // mask edit cho truong ngay thang (su dung jquery.maskedinput)
+        $("#NGAY_DK").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#NGAY_DKTCQG").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#NGAY_KIEM_TRA").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#NGAY_CAP_SO_DANG_KIEM").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#HAN_DANG_KIEM").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#NGAY_CAP_GIAY_VSTP").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#KT_NGAY_PD_TK").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+
+        // cho phep nhap so thap phan (su dung jquery.number)
+        $("#KT_CHIEU_DAI").number(true, 2, '.', '');
+        $("#KT_CHIEU_RONG").number(true, 2, '.', '');
+        $("#KT_CHIEU_CAO").number(true, 2, '.', '');
+        $("#KT_MAN_KHO").number(true, 2, '.', '');
+        $("#KT_MON_NUOC").number(true, 2, '.', '');
+    });
+
+</script>
+
+
+<div class="modal-header fdb-panel-header-10">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h5 class="modal-title" id="myModalLabel">Thông tin chi tiết tàu thuyền</h5>
+</div>
+<div class="modal-body fdb-panel-body-0">
+    <div id="tabs">
+        <ul>
+            <li><a href="#tabs-1">Hồ sơ tàu cá</a></li>
+            <li><a href="#tabs-2">Đặc điểm kỹ thuật</a></li>
+            @*<li><a href="#tabs-3">Giấy phép khai thác</a></li>*@
+        </ul>
+        <!-- Hồ sơ tàu cá -->
+        <div id="tabs-1">
+            @Html.Hidden("IsEdit", 1)
+            <div class="row">
+                <div class="col-md-2 control-label">
+                    Số đăng ký <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.SO_DK)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Ngày đăng ký <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.NGAY_DK)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Vào sổ ĐKTCQG số
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.SO_DKTCQG)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Ngày vào sổ
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.NGAY_DKTCQG)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Chủ phương tiện <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.CHU_PHUONG_TIEN)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Số CMND
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.SO_CMND)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Điện thoại
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.DIEN_THOAI)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Tỉnh/thành phố <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.DTINHTP.TEN_TINHTP)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Huyện <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.DQUANHUYEN.TEN_QUANHUYEN)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Xã/phường <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.DPHUONGXA.TEN_PHUONGXA)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Địa chỉ <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.DIA_CHI)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Tên tàu
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.TEN_TAU)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Hô hiệu
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.HO_HIEU)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Công dụng tàu cá <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.DCONG_DUNG_TAU.Name)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Nhóm tàu <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.DNHOM_TAU.Name)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Số đăng ký cũ
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.SO_DK_CU)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Vùng hoạt động
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.VUNG_HOAT_DONG)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Số thuyền viên
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.SO_THUYEN_VIEN)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Tình trạng tàu <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.DTINH_TRANG_TAU.Name)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Nơi kiểm tra
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.NOI_KIEM_TRA)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Ngày kiểm tra
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.NGAY_KIEM_TRA)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Loại kiểm tra kỹ thuật
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.DLOAI_KIEM_TRA_KT.Name)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Số biên bản KTKT
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.SO_BB_KIEM_TRA_KT)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Đăng kiểm
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.DTTDANG_KIEM.Name)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Tình trạng đăng kiểm
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.DTINH_TRANG_DANG_KIEM.Name)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Cơ quan đăng kiểm
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.CO_QUAN_DANG_KIEM)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Sổ đăng kiểm số
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.SO_SO_DANG_KIEM)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Ngày cấp sổ
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.NGAY_CAP_SO_DANG_KIEM)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Hạn đăng kiểm
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.HAN_DANG_KIEM)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Đăng kiểm viên
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.DANG_KIEM_VIEN)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Số giấy VSTP
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.SO_GIAY_VSTP)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Ngày cấp VSATTP
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.NGAY_CAP_GIAY_VSTP)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Số ấn chỉ ATKT - Tca
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.SO_AN_CHI_ATKT)
+                </div>
+
+                <div class="col-md-2 control-label">
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+        </div>
+
+        <!-- Đặc điểm kỹ thuật -->
+        <div id="tabs-2">
+            <div class="row">
+                <div class="col-md-2 control-label">
+                    Chiều dài (Lmax) <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.KT_CHIEU_DAI)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Chiều rộng (Bmax) <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.KT_CHIEU_RONG)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Chiều cao (D) <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.KT_CHIEU_CAO)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Mạn khô (f) <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.KT_MAN_KHO)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Mớn nước (d1) <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.KT_MON_NUOC)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Tấn đăng ký (RT) <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.KT_TAN_DANG_KY)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Vật liệu vỏ <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.DVAT_LIEU_VO.Name)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Tổng công suất (CV)
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.KT_TONG_CONG_SUAT)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Tốc độ tàu (hl/h)
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.KT_TOC_DO_TAU)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Nơi đóng
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.KT_NOI_DONG)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Năm đóng
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.KT_NAM_DONG)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Tên người đóng
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.KT_TEN_NGUOI_DONG)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Mẫu thiết kế
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.KT_MAU_THIET_KE)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Cơ quan thiết kế
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.KT_CQ_THIET_KE)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Phiếu duyệt TK số
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.KT_SO_PD_TK)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Ngày duyệt TK
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.KT_NGAY_PD_TK)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Tên Thiết kế
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.KT_TEN_THIET_KE)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Loại Thiết kế
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.KT_LOAI_THIET_KE)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Năm Thiết kế
+                </div>
+                <div class="col-md-4">
+                    @Html.DisplayFor(model => model.KT_NAM_THIET_KE)
+                </div>
+
+                <div class="col-md-2 control-label">
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+
+            <h4 style="text-align:center;">Danh sách máy tàu</h4>
+
+            <div class="row margin-top-05">
+                <div class="col-md-12">
+                    <table class="table table-hover table-bordered table-condensed">
+                        <tr>
+                            <th>STT</th>
+                            <th>
+                                Ký hiệu máy
+                            </th>
+                            <th>
+                                Số máy
+                            </th>
+                            <th>
+                                Nơi sản xuất
+                            </th>
+                            <th>
+                                Năm chế tạo
+                            </th>
+                            <th>
+                                Hãng máy
+                            </th>
+                            <th>
+                                Vòng quay (V/p)
+                            </th>
+                            <th>
+                                Công suất
+                            </th>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                1
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M1_KY_HIEU_MAY)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M1_SO_MAY)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M1_NOI_SX)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M1_NAM_CHE_TAO)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M1_HANG_MAY)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M1_VONG_QUAY)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M1_CONG_SUAT)
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                2
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M2_KY_HIEU_MAY)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M2_SO_MAY)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M2_NOI_SX)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M2_NAM_CHE_TAO)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M2_HANG_MAY)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M2_VONG_QUAY)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M2_CONG_SUAT)
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                3
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M3_KY_HIEU_MAY)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M3_SO_MAY)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M3_NOI_SX)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M3_NAM_CHE_TAO)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M3_HANG_MAY)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M3_VONG_QUAY)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M3_CONG_SUAT)
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                4
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M4_KY_HIEU_MAY)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M4_SO_MAY)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M4_NOI_SX)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M4_NAM_CHE_TAO)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M4_HANG_MAY)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M4_VONG_QUAY)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M4_CONG_SUAT)
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                5
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M5_KY_HIEU_MAY)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M5_SO_MAY)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M5_NOI_SX)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M5_NAM_CHE_TAO)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M5_HANG_MAY)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M5_VONG_QUAY)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.M5_CONG_SUAT)
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

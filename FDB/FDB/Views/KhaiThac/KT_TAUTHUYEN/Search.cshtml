@@ -1,0 +1,294 @@
+﻿@model FDB.Models.ViewModelSearchTK_TAUTHUYEN
+@using PagedList.Mvc;
+@using FDB.Helpers;
+@using FDB.Models
+@using FDB.DataAccessLayer
+
+@{
+    ViewBag.Title = "Tra cứu tàu thuyền";
+}
+
+<div class="container fdb-div-content fdb-div-corner-all">
+
+    <h3 class="text-center fdb-title-search-form">Tra cứu tàu thuyền</h3>
+
+
+    @using (Html.BeginForm("Search", "KT_TAUTHUYEN", FormMethod.Get))
+    {
+
+        <br />
+        <fieldset class="fdb-scheduler-border">
+            <legend class="fdb-scheduler-search-border">Chỉ tiêu tra cứu</legend>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Tỉnh/thành phố
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.MA_TINHTP, (SelectList)ViewBag.TINH_THANHPHOs, string.Empty, new { @class = "form-control", @id = "province_dll" })
+                </div>
+                <div class="col-md-2 control-label">
+                    Huyện
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.MA_QUANHUYEN, (SelectList)ViewBag.QUAN_HUYENs, string.Empty, new { @class = "form-control", @id = "district_dll" })
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Xã/phường
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.MA_PHUONGXA, (SelectList)ViewBag.PHUONG_XAs, string.Empty, new { @class = "form-control", @id = "ward_dll" })
+                </div>
+                <div class="col-md-2 control-label">
+                    Vật liệu vỏ
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.DVAT_LIEU_VOID, (SelectList)ViewBag.VAT_LIEU_VOs, string.Empty, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.DVAT_LIEU_VOID)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Công dụng tàu
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.DCONG_DUNG_TAUID, (SelectList)ViewBag.DCONG_DUNG_TAUs, string.Empty, new { @class = "form-control" })
+                </div>
+                <div class="col-md-2 control-label">
+                    Tình trạng tàu
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.DTINH_TRANG_TAUID, (SelectList)ViewBag.TINH_TRANG_TAUs, string.Empty, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Ngày đăng ký từ
+                </div>
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.NGAY_DK_TU)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Đến
+                </div>
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.NGAY_DK_DEN)
+                </div>
+            </div>
+
+
+            <p class="margin-top-05">
+                <button type="submit" class="btn btn-primary btn-sm" name="SearchButton" value="Tìm kiếm">
+                    <span class="glyphicon glyphicon-search"></span> Thống kê
+                </button>
+            </p>
+
+        </fieldset>
+    }
+
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // load district by province when change in dropdownlist
+            //$("#province_dll").change(function () {
+            $.ajax({
+                url: 'getDistrict',
+                type: 'post',
+                data: {
+                    ma_TinhTP: $('#province_dll').val()
+                }
+            }).done(function (response) {
+                // update district by province
+                var a = '<option value></option>' + response;   // defaut value
+                $("#district_dll").html(a);
+
+                // reset ward
+                var b = '<option value></option>'
+                $('#ward_dll').html(b);
+            });
+            //});
+
+
+            // load ward by disctrict when change in dropdownlist
+            $("#district_dll").change(function () {
+                $.ajax({
+                    url: 'getWard',
+                    type: 'post',
+                    data: {
+                        ma_QuanHuyen: $('#district_dll').val()
+                    }
+                }).done(function (response) {
+                    var a = '<option value></option>' + response;   // defaut value
+                    $("#ward_dll").html(a);
+                });
+            });
+
+
+            $('#tblKetQua tr td').each(function () {
+                var val = $(this).text();
+
+                if (!isNaN(val) && val != 0) {
+                    //$(this).parent().css('background-color', '#f00');
+                    $(this).addClass('success')
+                }
+            });
+
+        });
+    </script>
+
+
+
+    @{
+        FDBContext _db = new FDBContext();
+
+        var _lstNghe = _db.DM_NHOMNGHE.ToList();
+        var _lstNhomCongSuat = _db.DNHOM_TAU.ToList();
+        var _lstTinhTrangTau = _db.DTINH_TRANG_TAU.ToList();
+    //var _lstTinhTrangTau = _db.DTINH_TRANG_TAU.Take(2).ToList();
+    }
+
+
+    <div class="fdb-title-form text-center">
+        Thống kê số lượng tàu thuyền theo nghề
+        <div class="text-center fdb-title-form-14 col-md-12">
+            (Chỉ thống kê tàu khai thác thủy sản)
+        </div>
+    </div>
+    <div class="row margin-top-05">
+        <div class="col-md-9 center-table">
+            <table class="table table-hover table-bordered table-condensed table-responsive" id="tblKetQua">
+                <tr>
+                    <th class="col-md-4">Nhóm công suất\Nghề khai thác</th>
+                    @foreach (var nghe in _lstNghe)
+                    {
+                        <th>
+                            @nghe.TenNhomNghe
+                        </th>
+                    }
+                    <th>Tổng</th>
+                </tr>
+                @foreach (var nhomcongsuat in _lstNhomCongSuat)
+                {
+                    <tr>
+                        @{ var cs = 0; }
+
+                        <td>@nhomcongsuat.Name</td>
+                        @foreach (var cellvalue in _lstNghe)
+                        {
+                            <td class="text-right">
+                                <!-- gia tri de o day -->
+                                @Model.F[Model.MA_TINHTP + "#" + nhomcongsuat.ID + "#" + cellvalue.DM_NhomNgheID]
+
+                                @{
+                               
+                            cs += Model.F[Model.MA_TINHTP + "#" + nhomcongsuat.ID + "#" + cellvalue.DM_NhomNgheID];
+                               
+                                }
+                            </td>
+                        }
+
+                        <td class="text-right">@cs</td>
+                    </tr>
+                }
+
+                <tr>
+                    <td>Tổng</td>
+
+                    @{ var tong = 0;}
+                    @foreach (var nghe in _lstNghe)
+                    {
+                        <td class="text-right">
+                            @Model.Sum_F_By_Fishery[Model.MA_TINHTP + "#" + nghe.DM_NhomNgheID]
+
+                            @{
+                        tong += Model.Sum_F_By_Fishery[Model.MA_TINHTP + "#" + nghe.DM_NhomNgheID];
+                            }
+                        </td>
+                    }
+
+                    <td class="text-danger text-right">@tong</td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+
+
+    <div class="fdb-title-form text-center">
+        Thống kê số lượng tàu thuyền theo trạng thái tàu
+        <div class="text-center fdb-title-form-14 col-md-12">
+            (Bao gồm tất cả các loại tàu - khai thác, hậu cần dịch vụ, kiểm ngư -)
+        </div>
+    </div>
+    <div class="row margin-top-05">
+        <div class="col-md-9 center-table">
+            <table class="table table-hover table-bordered table-condensed table-responsive" id="tblKetQua">
+                <tr>
+                    <th class="col-md-4">Tình trạng tàu</th>
+                    @foreach (var status in _lstTinhTrangTau)
+                    {
+                        <th>
+                            @status.Name
+                        </th>
+                    }
+                    <th>Tổng</th>
+                </tr>
+                @foreach (var nhomcongsuat in _lstNhomCongSuat)
+                {
+                    <tr>
+                        @{ var s1 = 0; }
+
+                        <td>@nhomcongsuat.Name</td>
+                        @foreach (var cellvalue in _lstTinhTrangTau)
+                        {
+                            <td class="text-right">
+                                <!-- gia tri de o day -->
+                                @Model.F_by_Status[Model.MA_TINHTP + "#" + nhomcongsuat.ID + "#" + cellvalue.ID]
+
+                                @{
+                            if (cellvalue.ID == 1 || cellvalue.ID == 2)
+                            {
+                                s1 += Model.F_by_Status[Model.MA_TINHTP + "#" + nhomcongsuat.ID + "#" + cellvalue.ID];
+                            }
+
+                                }
+                            </td>
+                        }
+
+                        <td class="text-right">@s1</td>
+                    </tr>
+                }
+
+                <tr>
+                    <td>Tổng</td>
+
+                    @{ var tong_s1 = 0;}
+                    @foreach (var status in _lstTinhTrangTau)
+                    {
+                        <td class="text-right">
+                            @Model.Sum_F_by_Status[Model.MA_TINHTP + "#" + status.ID]
+
+                            @{
+                        if (status.ID == 1 || status.ID == 2)
+                        {
+                            tong_s1 += Model.Sum_F_by_Status[Model.MA_TINHTP + "#" + status.ID];
+                        }
+                            }
+                        </td>
+                    }
+
+                    <td class="text-danger text-right">@tong_s1</td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+</div>

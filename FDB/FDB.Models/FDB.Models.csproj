@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BDFC616A-91E8-4394-BF61-7B18570F063A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FDB.Models</RootNamespace>
+    <AssemblyName>FDB.Models</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DataAnnotationsExtensions">
+      <HintPath>..\packages\DataAnnotationsExtensions.1.1.0.0\lib\NETFramework40\DataAnnotationsExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="MVC Foolproof Validation">
+      <HintPath>..\packages\foolproof.0.9.4517\lib\MVC Foolproof Validation.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.0.0\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DanhMuc\CheckBoxListItem.cs" />
+    <Compile Include="DanhMuc\DCAP_TAU_DANG_KIEM.cs" />
+    <Compile Include="DanhMuc\DCONG_DUNG_TAU.cs" />
+    <Compile Include="DanhMuc\DKHU_BAO_TON.cs" />
+    <Compile Include="DanhMuc\DM_CANGCA.cs" />
+    <Compile Include="DanhMuc\DM_DOITUONG_GIA_THITRUONG.cs" />
+    <Compile Include="DanhMuc\DM_DOITUONG_KT.cs" />
+    <Compile Include="DanhMuc\DM_DOITUONG_NUOI.cs" />
+    <Compile Include="DanhMuc\DM_DOITUONG_NUOI_LONGBE.cs" />
+    <Compile Include="DanhMuc\DM_DOITUONG_NUOI_MANLO.cs" />
+    <Compile Include="DanhMuc\DM_DOITUONG_NUOI_NGOT.cs" />
+    <Compile Include="DanhMuc\DM_DOITUONG_NUOI_SANXUATGIONG.cs" />
+    <Compile Include="DanhMuc\DM_DOITUONG_KT_IUU.cs" />
+    <Compile Include="DanhMuc\DM_DOITUONG_NUOI_THIETHAI.cs" />
+    <Compile Include="DanhMuc\DM_DONVIHANHCHINH.cs" />
+    <Compile Include="DanhMuc\DM_HINHTHUC_NUOI.cs" />
+    <Compile Include="DanhMuc\DM_LOAI_MATNUOC_KT.cs" />
+    <Compile Include="DanhMuc\DM_LOAI_MATNUOC_NGOTMANLO.cs" />
+    <Compile Include="DanhMuc\DM_LOAI_MATNUOC_NUOI_LONGBE.cs" />
+    <Compile Include="DanhMuc\DM_LOAI_MATNUOC_NUOI_SANXUATGIONG.cs" />
+    <Compile Include="DanhMuc\DM_NGHE.cs" />
+    <Compile Include="DanhMuc\DM_NHOMDOITUONG_KT.cs" />
+    <Compile Include="DanhMuc\DM_NHOMDOITUONG_NUOI.cs" />
+    <Compile Include="DanhMuc\DM_NHOMDOITUONG_NUOI_LONGBE.cs" />
+    <Compile Include="DanhMuc\DM_NHOMDOITUONG_NUOI_SANXUATGIONG.cs" />
+    <Compile Include="DanhMuc\DM_NHOMNGHE.cs" />
+    <Compile Include="DanhMuc\DNGUYENNHAN_THIETHAI.cs" />
+    <Compile Include="DanhMuc\DNHOM_TAU.cs" />
+    <Compile Include="DanhMuc\DPHANLOAI_GIA.cs" />
+    <Compile Include="DanhMuc\DPHAN_LOAI_CANG.cs" />
+    <Compile Include="DanhMuc\DPHAN_LOAI_KHUNEODAU.cs" />
+    <Compile Include="DanhMuc\DPHUONGXA.cs" />
+    <Compile Include="DanhMuc\DQUANHUYEN.cs" />
+    <Compile Include="DanhMuc\DSUCOVENGUOI.cs" />
+    <Compile Include="DanhMuc\DSUCOVETAU.cs" />
+    <Compile Include="DanhMuc\DTINHTP.cs" />
+    <Compile Include="DanhMuc\DTINH_TRANG_DANG_KIEM.cs" />
+    <Compile Include="DanhMuc\DTINH_TRANG_TAU.cs" />
+    <Compile Include="DanhMuc\DTTDANG_KIEM.cs" />
+    <Compile Include="DanhMuc\DTYLE_THIETHAI.cs" />
+    <Compile Include="DanhMuc\DVAT_LIEU_VO.cs" />
+    <Compile Include="DanhMuc\DVUNG_TUYEN.cs" />
+    <Compile Include="KhaiThac\KT_BAC.cs" />
+    <Compile Include="KhaiThac\KT_CANGCA.cs" />
+    <Compile Include="KhaiThac\KT_CPUE.cs" />
+    <Compile Include="KhaiThac\KT_DANGKIEM.cs" />
+    <Compile Include="KhaiThac\KT_DONGSUA_TAUTHUYEN.cs" />
+    <Compile Include="KhaiThac\KT_GIAYPHEP.cs" />
+    <Compile Include="KhaiThac\KT_IUU_GIAYCHUNGNHAN.cs" />
+    <Compile Include="KhaiThac\KT_IUU_GIAYXN_NGUYENLIEU.cs" />
+    <Compile Include="KhaiThac\KT_KHUBAOTON.cs" />
+    <Compile Include="KhaiThac\KT_KHUBAOVENGUONLOI.cs" />
+    <Compile Include="KhaiThac\KT_KHUNEODAU.cs" />
+    <Compile Include="KhaiThac\KT_NGAYHOATDONG.cs" />
+    <Compile Include="KhaiThac\KT_SANLUONG.cs" />
+    <Compile Include="KhaiThac\KT_SANLUONG_DETAIL.cs" />
+    <Compile Include="KhaiThac\KT_SUCOVENGUOI.cs" />
+    <Compile Include="KhaiThac\KT_SUCOVETAU.cs" />
+    <Compile Include="KhaiThac\KT_TAUTHUYEN.cs" />
+    <Compile Include="KhaiThac\KT_THIETHAIKHAITHAC.cs" />
+    <Compile Include="KhaiThac\KT_TONGQUAN_NGHECA.cs" />
+    <Compile Include="NuoiTrong\NT_COSO_HATANG.cs" />
+    <Compile Include="NuoiTrong\NT_NUOCNGOT_MANNO.cs" />
+    <Compile Include="NuoiTrong\NT_NUOC_MANLO.cs" />
+    <Compile Include="NuoiTrong\NT_NUOC_NGOT.cs" />
+    <Compile Include="NuoiTrong\NT_NUOILONGBE.cs" />
+    <Compile Include="NuoiTrong\NT_SANXUATGIONG.cs" />
+    <Compile Include="NuoiTrong\NT_THIETHAI.cs" />
+    <Compile Include="NuoiTrong\NT_TT_THITRUONG.cs" />
+    <Compile Include="NuoiTrong\NT_YEUTOVATNUOIDAUVAO.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\BC_TCTS\BC_TCTS.cs" />
+    <Compile Include="Reports\KhaiThac\KT_BC_MAU1.cs" />
+    <Compile Include="Reports\KhaiThac\KT_BC_MAU10.cs" />
+    <Compile Include="Reports\KhaiThac\KT_BC_MAU2.cs" />
+    <Compile Include="Reports\KhaiThac\KT_BC_MAU3.cs" />
+    <Compile Include="Reports\KhaiThac\KT_BC_MAU4.cs" />
+    <Compile Include="Reports\KhaiThac\KT_BC_MAU5.cs" />
+    <Compile Include="Reports\KhaiThac\KT_BC_MAU6.cs" />
+    <Compile Include="Reports\KhaiThac\KT_BC_MAU7.cs" />
+    <Compile Include="Reports\KhaiThac\KT_BC_MAU8.cs" />
+    <Compile Include="Reports\KhaiThac\KT_BC_MAU9.cs" />
+    <Compile Include="Reports\NuoiTrong\NT_BC_MAU1.cs" />
+    <Compile Include="Reports\NuoiTrong\NT_BC_MAU2.cs" />
+    <Compile Include="Reports\NuoiTrong\NT_BC_MAU3.cs" />
+    <Compile Include="Reports\NuoiTrong\NT_BC_MAU4.cs" />
+    <Compile Include="Reports\NuoiTrong\NT_BC_MAU5.cs" />
+    <Compile Include="ViewModel\KT_SANLUONG_FAO_BuildFormula.cs" />
+    <Compile Include="ViewModel\ViewModelAccountLogs.cs" />
+    <Compile Include="ViewModel\ViewModelAddKT_THIETHAIKHAITHAC.cs" />
+    <Compile Include="ViewModel\ViewModelEditKT_THIETHAIKHAITHAC.cs" />
+    <Compile Include="ViewModel\ViewModelKT_GIAYPHEP_NOTEXIST.cs" />
+    <Compile Include="ViewModel\ViewModelSearchAcc_Login.cs" />
+    <Compile Include="ViewModel\ViewModelSearchDM_CANGCA.cs" />
+    <Compile Include="ViewModel\ViewModelSearchDM_DOITUONG_KT.cs" />
+    <Compile Include="ViewModel\ViewModelSearchDM_DOITUONG_NUOI_MANLO.cs" />
+    <Compile Include="ViewModel\ViewModelSearchDM_DOITUONG_NUOI_NGOT.cs" />
+    <Compile Include="ViewModel\ViewModelSearchDM_NHOMDOITUONG_KT.cs" />
+    <Compile Include="ViewModel\ViewModelSearchKT_BAC.cs" />
+    <Compile Include="ViewModel\ViewModelSearchKT_CANGCA.cs" />
+    <Compile Include="ViewModel\ViewModelSearchKT_CANGCA_THONGKE.cs" />
+    <Compile Include="ViewModel\ViewModelSearchKT_CPUE.cs" />
+    <Compile Include="ViewModel\ViewModelSearchKT_DANGKIEM.cs" />
+    <Compile Include="ViewModel\ViewModelSearchKT_DONGSUA_TAUTHUYEN.cs" />
+    <Compile Include="ViewModel\ViewModelSearchKT_GIAYPHEP.cs" />
+    <Compile Include="ViewModel\ViewModelSearchKT_GIAYPHEP_THONGKE.cs" />
+    <Compile Include="ViewModel\ViewModelSearchKT_IUU_CN.cs" />
+    <Compile Include="ViewModel\ViewModelSearchKT_KHUBAOVENGUONLOI.cs" />
+    <Compile Include="ViewModel\ViewModelSearchKT_IUU_XN.cs" />
+    <Compile Include="ViewModel\ViewModelSearchKT_KHUNEODAU.cs" />
+    <Compile Include="ViewModel\ViewModelSearchKT_KHU_BAO_TON.cs" />
+    <Compile Include="ViewModel\ViewModelSearchKT_NGAYHOATDONG.cs" />
+    <Compile Include="ViewModel\ViewModelSearchKT_SANLUONG.cs" />
+    <Compile Include="ViewModel\ViewModelSearchKT_SANLUONG_FAO.cs" />
+    <Compile Include="ViewModel\ViewModelSearchKT_TAUTHUYEN.cs" />
+    <Compile Include="ViewModel\ViewModelSearchKT_THIETHAIKHAITHAC.cs" />
+    <Compile Include="ViewModel\ViewModelSearchNT_COSO_HATANG.cs" />
+    <Compile Include="ViewModel\ViewModelSearchNT_NUOCNGOT_MANNO.cs" />
+    <Compile Include="ViewModel\ViewModelSearchNT_NUOC_MANLO.cs" />
+    <Compile Include="ViewModel\ViewModelSearchNT_NUOC_NGOT.cs" />
+    <Compile Include="ViewModel\ViewModelSearchNT_NUOILONGBE.cs" />
+    <Compile Include="ViewModel\ViewModelSearchNT_SANXUATGIONG.cs" />
+    <Compile Include="ViewModel\ViewModelSearchNT_TT_THITRUONG.cs" />
+    <Compile Include="ViewModel\ViewModelSearchNT_YEUTOVATNUOIDAUVAO.cs" />
+    <Compile Include="ViewModel\ViewModelSearchNT_THIETHAI.cs" />
+    <Compile Include="ViewModel\ViewModelSearchTK_TAUTHUYEN.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FDB.Common\FDB.Common.csproj">
+      <Project>{6d9b2271-ac9f-433a-84be-4bca5925a9c6}</Project>
+      <Name>FDB.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

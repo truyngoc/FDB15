@@ -1,0 +1,477 @@
+﻿@model FDB.Models.KT_GIAYPHEP
+
+@{
+    ViewBag.Title = "Giấy phép khai thác";
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/datepicker.js"></script>
+
+<script src="~/Scripts/moment.js"></script>
+<script src="~/Scripts/CustomValidation.js"></script>
+
+@using (Html.BeginForm())
+{
+    <div class="container fdb-div-content fdb-div-corner-all">
+
+        <h3 class="text-center fdb-title-search-form">Cấp phép khai thác</h3>
+
+
+        @Html.AntiForgeryToken()
+
+        <hr class="fdb-hr" />
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true)
+
+            @Html.Hidden("IsEdit", 0)
+
+            <div class="row">
+                <div class="col-md-2 control-label">
+                    Số đăng ký <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.SO_DK, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.SO_DK)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Ngày đăng ký
+                </div>
+                <div class="col-md-2">
+                    @Html.TextBoxFor(model => model.NGAY_DK, "{0:dd/MM/yyyy}", new { @class = "form-control", @readonly = true })
+                </div>
+            </div>
+
+            <div class="row margin-top-03">
+                <div class="col-md-2 control-label">
+                    Số giấy phép <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.SO_GP, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.SO_GP)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Ngày cấp giấy phép <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-2">
+                    @Html.EditorFor(model => model.NGAY_GP)
+                    @Html.ValidationMessageFor(model => model.NGAY_GP)
+                </div>
+            </div>
+
+            <div class="row margin-top-03">
+                <div class="col-md-2 control-label">
+                    Ngày hiệu lực <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-2">
+                    @Html.EditorFor(model => model.NGAY_HL_GP)
+                    @Html.ValidationMessageFor(model => model.NGAY_HL_GP)
+                </div>
+                <div class="col-md-2"></div>
+
+                <div class="col-md-2 control-label">
+                    Ngày hết hạn <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-2">
+                    @Html.EditorFor(model => model.NGAY_HHL_GP)
+                    @Html.ValidationMessageFor(model => model.NGAY_HHL_GP)
+                </div>
+            </div>
+
+            <div class="row margin-top-03">
+                <div class="col-md-2 control-label">
+                    Cảng đăng ký <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.CANG_DANG_KY, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CANG_DANG_KY)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Tỉnh/thành phố <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.MA_TINHTP, (SelectList)ViewBag.TINH_THANHPHOs, string.Empty, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.MA_TINHTP)
+                </div>
+            </div>
+
+            <div class="row margin-top-03">
+                <div class="col-md-2 control-label">
+                    Tên tàu
+                </div>
+                <div class="col-md-4">
+                    @*@Html.TextBoxFor(model => model.TEN_TAU, new { @class = "form-control", @readonly = true })*@
+                    @Html.TextBoxFor(model => model.TEN_TAU, new { @class = "form-control", @readonly = true })
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Chủ tàu
+                </div>
+                <div class="col-md-4">
+                    @*@Html.TextBoxFor(model => model.CHU_PHUONG_TIEN, new { @class = "form-control", @readonly = true })*@
+                    @Html.TextBoxFor(model => model.CHU_PHUONG_TIEN, new { @class = "form-control", @readonly = true })
+                </div>
+            </div>
+
+            <div class="row margin-top-03">
+                <div class="col-md-2 control-label">
+                    Địa chỉ
+                </div>
+                <div class="col-md-4">
+                    @*@Html.TextBoxFor(model => model.DIA_CHI, new { @class = "form-control", @readonly = true })*@
+                    @Html.TextBoxFor(model => model.DIA_CHI, new { @class = "form-control", @readonly = true })
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Điện thoại
+                </div>
+                <div class="col-md-4">
+                    @*@Html.TextBoxFor(model => model.DIEN_THOAI, new { @class = "form-control", @readonly = true })*@
+                    @Html.TextBoxFor(model => model.DIEN_THOAI, new { @class = "form-control", @readonly = true })
+                </div>
+            </div>
+
+
+
+            <h4 class="text-center">Ngành nghề cấp phép</h4>
+
+            <div class="row margin-top-05">
+                <div class="col-md-9 col-md-offset-2">
+                    <table class="table table-hover table-bordered table-condensed table-responsive">
+                        <tr>
+                            <th>STT</th>
+                            <th>
+                                Ngành nghề
+                            </th>
+                            <th>
+                                Nghề chính
+                            </th>
+                            <th>
+                                Vùng tuyến
+                            </th>
+                            <th>
+                                Thời gian cấp phép
+                            </th>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                1
+                            </td>
+                            <td>
+                                @Html.DropDownListFor(model => model.DM_NHOMNGHEID, (SelectList)ViewBag.DM_NGHEs, string.Empty, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.DM_NHOMNGHEID)
+                            </td>
+                            <td>
+                                @Html.CheckBoxFor(model => model.IsNGHECHINH, new { @onclick = "return false;" })
+                                @Html.ValidationMessageFor(model => model.IsNGHECHINH)
+                            </td>
+                            <td>
+                                @Html.DropDownListFor(model => model.DVUNG_TUYENID, (SelectList)ViewBag.DVUNG_TUYENs, string.Empty, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.DVUNG_TUYENID)
+                            </td>
+                            <td>
+                                Từ
+                                @Html.TextBoxFor(m => m.CAP_PHEP_TU, "{0:dd/MM/yyyy}", new { @class = "form-control fdb_form-inline" })
+                                @Html.ValidationMessageFor(model => model.CAP_PHEP_TU)
+                                Đến
+                                @Html.TextBoxFor(m => m.CAP_PHEP_DEN, "{0:dd/MM/yyyy}", new { @class = "form-control fdb_form-inline" })
+                                @Html.ValidationMessageFor(model => model.CAP_PHEP_DEN)
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                2
+                            </td>
+                            <td>
+                                @Html.DropDownListFor(model => model.DM_NHOMNGHE2ID, (SelectList)ViewBag.DM_NGHEs, string.Empty, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.DM_NHOMNGHE2ID)
+                            </td>
+                            <td>
+                                @Html.CheckBoxFor(model => model.IsNGHECHINH_2)
+                                @Html.ValidationMessageFor(model => model.IsNGHECHINH_2)
+                            </td>
+                            <td>
+                                @Html.DropDownListFor(model => model.DVUNG_TUYEN2ID, (SelectList)ViewBag.DVUNG_TUYENs, string.Empty, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.DVUNG_TUYEN2ID)
+                            </td>
+                            <td>
+                                Từ
+                                @Html.TextBoxFor(m => m.CAP_PHEP_TU_2, "{0:dd/MM/yyyy}", new { @class = "form-control fdb_form-inline" })
+                                @Html.ValidationMessageFor(model => model.CAP_PHEP_TU_2)
+                                Đến
+                                @Html.TextBoxFor(m => m.CAP_PHEP_DEN_2, "{0:dd/MM/yyyy}", new { @class = "form-control fdb_form-inline" })
+                                @Html.ValidationMessageFor(model => model.CAP_PHEP_DEN_2)
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                3
+                            </td>
+                            <td>
+                                @Html.DropDownListFor(model => model.DM_NHOMNGHE3ID, (SelectList)ViewBag.DM_NGHEs, string.Empty, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.DM_NHOMNGHE3ID)
+                            </td>
+                            <td>
+                                @Html.CheckBoxFor(model => model.IsNGHECHINH_3)
+                                @Html.ValidationMessageFor(model => model.IsNGHECHINH_3)
+                            </td>
+                            <td>
+                                @Html.DropDownListFor(model => model.DVUNG_TUYEN3ID, (SelectList)ViewBag.DVUNG_TUYENs, string.Empty, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.DVUNG_TUYEN3ID)
+                            </td>
+                            <td>
+                                Từ
+                                @Html.TextBoxFor(m => m.CAP_PHEP_TU_3, "{0:dd/MM/yyyy}", new { @class = "form-control fdb_form-inline" })
+                                @Html.ValidationMessageFor(model => model.CAP_PHEP_TU_3)
+                                Đến
+                                @Html.TextBoxFor(m => m.CAP_PHEP_DEN_3, "{0:dd/MM/yyyy}", new { @class = "form-control fdb_form-inline" })
+                                @Html.ValidationMessageFor(model => model.CAP_PHEP_DEN_3)
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                4
+                            </td>
+                            <td>
+                                @Html.DropDownListFor(model => model.DM_NHOMNGHE4ID, (SelectList)ViewBag.DM_NGHEs, string.Empty, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.DM_NHOMNGHE4ID)
+                            </td>
+                            <td>
+                                @Html.CheckBoxFor(model => model.IsNGHECHINH_4)
+                                @Html.ValidationMessageFor(model => model.IsNGHECHINH_4)
+                            </td>
+                            <td>
+                                @Html.DropDownListFor(model => model.DVUNG_TUYEN4ID, (SelectList)ViewBag.DVUNG_TUYENs, string.Empty, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.DVUNG_TUYEN4ID)
+                            </td>
+                            <td>
+                                Từ
+                                @Html.TextBoxFor(m => m.CAP_PHEP_TU_4, "{0:dd/MM/yyyy}", new { @class = "form-control fdb_form-inline" })
+                                @Html.ValidationMessageFor(model => model.CAP_PHEP_TU_4)
+                                Đến
+                                @Html.TextBoxFor(m => m.CAP_PHEP_DEN_4, "{0:dd/MM/yyyy}", new { @class = "form-control fdb_form-inline" })
+                                @Html.ValidationMessageFor(model => model.CAP_PHEP_DEN_4)
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                5
+                            </td>
+                            <td>
+                                @Html.DropDownListFor(model => model.DM_NHOMNGHE5ID, (SelectList)ViewBag.DM_NGHEs, string.Empty, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.DM_NHOMNGHE5ID)
+                            </td>
+                            <td>
+                                @Html.CheckBoxFor(model => model.IsNGHECHINH_5)
+                                @Html.ValidationMessageFor(model => model.IsNGHECHINH_5)
+                            </td>
+                            <td>
+                                @Html.DropDownListFor(model => model.DVUNG_TUYEN5ID, (SelectList)ViewBag.DVUNG_TUYENs, string.Empty, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.DVUNG_TUYEN5ID)
+                            </td>
+                            <td>
+                                Từ
+                                @Html.TextBoxFor(m => m.CAP_PHEP_TU_5, "{0:dd/MM/yyyy}", new { @class = "form-control fdb_form-inline" })
+                                @Html.ValidationMessageFor(model => model.CAP_PHEP_TU_5)
+                                Đến
+                                @Html.TextBoxFor(m => m.CAP_PHEP_DEN_5, "{0:dd/MM/yyyy}", new { @class = "form-control fdb_form-inline" })
+                                @Html.ValidationMessageFor(model => model.CAP_PHEP_DEN_5)
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <br />
+
+    <div class="row">
+        <div class="col-md-12">
+            @*<input type="submit" value="Cập nhật" class="btn btn-primary" />*@
+            <button type="submit" class="btn btn-danger btn-sm">
+                <span class="glyphicon glyphicon-floppy-disk"></span> Cập nhật
+            </button>
+            &nbsp;&nbsp;
+            @Html.ActionLink("Quay lại", "Index", "KT_GIAYPHEP", null, new { @class = "btn btn-primary btn-sm" })
+        </div>
+
+    </div>
+}
+
+@* import 2 file nay vao de ap dung tooltip cho validation message
+    <script src="~/Scripts/jquery.validate.mvc.js"></script>
+    <link href="~/Content/jquery.validate.mvc.css" rel="stylesheet" />
+*@
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#IsNGHECHINH').prop('checked', true);
+
+        // Load du lieu cua dang ky
+        // khi nhap so so dang ky + Enter
+        $('#SO_DK').keypress(function (e) {
+            if (e.which == '13') {
+                e.preventDefault();
+
+                load_by_so_dang_ky();
+            }
+        });
+    });
+
+
+
+    // phan hien thi tooltip cho validation message
+    $("form input").tooltipValidation({
+        placement: "right"
+    });
+
+    $("form select").tooltipValidation({
+        placement: "right"
+    });
+
+
+
+    // hien thi va format datepicker
+    $("#CAP_PHEP_TU").datepicker({
+        changeMonth: true,
+        changeYear: true,
+
+        dateFormat: 'dd/mm/yy'
+    });
+
+    $("#CAP_PHEP_DEN").datepicker({
+        changeMonth: true,
+        changeYear: true,
+
+        dateFormat: 'dd/mm/yy'
+    });
+
+    $("#CAP_PHEP_TU_2").datepicker({
+        changeMonth: true,
+        changeYear: true,
+
+        dateFormat: 'dd/mm/yy'
+    });
+
+    $("#CAP_PHEP_DEN_2").datepicker({
+        changeMonth: true,
+        changeYear: true,
+
+        dateFormat: 'dd/mm/yy'
+    });
+
+    $("#CAP_PHEP_TU_3").datepicker({
+        changeMonth: true,
+        changeYear: true,
+
+        dateFormat: 'dd/mm/yy'
+    });
+
+    $("#CAP_PHEP_DEN_3").datepicker({
+        changeMonth: true,
+        changeYear: true,
+
+        dateFormat: 'dd/mm/yy'
+    });
+
+    $("#CAP_PHEP_TU_4").datepicker({
+        changeMonth: true,
+        changeYear: true,
+
+        dateFormat: 'dd/mm/yy'
+    });
+
+    $("#CAP_PHEP_DEN_4").datepicker({
+        changeMonth: true,
+        changeYear: true,
+
+        dateFormat: 'dd/mm/yy'
+    });
+
+    $("#CAP_PHEP_TU_5").datepicker({
+        changeMonth: true,
+        changeYear: true,
+
+        dateFormat: 'dd/mm/yy'
+    });
+
+    $("#CAP_PHEP_DEN_5").datepicker({
+        changeMonth: true,
+        changeYear: true,
+
+        dateFormat: 'dd/mm/yy'
+    });
+
+
+    $("#NGAY_GP").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+    $("#NGAY_HL_GP").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+    $("#NGAY_HHL_GP").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+
+    $("#CAP_PHEP_TU").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+    $("#CAP_PHEP_DEN").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+    $("#CAP_PHEP_TU_2").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+    $("#CAP_PHEP_DEN_2").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+    $("#CAP_PHEP_TU_3").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+    $("#CAP_PHEP_DEN_3").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+    $("#CAP_PHEP_TU_4").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+    $("#CAP_PHEP_DEN_4").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+    $("#CAP_PHEP_TU_5").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+    $("#CAP_PHEP_DEN_5").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+
+
+    function ToJavaScriptDate(value) {
+        if (value != null) {
+            var pattern = /Date\(([^)]+)\)/;
+            var results = pattern.exec(value);
+            var dt = new Date(parseFloat(results[1]));
+            return dt.getDate() + "/" + (dt.getMonth() + 1) + "/" + dt.getFullYear();
+        }
+        return null;
+    }
+
+
+    function load_by_so_dang_ky() {
+        $.ajax({
+            type: 'GET',
+            dataType: 'Json',
+            url: '@Url.Action("Load_Tau_By_SoDK", "KT_GIAYPHEP")',
+            data: {
+                so_Dang_Ky: $('#SO_DK').val()
+            },
+            success: function (data) {                
+                // ngay dang ky
+                $('#NGAY_DK').val(ToJavaScriptDate(data.NGAY_DK));
+                // ten tau
+                $('#TEN_TAU').val(data.TEN_TAU);
+                // chu phuong tien
+                $('#CHU_PHUONG_TIEN').val(data.CHU_PHUONG_TIEN);
+                // nam dong
+                $('#DIA_CHI').val(data.DIA_CHI);
+                // noi dong
+                $('#DIEN_THOAI').val(data.DIEN_THOAI);
+                // nghe chinh
+                $('#DM_NHOMNGHEID').val(data.NGHE_CHINH_ID);
+                // nghe phu
+                $('#DM_NHOMNGHEID2').val(data.NGHE_PHU_ID);                
+            },
+            error: function (xhr, ajaxOption, thorwnError) {
+                console.log(thorwnError + xhr);
+            }
+        });
+    }
+
+
+    
+
+</script>

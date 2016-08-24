@@ -1,0 +1,41 @@
+﻿@model FDB.Models.KT_BC_MAU10
+
+
+@{
+    ViewBag.Title = "KT_BC_MAU10";
+}
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <h3 class="text-center fdb-title-search-form">Báo cáo tai nạn tàu cá</h3>
+    <br />
+    <div class="container">
+        @using (Html.BeginForm("KT_BC_MAU10", "BC_KHAITHAC", FormMethod.Get, new { target = "_blank" }))
+        {
+            <div class="row">
+                <div class="col-md-2 control-label">
+                    Ngày báo cáo từ
+                </div>
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.TU_NGAY)
+                    @Html.ValidationMessageFor(model => model.TU_NGAY)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Đến ngày
+                </div>
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.DEN_NGAY)
+                    @Html.ValidationMessageFor(model => model.DEN_NGAY)
+                </div>
+            </div>
+
+            <p class="margin-top-05">
+                <button type="submit" class="btn btn-primary btn-sm" name="SearchButton" value="Generate report">
+                    @*<i class='fa fa-file-excel-o'></i>*@
+                    Xuất báo cáo
+                </button>
+            </p>
+        }
+    </div>
+</div>
+

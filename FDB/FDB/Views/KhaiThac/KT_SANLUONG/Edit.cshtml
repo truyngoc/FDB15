@@ -1,0 +1,431 @@
+﻿@model FDB.Models.KT_SANLUONG
+
+@{
+    ViewBag.Title = "Sửa";
+
+}
+
+@using (Html.BeginForm("Edit", "KT_SANLUONG", FormMethod.Post, new { @id = "formEdit" }))
+{
+    <div class="container fdb-div-content fdb-div-corner-all">
+        @*<div class="row">
+                <div class="col-md-2">
+
+                </div>
+                <div class="col-md-10" style=" text-align:center">
+                    <h3>Thu thập thông tin sản lượng theo Tỉnh/Thành phố</h3>
+                    <strong>(Tần suất thu thập 1 tháng/1 lần)</strong>
+                </div>
+            </div>
+            <br />*@
+
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.ID)
+
+            <div class="col-md-8 center-table">
+                <div class="row">
+                    <div class="fdb-title-form-24 text-center col-md-12">
+                        Báo cáo sản lượng khai thác thủy sản<br />
+                        <div class="text-center fdb-title-form-14 col-md-12">
+                            (Tần suất thu thập 1 tháng/1 lần)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 center-table">
+                <div class="row">
+                    <div class="col-md-2 control-label">
+                        Tháng <label style="color:red;">(*)</label>
+                    </div>
+
+                    <div class="col-md-4">
+
+                        @Html.DropDownListFor(m => m.THANG, new List<SelectListItem>
+                    {                   new SelectListItem() {Text = "", Value=""},
+                                        new SelectListItem() {Text = "Tháng 1", Value="1"},
+                                        new SelectListItem() {Text = "Tháng 2", Value="2"},
+                                        new SelectListItem() {Text = "Tháng 3", Value="3"},
+                                        new SelectListItem() {Text = "Tháng 4", Value="4"},
+                                        new SelectListItem() {Text = "Tháng 5", Value="5"},
+                                        new SelectListItem() {Text = "Tháng 6", Value="6"},
+                                        new SelectListItem() {Text = "Tháng 7", Value="7"},
+                                        new SelectListItem() {Text = "Tháng 8", Value="8"},
+                                        new SelectListItem() {Text = "Tháng 9", Value="9"},
+                                        new SelectListItem() {Text = "Tháng 10", Value="10"},
+                                        new SelectListItem() {Text = "Tháng 11", Value="11"},
+                                        new SelectListItem() {Text = "Tháng 12", Value="12"}
+                    }, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.THANG)
+                        <label id="lblValidateTHANG" style="color: #b94a48; display: none"></label>
+                    </div>
+
+
+                    <div class="col-md-2 control-label">
+
+                        Năm <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+
+                        @Html.TextBoxFor(m => m.NAM, new { @class = "form-control", @type = "text" })
+                        @Html.ValidationMessageFor(model => model.NAM)
+                        <span id="lblValidateNAM" style="color: #b94a48; display: none"></span>
+                    </div>
+                </div>
+
+                @*<div class="row margin-top-05">
+                        <div class="col-md-3 control-label">
+
+                            Năm <label style="color:red;">(*)</label>
+                        </div>
+                        <div class="col-md-9">
+
+                            @Html.TextBoxFor(m => m.NAM, new { @class = "form-control", @type = "text" })
+                            @Html.ValidationMessageFor(model => model.NAM)
+                            <span id="lblValidateNAM" style="color: #b94a48; display: none"></span>
+                        </div>
+                    </div>*@
+
+                <div class="row margin-top-05">
+
+                    <div class="col-md-9">
+                        @Html.HiddenFor(m => m.MA_TINHTP)
+                        @Html.HiddenFor(m => m.NGAY_NHAP)
+                        @Html.HiddenFor(m => m.NGUOI_NHAP)
+                        @*<select disabled>
+                                <option value="1" selected>sdfafsa</option>
+                            </select>*@, @*new { @class = "form-control", @readonly = true }*@
+                        </div>
+                    </div>
+
+
+
+                    <label id="lblValidateSANLUONGDETAIL" style="color: #b94a48"></label>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <table class="table table-hover table-bordered table-condensed" id="Table1">
+                                <tr>
+                                    <th>
+                                        Đối tượng khai thác
+                                    </th>
+                                    <th>
+                                        Nghề khai thác
+                                    </th>
+                                    <th>
+                                        Nhóm công suất
+                                    </th>
+                                    <th>
+                                        Sản lượng (kg)
+                                    </th>
+                                    <th>
+                                        <label class="BtnPlus" style="cursor: pointer; width: 50px; text-align: center"><img src="@Url.Content("~/fonts/button-add-icon.png")" title="Thêm mới" /></label>
+
+                                    </th>
+                                </tr>
+                                @*@Html.Raw(ViewBag.DSachDetail)*@
+                                @{
+
+    int i = 1;
+
+    //var DsNhomDoiTuong = FDB.Common.CategoryCommon.lstDMDoiTuongCPUE;
+    var DsNhomDoiTuong = (new FDB.DataAccessLayer.FDBContext()).DM_NHOMDOITUONG_KT.ToList();
+    var DsNhomNghe = (new FDB.DataAccessLayer.FDBContext()).DM_NHOMNGHE.ToList();
+    var DsNhomCongSuat = (new FDB.DataAccessLayer.FDBContext()).DNHOM_TAU.ToList();
+
+    if (Model.DSSanLuongDetail.Count > 0)
+    {
+
+        foreach (var item in Model.DSSanLuongDetail)
+        {
+
+            <tr>
+                <td >
+                    <select name="ddlID_KHAITHAC_NHOM_DOITUONG_@i.ToString()" class="form-control" id="ddlID_KHAITHAC_NHOM_DOITUONG_@i.ToString()">
+                        <option value="">-Tất cả-</option>
+                        @foreach (var itemDM in DsNhomDoiTuong)
+                        {
+                            @*<option value="@itemDM.ID.ToString()" @(itemDM.ID == item.ID_KHAITHAC_NHOM_DOITUONG ? "selected" : "")>@itemDM.NAME</option>*@
+                            <option value="@itemDM.ID.ToString()" @(itemDM.ID == item.ID_KHAITHAC_NHOM_DOITUONG ? "selected" : "")>@itemDM.TEN_NHOM</option>
+                        }
+
+                    </select>
+                </td>
+                <td >
+                    <select name="ddlID_KHAITHAC_NHOM_NGHE_@i.ToString()" class="form-control" id="ddlID_KHAITHAC_NHOM_NGHE_@i.ToString()">
+                        <option value="">-Tất cả-</option>
+                        @foreach (var itemDM in DsNhomNghe)
+                        {
+                            <option value="@itemDM.DM_NhomNgheID.ToString()" @(itemDM.DM_NhomNgheID == item.ID_KHAITHAC_NHOM_NGHE ? "selected" : "")>@itemDM.TenNhomNghe</option>
+                        }
+
+                    </select>
+                </td>
+                <td >
+                    <select name="ddlID_KHAITHAC_NHOM_CONGSUAT_@i.ToString()" class="form-control" id="ddlID_KHAITHAC_NHOM_CONGSUAT_@i.ToString()">
+                        <option value="">-Tất cả-</option>
+                        @foreach (var itemDM in DsNhomCongSuat)
+                        {
+                            <option value="@itemDM.ID.ToString()" @(itemDM.ID == item.ID_KHAITHAC_NHOM_CONGSUAT ? "selected" : "")>@itemDM.Name</option>
+                        }
+
+                    </select>
+                </td>
+
+                <td><input type="text" value="@item.SAN_LUONG" class="form-control" name="txtSAN_LUONG_@i.ToString()" /></td>
+                <td>
+                    <label class="BtnPlus" style="cursor:pointer"><img src="@Url.Content("~/fonts/button-add-icon.png")" title="Thêm mới" /></label>
+                    <label class="BtnMinus" id="lbldetail_@i.ToString()" style="cursor:pointer"><img src="@Url.Content("~/fonts/DELETE.GIF")" title="Xóa" /></label>
+                </td>
+            </tr>
+
+
+                        i++;
+        }
+
+        ViewBag.MaxID = i;
+    }
+                                }
+
+                                @Html.Raw(@ViewBag.sEditHTML)
+                            </table>
+                        </div>
+                        <div class="col-md-push-4"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <br />
+        <div class="row">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-danger btn-sm" id="btnsubmit">
+                    <span class="glyphicon glyphicon-floppy-disk"></span> Cập nhật
+                </button>
+                &nbsp;&nbsp;
+                @Html.ActionLink("Quay lại", "Index", "KT_SANLUONG", null, new { @class = "btn btn-primary btn-sm" })
+            </div>
+        </div>
+}
+
+<input id="txtDMNhomNgheKhaiThac" style="display:none" value="@ViewBag.DMNhomNgheKhaiThac" />
+<input id="txtDMNhomDoiTuongKT" style="display:none" value="@ViewBag.DMNhomDoiTuongKT" />
+<input id="txtDMNhomCongSuat" style="display:none" value="@ViewBag.DMNhomCongSuat" />
+<label id="lblID" style="display:none">@ViewBag.MaxID </label>
+
+
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script src="~/Scripts/datepicker.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/jquery.maskMoney.js"></script>
+<script src="~/Scripts/jquery.number.js"></script>
+<script src="~/Scripts/jquery.masknumber.js"></script>
+<script src="~/Scripts/moment.js"></script>
+
+<script type="text/javascript">
+
+    $('#NAM').maskNumber({ integer: true, decimal: '', thousands: '' });
+
+
+</script>
+
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#Table1").find('input').number(true, 2);
+
+        var lblID = "#lbl1";
+        var ID = 1;
+        if ($('#lblID').html().trim() != "") {
+            ID = parseInt($('#lblID').html().toString());
+        }
+
+        //Nhóm đối tượng khai thác
+
+        var strNhomDoiTuongKT = $('#txtDMNhomDoiTuongKT').val();
+        var strDDL1 = strNhomDoiTuongKT + '</select>';
+
+        //Nhóm nghề khai thác
+        var strNhomNgheKhaiThac = $('#txtDMNhomNgheKhaiThac').val();
+        var strDDL2 = strNhomNgheKhaiThac + '</select>';
+
+        //nhóm công suất
+        var strNhomCongSuat = $('#txtDMNhomCongSuat').val();
+        var strDDL3 = strNhomCongSuat + '</select>';
+
+
+        function addRow() {
+            var html =
+                '<tr>' +
+                '<td><select  name="ddlID_KHAITHAC_NHOM_DOITUONG_' + ID + '" id="ddlID_KHAITHAC_NHOM_DOITUONG_' + ID + '" class="form-control"><option value>-tất cả-</option>' + strDDL1 + '</td>' +
+                '<td><select name="ddlID_KHAITHAC_NHOM_NGHE_' + ID + '" id="ddlID_KHAITHAC_NHOM_NGHE_' + ID + '" class="form-control"><option value>-tất cả-</option>' + strDDL2 + '</td>' +
+                '<td><select name="ddlID_KHAITHAC_NHOM_CONGSUAT_' + ID + '" id="ddlID_KHAITHAC_NHOM_CONGSUAT_' + ID + '" class="form-control"><option value>-tất cả-</option>' + strDDL3 + '</td>' +
+                '<td><input type="text" value=""  class="form-control" name="txtSAN_LUONG_' + ID + '" /></td>' +
+
+                '<td> <label class="BtnPlus" style="cursor:pointer" ><img src="@Url.Content("~/fonts/button-add-icon.png")" title="Thêm mới" /></label>' +
+                ' <label class="BtnMinus" id="lblSanLuongDetail_' + ID + '" style="cursor:pointer"><img src="@Url.Content("~/fonts/DELETE.GIF")" title="Xóa"  /></label>' +
+                '</td>' +
+                '</tr>';
+
+
+            $(html).appendTo($("#Table1"));
+            // mask decimal ở đây:
+            //$("#Table1").find('input').maskMoney({ prefix: '', thousands: ',', decimal: '.', affixesStay: false });
+            $("#Table1").find('input').number(true, 2);
+            ID++;
+
+        };
+
+        $("#Table1").on("click", ".BtnPlus", addRow);
+
+        $("#Table1").on("click", ".BtnMinus", deleteRow);
+
+        //Sự kiện on change loại mặt nước ==> nhóm đối tượng
+        $(document).on('change', ".selectLoaiMatNuoc", function () {
+            // alert($(this).val());
+            var loaiMatNuocVal = $(this).val();
+            var thisID = $(this).attr('id');
+            var lastNumber = thisID.split('_');
+            var NhomDoiTuongID = 'ddlID_KHAITHAC_NHOM_DOITUONG_' + lastNumber[lastNumber.length - 1].toString();
+            var DoiTuongID = 'ddlID_KHAITHAC_DOITUONG_' + lastNumber[lastNumber.length - 1].toString();
+            // alert(DoiTuongID);
+            var NhomDoiTuongval = $("#" + NhomDoiTuongID);
+            // alert(DoiTuongval);
+            // load thông tin đối tượng nuôi theo nhóm:
+            $.ajax({
+                url: '@Url.Action("getNhomDoiTuongByMatNuoc", "KT_SANLUONG")',
+                type: 'post',
+                data: {
+                    ma_MatNuoc: loaiMatNuocVal
+                }
+            }).done(function (response) {
+                // alert(response.toString());
+                var a = '<option value>-tất cả-</option>' + response;
+                //   var a =response;
+                $("#" + NhomDoiTuongID).html(a);
+                //// reset ward
+                var b = '<option value>-tất cả-</option>'
+                $("#" + DoiTuongID).html(b);
+            });
+
+        });
+
+        //Sự kiện on change Nhóm đối tượng nuôi ==> đối tượng nuôi
+        $(document).on('change', ".selectNhomNghe", function () {
+            // alert($(this).val());
+            var nhomDoiTuongVal = $(this).val();
+            var thisID = $(this).attr('id');
+            var lastNumber = thisID.split('_');
+            var DoiTuongID = 'ddlID_KHAITHAC_DOITUONG_' + lastNumber[lastNumber.length - 1].toString();
+            // alert(DoiTuongID);
+            var DoiTuongval = $("#" + DoiTuongID);
+            // alert(DoiTuongval);
+            // load thông tin đối tượng nuôi theo nhóm:
+            $.ajax({
+                url: '@Url.Action("getDoiTuongByNhom", "KT_SANLUONG")',
+                type: 'post',
+                data: {
+                    ma_NhomDoiTuong: nhomDoiTuongVal
+                }
+            }).done(function (response) {
+                // alert(response.toString());
+                var a = '<option value>-tất cả-</option>' + response;
+                $("#" + DoiTuongID).html(a);
+
+            });
+
+        });
+
+
+
+
+        function deleteRow() {
+            lblID = $(this).attr('id');
+            lblID = "#" + lblID.toString().trim();
+            if (confirm("Bạn chắc chắn muốn xóa?")) {
+                var par = $(this).parent().parent();
+                par.remove();
+            }
+
+            return false;
+
+        };
+
+        var validateNGAYNHAP = true;
+        $('#btnsubmit').click(function () {
+            var currentTime = new Date();
+            var currentMonth = currentTime.getMonth() + 1;
+            var currentYear = currentTime.getFullYear();
+
+            var lblValidateTHANG = $('#lblValidateTHANG');
+            var lblValidateNAM = $('#lblValidateNAM');
+
+            lblValidateNAM.html('');
+            lblValidateTHANG.html('');
+
+
+            var txtTHANG = $('#THANG').val();
+            var txtNAM = $('#NAM').val();
+            if (txtNAM > currentYear) {
+                lblValidateNAM.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+                lblValidateNAM.html('(*)Năm không được lớn hơn năm hiện tại');
+                lblValidateTHANG.html('');
+                lblValidateTHANG.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+                $('#NAM').focus();
+                return false;
+            }
+            if (txtNAM == currentYear && txtTHANG > currentMonth) {
+                lblValidateTHANG.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+                lblValidateTHANG.html('(*)Tháng không được lớn hơn tháng hiện tại');
+                lblValidateNAM.html('');
+                lblValidateNAM.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+                $('#THANG').focus();
+                return false;
+            }
+
+
+
+            var table1 = $("#Table1");
+            var countAll = 0;
+            var countVal = 0;
+            $(table1).find('tr td input')
+            .each(function () {
+                var txt = $(this).val();
+                // alert(txt);
+                if (txt == "") {
+                    $(this).css("border", "solid 1px red");
+                    $(this).focus();
+                }
+                else
+                    countVal++;
+                countAll++;
+            });
+
+            if (countAll == 0) {
+                $('#lblValidateSANLUONGDETAIL').html('(*)Bạn phải nhập danh sách sản lượng!');
+                $('#lblValidateSANLUONGDETAIL').attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+                return false;
+            }
+            else {
+                $('#lblValidateSANLUONGDETAIL').html('');
+                if (countAll == countVal)
+                    return true;
+                else
+                    return false;
+            }
+        }
+        );
+
+
+    });
+</script>

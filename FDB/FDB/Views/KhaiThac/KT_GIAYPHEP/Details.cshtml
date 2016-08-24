@@ -1,0 +1,318 @@
+﻿@model FDB.Models.KT_GIAYPHEP
+
+@{
+    ViewBag.Title = "Xem chi tiết giấy phép khai thác";
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/datepicker.js"></script>
+
+<script src="~/Scripts/moment.js"></script>
+<script src="~/Scripts/CustomValidation.js"></script>
+
+
+@*<script src="~/Scripts/bootstrap.min.js"></script>
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/bootstrap-theme.min.css" rel="stylesheet" />*@
+
+
+
+<div class="modal-header fdb-panel-header-15">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h5 class="modal-title" id="myModalLabel">Chi tiết giấy phép</h5>
+</div>
+<div class="modal-body">
+    @*<div class="container fdb-div-content fdb-div-corner-all">*@
+
+    @*<h3 class="text-center fdb-title-search-form">Giấy phép khai thác</h3>
+    <hr class="fdb-hr" />*@
+
+
+    <div class="form-horizontal">
+        <div class="row">
+            <div class="col-md-2 control-label">
+                Số giấy phép <label style="color:red;">(*)</label> :
+            </div>
+            <div class="col-md-4 fdb-text-display">
+                @Html.DisplayFor(model => model.SO_GP)
+            </div>
+
+            <div class="col-md-2 control-label">
+                Ngày cấp <label style="color:red;">(*)</label> :
+            </div>
+            <div class="col-md-4 fdb-text-display">
+                @Html.DisplayFor(model => model.NGAY_GP)
+            </div>
+        </div>
+
+        <div class="row margin-top-03">
+            <div class="col-md-2 control-label">
+                Ngày hiệu lực <label style="color:red;">(*)</label> :
+            </div>
+            <div class="col-md-4 fdb-text-display">
+                @Html.DisplayFor(model => model.NGAY_HL_GP)
+            </div>
+
+            <div class="col-md-2 control-label">
+                Ngày hết hạn <label style="color:red;">(*)</label> :
+            </div>
+            <div class="col-md-4 fdb-text-display">
+                @Html.DisplayFor(model => model.NGAY_HHL_GP)
+            </div>
+        </div>
+
+        <div class="row margin-top-03">
+            <div class="col-md-2 control-label">
+                Cảng đăng ký <label style="color:red;">(*)</label> :
+            </div>
+            <div class="col-md-4 fdb-text-display">
+                @Html.DisplayFor(model => model.CANG_DANG_KY)
+            </div>
+
+            <div class="col-md-2 control-label">
+                Tỉnh/thành phố <label style="color:red;">(*)</label> :
+            </div>
+            <div class="col-md-4 fdb-text-display">
+                @Html.DisplayFor(model => model.DTINHTP.TEN_TINHTP)
+            </div>
+        </div>
+
+        <div class="row margin-top-03">
+            <div class="col-md-2 control-label">
+                Số đăng ký :
+            </div>
+            <div class="col-md-4 fdb-text-display">
+                @Html.DisplayFor(model => model.SO_DK)
+            </div>
+
+            <div class="col-md-2 control-label">
+                Ngày đăng ký :
+            </div>
+            <div class="col-md-4 fdb-text-display">
+                @Html.DisplayFor(model => model.NGAY_DK)
+            </div>
+        </div>
+
+        <div class="row margin-top-03">
+            <div class="col-md-2 control-label">
+                Tên tàu :
+            </div>
+            <div class="col-md-4 fdb-text-display">
+                @Html.DisplayFor(model => model.TEN_TAU)
+            </div>
+
+            <div class="col-md-2 control-label">
+                Chủ tàu :
+            </div>
+            <div class="col-md-4 fdb-text-display">
+                @Html.DisplayFor(model => model.CHU_PHUONG_TIEN)
+            </div>
+        </div>
+
+        <div class="row margin-top-03">
+            <div class="col-md-2 control-label">
+                Địa chỉ :
+            </div>
+            <div class="col-md-4 fdb-text-display">
+                @Html.DisplayFor(model => model.DIA_CHI)
+            </div>
+
+            <div class="col-md-2 control-label">
+                Điện thoại :
+            </div>
+            <div class="col-md-4 fdb-text-display">
+                @Html.DisplayFor(model => model.DIEN_THOAI)
+            </div>
+        </div>
+
+
+
+        <h4 class="text-center">Ngành nghề cấp phép</h4>
+
+        <div class="row margin-top-05">
+            <div class="col-md-10 center-table">
+                <table class="table table-hover table-bordered table-condensed">
+                    <tr>
+                        <th>STT</th>
+                        <th>
+                            Ngành nghề
+                        </th>
+                        <th>
+                            Nghề chính
+                        </th>
+                        <th>
+                            Vùng tuyến
+                        </th>
+                        <th>
+                            Thời gian cấp phép
+                        </th>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.DM_NGHE.TenNghe)
+                        </td>
+                        <td>
+                            @Html.CheckBoxFor(model => model.IsNGHECHINH)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.DVUNG_TUYEN.Name)
+                        </td>
+                        <td>
+                            Từ
+                            @Html.DisplayFor(m => m.CAP_PHEP_TU)
+                            đến
+                            @Html.DisplayFor(m => m.CAP_PHEP_DEN)
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.DM_NGHE2.TenNghe)
+                        </td>
+                        <td>
+                            @if (Model.CAP_PHEP_TU_2.HasValue)
+                            {
+                                @Html.CheckBoxFor(model => model.IsNGHECHINH_2)
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.DVUNG_TUYEN2.Name)
+                        </td>
+                        <td>
+                            @if (Model.CAP_PHEP_TU_2.HasValue)
+                            {
+                                @:Từ
+                                @Html.DisplayFor(m => m.CAP_PHEP_TU_2)
+                                @:đến
+                                @Html.DisplayFor(m => m.CAP_PHEP_DEN_2)
+                            }
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            3
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.DM_NGHE3.TenNghe)
+                        </td>
+                        <td>
+                            @if (Model.CAP_PHEP_TU_3.HasValue)
+                            {
+                                @Html.CheckBoxFor(model => model.IsNGHECHINH_3)
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.DVUNG_TUYEN3.Name)
+                        </td>
+                        <td>
+                            @if (Model.CAP_PHEP_TU_3.HasValue)
+                            {
+                                @:Từ
+                                @Html.DisplayFor(m => m.CAP_PHEP_TU_3)
+                                @:đến
+                                @Html.DisplayFor(m => m.CAP_PHEP_DEN_3)
+                            }
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            4
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.DM_NGHE4.TenNghe)
+                        </td>
+                        <td>
+                            @if (Model.CAP_PHEP_TU_4.HasValue)
+                            {
+                                @Html.CheckBoxFor(model => model.IsNGHECHINH_4)
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.DVUNG_TUYEN4.Name)
+                        </td>
+                        <td>
+                            @if (Model.CAP_PHEP_TU_4.HasValue)
+                            {
+                                @:Từ
+                                @Html.DisplayFor(m => m.CAP_PHEP_TU_4)
+                                @:đến
+                                @Html.DisplayFor(m => m.CAP_PHEP_DEN_4)
+                            }
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            5
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.DM_NGHE5.TenNghe)
+                        </td>
+                        <td>
+                            @if (Model.CAP_PHEP_TU_5.HasValue)
+                            {
+                                @Html.CheckBoxFor(model => model.IsNGHECHINH_5)
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.DVUNG_TUYEN5.Name)
+                        </td>
+                        <td>
+                            @if (Model.CAP_PHEP_TU_5.HasValue)
+                            {
+                                @:Từ
+                                @Html.DisplayFor(m => m.CAP_PHEP_TU_5)
+                                @:đến
+                                @Html.DisplayFor(m => m.CAP_PHEP_DEN_5)
+                            }
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+        @if (Model.TRANG_THAI == 1)
+        {
+            <div class="row margin-top-03">
+                <div class="col-md-2 control-label">
+                    Ngày gia hạn
+                </div>
+                <div class="col-md-2 fdb-text-display" style="font-weight:bold">
+                    @Html.DisplayFor(model => model.NGAY_GIA_HAN)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Gia hạn từ ngày
+                </div>
+                <div class="col-md-2 fdb-text-display" style="font-weight:bold">
+                    @Html.DisplayFor(model => model.NGAY_GIA_HAN_TU)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Đến ngày
+                </div>
+                <div class="col-md-2 fdb-text-display" style="font-weight:bold">
+                    @Html.DisplayFor(model => model.NGAY_GIA_HAN_DEN)
+                </div>
+            </div>
+        }
+    </div>
+
+    
+</div>
+<div class="modal-footer" style="margin-top:0px;">
+    <button class="btn btn-danger" data-dismiss="modal">Đóng</button>
+</div>
+

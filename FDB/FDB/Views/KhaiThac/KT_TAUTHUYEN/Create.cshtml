@@ -1,0 +1,1013 @@
+﻿@model FDB.Models.KT_TAUTHUYEN
+
+@{
+    ViewBag.Title = "Thu thập thông tin tàu thuyền";
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script src="~/Scripts/datepicker.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/jquery.maskMoney.js"></script>
+<script src="~/Scripts/jquery.number.js"></script>
+
+<script type="text/javascript">
+
+    // Voi jQuery 1.9 > thi chi validate gia tri trong active tab
+    // Muon validate nhung gia tri trong cac tab khac nua thi dung jquery.validate 1.8.1 or 1.7
+
+    function getIndexForId(tabsDivId, searchedId) {
+        var index = -1;
+        var i = 0, els = $("#" + tabsDivId).find("a");
+        var l = els.length, e;
+        while (i < l && index == -1) {
+            e = els[i];
+            if ("#" + searchedId == $(e).attr('href')) {
+                index = i;
+            }
+            i++;
+        };
+        return index;
+    }
+
+    function calculateTotal(src) {
+        var sum = 0,
+            tbl = $(src).closest('table');
+
+        tbl.find('input.form-control.power').each(function (index, elem) {
+            var val = parseFloat($(elem).val());
+            if (!isNaN(val)) {
+                sum += val;
+            }
+        });
+
+        //tbl.find('input.form-control.totalPower').html(sum.toFixed(2));
+        //document.getElementById("KT_TONG_CONG_SUAT").value = sum;
+        $('input.form-control.totalPower').val(sum);
+    }
+
+    $(document).ready(function () {
+        $("#tabs").tabs({
+            show: { effect: "fade", duration: 800 },
+        });
+
+        $("#myForm").submit(function () {
+            // get id of tab contain input-validation
+            var id = $("#myForm .input-validation-error").closest(".ui-tabs-panel").get(0).id;
+
+            // get index of tab contain input-validation
+            var index = getIndexForId("tabs", id);
+
+            // select that tab for input valid
+            $('#tabs').tabs('option', 'active', index);
+        });
+
+
+        // calculate total power
+        $('input.form-control.power').keyup(function () {
+            calculateTotal(this);
+        });
+
+
+        // load district by province when change in dropdownlist
+        $("#province_dll").change(function () {
+            $.ajax({
+                url: 'getDistrict',
+                type: 'post',
+                data: {
+                    ma_TinhTP: $('#province_dll').val()
+                }
+            }).done(function (response) {
+                // update district by province
+                var a = '<option value></option>' + response;   // defaut value
+                $("#district_dll").html(a);
+
+                // reset ward
+                var b = '<option value></option>'
+                $('#ward_dll').html(b);
+            });
+        });
+
+        $.ajax({
+            url: 'getDistrict',
+            type: 'post',
+            data: {
+                ma_TinhTP: $('#province_dll').val()
+            }
+        }).done(function (response) {
+            // update district by province
+            var a = '<option value></option>' + response;   // defaut value
+            $("#district_dll").html(a);
+
+            // reset ward
+            var b = '<option value></option>'
+            $('#ward_dll').html(b);
+        });
+
+
+        // load ward by disctrict when change in dropdownlist
+        $("#district_dll").change(function () {
+            $.ajax({
+                url: 'getWard',
+                type: 'post',
+                data: {
+                    ma_QuanHuyen: $('#district_dll').val()
+                }
+            }).done(function (response) {
+                var a = '<option value></option>' + response;   // defaut value
+                $("#ward_dll").html(a);
+            });
+        });
+
+
+        // mask edit cho truong ngay thang (su dung jquery.maskedinput)
+        $("#NGAY_DK").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#NGAY_DKTCQG").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#NGAY_KIEM_TRA").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#NGAY_CAP_SO_DANG_KIEM").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#HAN_DANG_KIEM").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#NGAY_CAP_GIAY_VSTP").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#KT_NGAY_PD_TK").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+
+        // cho phep nhap so thap phan (su dung jquery.number)
+        $("#KT_CHIEU_DAI").number(true, 2, '.', '');
+        $("#KT_CHIEU_RONG").number(true, 2, '.', '');
+        $("#KT_CHIEU_CAO").number(true, 2, '.', '');
+        $("#KT_MAN_KHO").number(true, 2, '.', '');
+        $("#KT_MON_NUOC").number(true, 2, '.', '');
+        $("#KT_TAN_DANG_KY").number(true, 0, '.', '');
+
+
+        $("#machine1").hide();
+        $("#machine2").hide();
+        $("#machine3").hide();
+        $("#machine4").hide();
+        $("#machine5").hide();
+        // Hien thi so may tau
+        $('#KT_SO_MAY_TAU').keypress(function (e) {
+            if (e.which == '13') {
+                e.preventDefault();
+
+                var numberMachine = $(this).val();
+
+                load_may_tau(numberMachine);
+            }
+        });
+
+        $('#KT_SO_MAY_TAU').focusout(function () {
+            var numberMachine = $(this).val();
+
+            load_may_tau(numberMachine);
+        });
+
+
+
+        // Load du lieu cua so dang kiem da co
+        // khi nhap so so dang kiem + Enter
+        $('#SO_SO_DANG_KIEM').keypress(function (e) {
+            if (e.which == '13') {
+                e.preventDefault();
+
+                load_by_so_dang_kiem();
+            }
+        });
+
+    });
+
+
+    function load_may_tau(numberMachine) {
+        switch (numberMachine) {
+            case "1":
+                $("#machine1").show();
+                $("#machine2").hide();
+                $("#machine3").hide();
+                $("#machine4").hide();
+                $("#machine5").hide();
+                break;
+            case "2":
+                $("#machine1").show();
+                $("#machine2").show();
+                $("#machine3").hide();
+                $("#machine4").hide();
+                $("#machine5").hide();
+                break;
+            case "3":
+                $("#machine1").show();
+                $("#machine2").show();
+                $("#machine3").show();
+                $("#machine4").hide();
+                $("#machine5").hide();
+                break;
+            case "4":
+                $("#machine1").show();
+                $("#machine2").show();
+                $("#machine3").show();
+                $("#machine4").show();
+                $("#machine5").hide();
+                break;
+            case "5":
+                $("#machine1").show();
+                $("#machine2").show();
+                $("#machine3").show();
+                $("#machine4").show();
+                $("#machine5").show();
+                break;
+            default:
+                $("#machine1").hide();
+                $("#machine2").hide();
+                $("#machine3").hide();
+                $("#machine4").hide();
+                $("#machine5").hide();
+        }
+    }
+
+    function load_by_so_dang_kiem() {
+        $.ajax({
+            type: 'GET',
+            dataType: 'Json',
+            url: '@Url.Action("Load_Data_By_ID", "KT_DANGKIEM")',
+            data: {
+                so_Dang_Kiem: $('#SO_SO_DANG_KIEM').val()
+            },
+            success: function (data) {
+                // ngay cap so
+                $('#NGAY_CAP_SO_DANG_KIEM').val(ToJavaScriptDate(data.NGAY_CAP_SO_DANG_KIEM));
+                // ket luan chung
+                $('#DTINH_TRANG_DANG_KIEMID').val(data.DTINH_TRANG_DANG_KIEMID);
+                // cap tau
+                $('#DCAP_TAU_DANG_KIEMID').val(data.DCAP_TAU_DANG_KIEMID);
+                // co quan dang kiem
+                $('#CO_QUAN_DANG_KIEM').val(data.CO_QUAN_DANG_KIEM);
+                // han dang kiem
+                $('#HAN_DANG_KIEM').val(ToJavaScriptDate(data.HAN_DANG_KIEM));
+                // dang kiem vien
+                $('#DANG_KIEM_VIEN').val(data.DANG_KIEM_VIEN);
+                // ngay chung nhan ATKT
+                $('#SO_AN_CHI_ATKT').val(data.SO_AN_CHI_ATKT);
+
+
+                $('#MA_TINHTP').val(data.MA_TINHTP);
+
+
+                // ten tau
+                $('#TEN_TAU').val(data.TEN_TAU);
+                // chu phuong tien
+                $('#CHU_PHUONG_TIEN').val(data.CHU_PHUONG_TIEN);
+                // cong dung tau
+                $('#DCONG_DUNG_TAUID').val(data.DCONG_DUNG_TAUID);
+                // so thuyen vien
+                $('#SO_THUYEN_VIEN').val(data.SO_THUYEN_VIEN);
+                // nam dong
+                $('#KT_NAM_DONG').val(data.KT_NAM_DONG);
+                // noi dong
+                $('#KT_NOI_DONG').val(data.KT_NOI_DONG);
+
+                // Lmax
+                if (data.KT_CHIEU_DAI != null) $('#KT_CHIEU_DAI').val(data.KT_CHIEU_DAI);
+                // Bmax
+                if (data.KT_CHIEU_RONG != null) $('#KT_CHIEU_RONG').val(data.KT_CHIEU_RONG);
+                // D
+                if (data.KT_CHIEU_CAO != null) $('#KT_CHIEU_CAO').val(data.KT_CHIEU_CAO);
+                // d
+                if (data.KT_MON_NUOC != null) $('#KT_MON_NUOC').val(data.KT_MON_NUOC);
+                // f
+                if (data.KT_MAN_KHO != null) $('#KT_MAN_KHO').val(data.KT_MAN_KHO);
+                // vat lieu vo
+                $('#DVAT_LIEU_VOID').val(data.DVAT_LIEU_VOID);
+                // toc do tau
+                $('#KT_TOC_DO_TAU').val(data.KT_TOC_DO_TAU);
+                // tong cong suat
+                $('#KT_TONG_CONG_SUAT').val(data.KT_TONG_CONG_SUAT);
+                // so may tau
+                $('#KT_SO_MAY_TAU').val(data.KT_SO_MAY_TAU);
+
+                var numberMachine = data.KT_SO_MAY_TAU;
+                if (numberMachine != null) {
+                    load_may_tau(numberMachine.toString());
+                } else {
+                    load_may_tau(numberMachine);
+                }
+
+
+                // 1
+                // ky hieu may
+                $('#M1_KY_HIEU_MAY').val(data.M1_KY_HIEU_MAY);
+                // so may
+                $('#M1_SO_MAY').val(data.M1_SO_MAY);
+                // noi san xuat
+                $('#M1_NOI_SX').val(data.M1_NOI_SX);
+                // nam che tao
+                $('#M1_NAM_CHE_TAO').val(data.M1_NAM_CHE_TAO);
+                // hang may
+                $('#M1_HANG_MAY').val(data.M1_HANG_MAY);
+                // vong quay
+                $('#M1_VONG_QUAY').val(data.M1_VONG_QUAY);
+                // cong suat
+                $('#M1_CONG_SUAT').val(data.M1_CONG_SUAT);
+
+                // 2
+                // ky hieu may
+                $('#M2_KY_HIEU_MAY').val(data.M2_KY_HIEU_MAY);
+                // so may
+                $('#M2_SO_MAY').val(data.M2_SO_MAY);
+                // noi san xuat
+                $('#M2_NOI_SX').val(data.M2_NOI_SX);
+                // nam che tao
+                $('#M2_NAM_CHE_TAO').val(data.M2_NAM_CHE_TAO);
+                // hang may
+                $('#M2_HANG_MAY').val(data.M2_HANG_MAY);
+                // vong quay
+                $('#M2_VONG_QUAY').val(data.M2_VONG_QUAY);
+                // cong suat
+                $('#M2_CONG_SUAT').val(data.M2_CONG_SUAT);
+
+                // 3
+                // ky hieu may
+                $('#M3_KY_HIEU_MAY').val(data.M3_KY_HIEU_MAY);
+                // so may
+                $('#M3_SO_MAY').val(data.M3_SO_MAY);
+                // noi san xuat
+                $('#M3_NOI_SX').val(data.M3_NOI_SX);
+                // nam che tao
+                $('#M3_NAM_CHE_TAO').val(data.M3_NAM_CHE_TAO);
+                // hang may
+                $('#M3_HANG_MAY').val(data.M3_HANG_MAY);
+                // vong quay
+                $('#M3_VONG_QUAY').val(data.M3_VONG_QUAY);
+                // cong suat
+                $('#M3_CONG_SUAT').val(data.M3_CONG_SUAT);
+
+                // 4
+                // ky hieu may
+                $('#M4_KY_HIEU_MAY').val(data.M4_KY_HIEU_MAY);
+                // so may
+                $('#M4_SO_MAY').val(data.M4_SO_MAY);
+                // noi san xuat
+                $('#M4_NOI_SX').val(data.M4_NOI_SX);
+                // nam che tao
+                $('#M4_NAM_CHE_TAO').val(data.M4_NAM_CHE_TAO);
+                // hang may
+                $('#M4_HANG_MAY').val(data.M4_HANG_MAY);
+                // vong quay
+                $('#M4_VONG_QUAY').val(data.M4_VONG_QUAY);
+                // cong suat
+                $('#M4_CONG_SUAT').val(data.M4_CONG_SUAT);
+
+                // 5
+                // ky hieu may
+                $('#M5_KY_HIEU_MAY').val(data.M5_KY_HIEU_MAY);
+                // so may
+                $('#M5_SO_MAY').val(data.M5_SO_MAY);
+                // noi san xuat
+                $('#M5_NOI_SX').val(data.M5_NOI_SX);
+                // nam che tao
+                $('#M5_NAM_CHE_TAO').val(data.M5_NAM_CHE_TAO);
+                // hang may
+                $('#M5_HANG_MAY').val(data.M5_HANG_MAY);
+                // vong quay
+                $('#M5_VONG_QUAY').val(data.M5_VONG_QUAY);
+                // cong suat
+                $('#M5_CONG_SUAT').val(data.M5_CONG_SUAT);
+
+            },
+            error: function (xhr, ajaxOption, thorwnError) {
+                console.log(thorwnError);
+            }
+        });
+    }
+
+    function ToJavaScriptDate(value) {
+        if (value != null) {
+            var pattern = /Date\(([^)]+)\)/;
+            var results = pattern.exec(value);
+            var dt = new Date(parseFloat(results[1]));
+            return dt.getDate() + "/" + (dt.getMonth() + 1) + "/" + dt.getFullYear();
+        }
+        return null;
+    }
+</script>
+
+
+
+@using (Html.BeginForm("Create", "KT_TAUTHUYEN", FormMethod.Post, new { @id = "myForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    @*<div class="form-horizontal fdb_font_size">
+        <hr />*@
+    @Html.ValidationSummary(true)
+
+    <div id="tabs">
+        <ul>
+            <li><a href="#tabs-1">Hồ sơ tàu cá</a></li>
+            <li><a href="#tabs-2">Đặc điểm kỹ thuật</a></li>
+            @*<li><a href="#tabs-3">Giấy phép khai thác</a></li>*@
+        </ul>
+        <!-- Hồ sơ tàu cá -->
+        <div id="tabs-1">
+            @Html.Hidden("IsEdit", 0)
+
+            @*<div class="fdb-title-form">
+                    Thông tin đăng kiểm
+                </div>
+                <br />*@
+            <fieldset class="fdb-scheduler-border">
+                <legend class="fdb-scheduler-border">Thông tin đăng kiểm</legend>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Sổ đăng kiểm số
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.SO_SO_DANG_KIEM, new { @class = "form-control" })
+                        <div class="help-tip">
+                            <p>
+                                Khi nhập số sổ đăng kiểm đã được cấp của tàu thuyền (nhấn Enter) thì hệ thống sẽ tự động điền các thông tin của sổ đăng kiểm vào màn hình đăng ký
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        Ngày cấp sổ
+                    </div>
+                    <div class="col-md-2">
+                        @Html.EditorFor(model => model.NGAY_CAP_SO_DANG_KIEM)
+                        @Html.ValidationMessageFor(model => model.NGAY_CAP_SO_DANG_KIEM)
+                    </div>
+                </div>
+
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Kết luận chung
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.DTINH_TRANG_DANG_KIEMID, (SelectList)ViewBag.TINH_TRANG_DANG_KIEMs, string.Empty, new { @class = "form-control" })
+                    </div>
+
+                    <div class="col-md-2 control-label text-left">
+                        Cấp tàu
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.DCAP_TAU_DANG_KIEMID, (SelectList)ViewBag.CAP_TAU_DANG_KIEMs, string.Empty, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.DCAP_TAU_DANG_KIEMID)
+                    </div>
+                </div>
+
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Cơ quan đăng kiểm
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.CO_QUAN_DANG_KIEM, new { @class = "form-control" })
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        Ngày hết hạn đăng kiểm
+                    </div>
+                    <div class="col-md-2">
+                        @Html.EditorFor(model => model.HAN_DANG_KIEM)
+                        @Html.ValidationMessageFor(model => model.HAN_DANG_KIEM)
+                    </div>
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Đăng kiểm viên
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.DANG_KIEM_VIEN, new { @class = "form-control" })
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        Số chứng nhận ATKT - Tàu cá
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.SO_AN_CHI_ATKT, new { @class = "form-control" })
+                    </div>
+                </div>
+            </fieldset>
+            <br />
+
+            @*<div class="fdb-title-form">
+                    Thông tin chủ tàu
+                </div>
+                <br />*@
+
+            <fieldset class="fdb-scheduler-border">
+                <legend class="fdb-scheduler-border">Thông tin chủ tàu</legend>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Chủ phương tiện <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.CHU_PHUONG_TIEN, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.CHU_PHUONG_TIEN)
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        Số CMND
+                    </div>
+                    <div class="col-md-2">
+                        @Html.TextBoxFor(model => model.SO_CMND, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Điện thoại
+                    </div>
+                    <div class="col-md-2">
+                        @Html.TextBoxFor(model => model.DIEN_THOAI, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-2"></div>
+
+                    <div class="col-md-2 control-label">
+                        Tỉnh/thành phố <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.MA_TINHTP, (SelectList)ViewBag.TINH_THANHPHOs, string.Empty, new { @class = "form-control", @id = "province_dll" })
+                        @Html.ValidationMessageFor(model => model.MA_TINHTP)
+                    </div>
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Huyện <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.MA_QUANHUYEN, (SelectList)ViewBag.DEFAULT_VALUE_DDL, string.Empty, new { @class = "form-control", @id = "district_dll" })
+                        @Html.ValidationMessageFor(model => model.MA_QUANHUYEN)
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        Xã/phường <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.MA_PHUONGXA, (SelectList)ViewBag.DEFAULT_VALUE_DDL, string.Empty, new { @class = "form-control", @id = "ward_dll" })
+                        @Html.ValidationMessageFor(model => model.MA_PHUONGXA)
+                    </div>
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Địa chỉ <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.DIA_CHI, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.DIA_CHI)
+                    </div>
+                </div>
+            </fieldset>
+
+            <br />
+            @*<div class="fdb-title-form">
+                    Thông tin đăng ký
+                </div>
+                <br />*@
+
+            <fieldset class="fdb-scheduler-border">
+                <legend class="fdb-scheduler-border">Thông tin đăng ký</legend>
+
+                <div class="row">
+                    <div class="col-md-2 control-label">
+                        Số đăng ký <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.SO_DK, new { @class = "form-control  fdb-text-background-color" })
+                        @Html.ValidationMessageFor(model => model.SO_DK)
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        Ngày đăng ký <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-2">
+                        @Html.EditorFor(model => model.NGAY_DK)
+                        @Html.ValidationMessageFor(model => model.NGAY_DK)
+                    </div>
+                </div>
+
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Nhóm tàu <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.DNHOM_TAUID, (SelectList)ViewBag.NHOM_TAUs, string.Empty, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.DNHOM_TAUID)
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        Công dụng tàu cá <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.DCONG_DUNG_TAUID, (SelectList)ViewBag.CONG_DUNG_TAU_CAs, string.Empty, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.DCONG_DUNG_TAUID)
+                        <div class="help-tip">
+                            <p>
+                                Nếu công dụng tàu là khai thác thủy sản thì bạn phải nhập thông tin nghề chính
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Tình trạng tàu <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.DTINH_TRANG_TAUID, (SelectList)ViewBag.TINH_TRANG_TAUs, string.Empty, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.DTINH_TRANG_TAUID)
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        Tên tàu
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.TEN_TAU, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Nghề chính
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.NGHE_CHINH_ID, (SelectList)ViewBag.NGHE_KHAI_THACs, string.Empty, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.NGHE_CHINH_ID)
+                        <div class="help-tip">
+                            <p>
+                                Bắt buộc nhập khi công dụng tàu là khai thác thủy sản
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        Nghề phụ
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.NGHE_PHU_ID, (SelectList)ViewBag.NGHE_KHAI_THACs, string.Empty, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Hô hiệu
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.HO_HIEU, new { @class = "form-control" })
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        Số thuyền viên
+                    </div>
+                    <div class="col-md-2">
+                        @Html.TextBoxFor(model => model.SO_THUYEN_VIEN, new { @class = "form-control", @type = "number" })
+                        @Html.ValidationMessageFor(model => model.SO_THUYEN_VIEN)
+                    </div>
+                </div>
+
+
+            </fieldset>
+
+        </div>
+
+        <!-- Đặc điểm kỹ thuật -->
+        <div id="tabs-2">
+            @*<div class="fdb-title-form">
+                    Chi tiết kỹ thuật
+                </div>
+                <br />*@
+
+            <fieldset class="fdb-scheduler-border">
+                <legend class="fdb-scheduler-border">Thông tin kỹ thuật tàu</legend>
+
+                <div class="row">
+                    <div class="col-md-2 control-label">
+                        Lmax (m) <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-1">
+                        @Html.TextBoxFor(model => model.KT_CHIEU_DAI, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.KT_CHIEU_DAI)
+                    </div>
+
+                    <div class="col-md-1 control-label">
+                        Bmax(m)<label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-1">
+                        @Html.TextBoxFor(model => model.KT_CHIEU_RONG, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.KT_CHIEU_RONG)
+                    </div>
+
+                    <div class="col-md-1"></div>
+
+                    <div class="col-md-2 control-label">
+                        D (m) <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-1">
+                        @Html.TextBoxFor(model => model.KT_CHIEU_CAO, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.KT_CHIEU_CAO)
+                    </div>
+
+                    <div class="col-md-1 control-label">
+                        d (m) <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-1">
+                        @Html.TextBoxFor(model => model.KT_MON_NUOC, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.KT_MON_NUOC)
+                    </div>
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Mạn khô (f) <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.KT_MAN_KHO, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.KT_MAN_KHO)
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        Tấn đăng ký (RT)
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.KT_TAN_DANG_KY, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.KT_TAN_DANG_KY)
+                    </div>
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Vật liệu vỏ <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.DVAT_LIEU_VOID, (SelectList)ViewBag.VAT_LIEU_VOs, string.Empty, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.DVAT_LIEU_VOID)
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        Tốc độ tàu (hl/h)
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.KT_TOC_DO_TAU, new { @class = "form-control", @type = "number" })
+                    </div>
+
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Cơ sở đóng/sửa tàu thuyền
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.KT_NOI_DONG, new { @class = "form-control" })
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        Năm đóng
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.KT_NAM_DONG, new { @class = "form-control", @type = "number", @min = "1900" })
+                    </div>
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label text-left">
+                        Số máy tàu <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.KT_SO_MAY_TAU, new { @class = "form-control", @type = "number" })
+                        @Html.ValidationMessageFor(model => model.KT_SO_MAY_TAU)
+                        <div class="help-tip">
+                            <p>Số lượng máy chính của tàu (chi tiết máy tàu nhập ở danh sách máy tàu bên dưới, tối đa 5 máy tàu)</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        Tổng công suất (CV) <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.KT_TONG_CONG_SUAT, new { @class = "form-control totalPower", @type = "number", @readonly = true })
+                        @Html.ValidationMessageFor(model => model.KT_TONG_CONG_SUAT)
+                        <div class="help-tip">
+                            <p>Tự động tính từ công suất của các máy ở danh sách máy tàu (bên dưới)</p>
+                        </div>
+                    </div>
+                </div>
+
+            </fieldset>
+            @*<h4 style="text-align:center;">Danh sách máy tàu</h4>*@
+
+            <br />
+            @*<div class="fdb-title-form">
+                    Danh sách máy tàu
+                </div>
+                <br />*@
+
+            <fieldset class="fdb-scheduler-border">
+                <legend class="fdb-scheduler-border">Danh sách máy tàu</legend>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-9 col-md-offset-2">
+                        <table class="table table-hover table-bordered table-condensed table-responsive">
+                            <tr>
+                                <th>STT</th>
+                                <th>
+                                    Ký hiệu máy
+                                </th>
+                                <th>
+                                    Số máy
+                                </th>
+                                <th>
+                                    Nơi sản xuất
+                                </th>
+                                <th>
+                                    Năm chế tạo
+                                </th>
+                                <th>
+                                    Hãng máy
+                                </th>
+                                <th>
+                                    Vòng quay<br />định mức (V/p)
+                                </th>
+                                <th>
+                                    Công suất
+                                </th>
+                            </tr>
+
+                            <tr id="machine1">
+                                <td>
+                                    1
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M1_KY_HIEU_MAY, new { @class = "form-control" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M1_SO_MAY, new { @class = "form-control" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M1_NOI_SX, new { @class = "form-control" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M1_NAM_CHE_TAO, new { @class = "form-control", @type = "number" })
+                                    @Html.ValidationMessageFor(model => model.M1_NAM_CHE_TAO)
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M1_HANG_MAY, new { @class = "form-control" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M1_VONG_QUAY, new { @class = "form-control", @type = "number" })
+                                    @Html.ValidationMessageFor(model => model.M1_VONG_QUAY)
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M1_CONG_SUAT, new { @class = "form-control power", @type = "number" })
+                                    @Html.ValidationMessageFor(model => model.M1_CONG_SUAT)
+                                </td>
+                            </tr>
+
+                            <tr id="machine2">
+                                <td>
+                                    2
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M2_KY_HIEU_MAY, new { @class = "form-control" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M2_SO_MAY, new { @class = "form-control" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M2_NOI_SX, new { @class = "form-control" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M2_NAM_CHE_TAO, new { @class = "form-control", @type = "number" })
+                                    @Html.ValidationMessageFor(model => model.M2_NAM_CHE_TAO)
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M2_HANG_MAY, new { @class = "form-control" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M2_VONG_QUAY, new { @class = "form-control", @type = "number" })
+                                    @Html.ValidationMessageFor(model => model.M2_VONG_QUAY)
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M2_CONG_SUAT, new { @class = "form-control power", @type = "number" })
+                                    @Html.ValidationMessageFor(model => model.M2_CONG_SUAT)
+                                </td>
+                            </tr>
+
+                            <tr id="machine3">
+                                <td>
+                                    3
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M3_KY_HIEU_MAY, new { @class = "form-control" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M3_SO_MAY, new { @class = "form-control" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M3_NOI_SX, new { @class = "form-control" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M3_NAM_CHE_TAO, new { @class = "form-control", @type = "number" })
+                                    @Html.ValidationMessageFor(model => model.M3_NAM_CHE_TAO)
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M3_HANG_MAY, new { @class = "form-control" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M3_VONG_QUAY, new { @class = "form-control", @type = "number" })
+                                    @Html.ValidationMessageFor(model => model.M3_VONG_QUAY)
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M3_CONG_SUAT, new { @class = "form-control power", @type = "number" })
+                                    @Html.ValidationMessageFor(model => model.M3_CONG_SUAT)
+                                </td>
+                            </tr>
+
+                            <tr id="machine4">
+                                <td>
+                                    4
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M4_KY_HIEU_MAY, new { @class = "form-control" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M4_SO_MAY, new { @class = "form-control" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M4_NOI_SX, new { @class = "form-control" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M4_NAM_CHE_TAO, new { @class = "form-control", @type = "number" })
+                                    @Html.ValidationMessageFor(model => model.M4_NAM_CHE_TAO)
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M4_HANG_MAY, new { @class = "form-control" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M4_VONG_QUAY, new { @class = "form-control", @type = "number" })
+                                    @Html.ValidationMessageFor(model => model.M4_VONG_QUAY)
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M4_CONG_SUAT, new { @class = "form-control power", @type = "number" })
+                                    @Html.ValidationMessageFor(model => model.M4_CONG_SUAT)
+                                </td>
+                            </tr>
+
+                            <tr id="machine5">
+                                <td>
+                                    5
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M5_KY_HIEU_MAY, new { @class = "form-control" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M5_SO_MAY, new { @class = "form-control" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M5_NOI_SX, new { @class = "form-control" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M5_NAM_CHE_TAO, new { @class = "form-control", @type = "number" })
+                                    @Html.ValidationMessageFor(model => model.M5_NAM_CHE_TAO)
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M5_HANG_MAY, new { @class = "form-control" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M5_VONG_QUAY, new { @class = "form-control", @type = "number" })
+                                    @Html.ValidationMessageFor(model => model.M5_VONG_QUAY)
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.M5_CONG_SUAT, new { @class = "form-control power", @type = "number" })
+                                    @Html.ValidationMessageFor(model => model.M5_CONG_SUAT)
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+            </fieldset>
+        </div>
+    </div>
+
+
+
+    <br />
+
+    <div class="row">
+        <div class="col-md-12">
+            @*<input type="submit" value="Cập nhật" class="btn btn-info btn-sm" />*@
+            <button type="submit" class="btn btn-danger btn-sm">
+                <span class="glyphicon glyphicon-floppy-disk"></span> Cập nhật
+            </button>
+            &nbsp;&nbsp;
+            @Html.ActionLink("Quay lại", "Index", null, new { @class = "btn btn-primary btn-sm" })
+        </div>
+
+    </div>
+}

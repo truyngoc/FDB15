@@ -1,0 +1,97 @@
+﻿@{
+    ViewBag.Title = "KTSanLuongFAO";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<div style="float:left; width:100%; border:solid 1px groove">
+    @Html.Raw(@ViewBag.SanLuongs)
+</div>*@
+
+
+@*Create Matrix view Thông tin sản lượng theo Nhóm công suât, theo nhóm nghề*@
+@using FDB.Models
+@using FDB.DataAccessLayer
+
+@{
+    string _MA_TTP = "38";
+    int _THANG = 1;
+    int _NAM = 2016;
+
+    FDBContext _db = new FDBContext();
+    List<DM_NHOMNGHE> _lstDMNhomNghe = _db.DM_NHOMNGHE.ToList();
+    List<DNHOM_TAU> _lstDMNhomTau = _db.DNHOM_TAU.ToList();
+    KT_View_SANLUONG_FAO _ktDictSL = (KT_View_SANLUONG_FAO)ViewBag.DictSanLuongs;
+
+    <fieldset class="fdb-scheduler-border">
+        <legend class="fdb-scheduler-search-border">Kết quả thống kê sản lượng theo FAO Tháng 1 của Tỉnh Thanh Hóa </legend>
+
+        <table class="table table-hover table-bordered table-condensed">
+            <tr>
+                <th rowspan="2"></th>
+                @foreach (var columnNghe in _lstDMNhomNghe)
+                {
+                    <th style="text-align:center">@columnNghe.TenNhomNghe</th>
+                }
+            </tr>
+            <tr></tr>
+            @foreach (var rowNhomTau in _lstDMNhomTau)
+            {
+                <tr>
+                    <td>@rowNhomTau.Name</td>
+                    @foreach (var columnNghe1 in _lstDMNhomNghe)
+                    {
+                        <td style="text-align:center">
+                            @String.Format("{0:0.0000}", _ktDictSL.dictSANLUONG_FAO[_MA_TTP + "#" + _THANG.ToString() + "#" + _NAM.ToString() + "#" + rowNhomTau.ID.ToString() + "#" + columnNghe1.DM_NhomNgheID.ToString()].dKT_SANLUONG_FAO)
+                        </td>
+                    }
+                </tr>
+            }
+            <tr></tr>
+            @*@Html.Raw(ViewBag.TR_END)*@
+            <tr>
+                <td style="text-align:center; font-size:12px; font-weight:bold">
+                    Tổng sản lượng theo nhóm nghề:
+                </td>
+                @foreach (var columnNghe in _lstDMNhomNghe)
+                {
+                    <td style="text-align:center; font-size:14px; font-weight:bold">
+                       @String.Format("{0:0.0000}", _ktDictSL.dictSANLUONG_NHOMNGHE[_MA_TTP + "#" + _THANG.ToString() + "#" + _NAM.ToString() + "#" + columnNghe.DM_NhomNgheID.ToString()].dKT_SANLUONG_NHOMNGHE)
+                    </td>
+                }
+            </tr>
+
+            <tr>
+                <td style="text-align:center; font-size:12px; font-weight:bold">
+                    Tổng sản lượng theo tháng:
+                </td>
+                <td style="text-align:center; font-size:16px; font-weight:bold" colspan="@_lstDMNhomNghe.Count">
+                    @String.Format("{0:0.0000}",_ktDictSL.ktSANLUONG_THANG.dKT_SANLUONG_FAO_THANG)
+                </td>
+            </tr>
+        </table>
+
+
+    </fieldset>
+
+
+    //var salesTable =
+    //from s in m.Sales
+    //group s by s.SalesPerson.Label into g
+    //select new
+    //{
+    //    rowKey = g.Key,
+    //    rowData = g.Select(s => new { Product = s.Product, Amount = s.Amount }).OrderBy(s => s.Product.Label)
+    //};
+
+    @*@foreach (var tableRow in salesTable)
+        {
+            <tr>
+                <td>@tableRow.rowKey</td>
+                @foreach (var sale in tableRow.rowData)
+                {
+                    <td>@sale.Amount</td>
+                }
+            </tr>
+        }*@
+
+}

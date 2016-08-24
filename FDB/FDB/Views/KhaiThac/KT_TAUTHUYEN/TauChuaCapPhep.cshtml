@@ -1,0 +1,361 @@
+﻿@model FDB.Models.ViewModelSearchKT_TAUTHUYEN
+@using PagedList.Mvc;
+@using FDB.Helpers;
+
+@{
+    ViewBag.Title = "Danh sách tàu chưa cấp phép";
+}
+
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/datepicker.js"></script>
+<script>
+
+    $(document).ready(function () {
+    //    var url = "";
+    //    // khoi tao dialog
+    //    $("#dialog-edit").dialog({
+    //        title: "Thông tin tàu thuyền chi tiết",
+    //        autoOpen: false,
+    //        resizable: false,
+    //        width: 975,
+    //        position: {
+    //            my: "center center",
+    //            at: "center top",
+    //            of: window,
+    //        },
+    //        //show: { effect: 'drop', direction: "up" },
+    //        show: { effect: 'fade' },
+    //        modal: true,
+    //        draggable: true,
+    //        open: function (event, ui) {
+
+    //            $(this).load(url);
+    //        }
+    //    });
+    //    // Handles event when buttons click
+    //    $(".lnkDetails").click(function () {
+    //        url = $(this).attr('href');
+    //        $("#dialog-edit").dialog('open');
+
+    //        return false;
+    //    });
+
+
+
+        // load district by province when change in dropdownlist
+        $("#province_dll").change(function () {
+            $.ajax({
+                url: '@Url.Action("getDistrict","KT_TAUTHUYEN")',
+                type: 'post',
+                data: {
+                    ma_TinhTP: $('#province_dll').val()
+                }
+            }).done(function (response) {
+                // update district by province
+                var a = '<option value></option>' + response;   // defaut value
+                $("#district_dll").html(a);
+
+                // reset ward
+                var b = '<option value></option>'
+                $('#ward_dll').html(b);
+            });
+        });
+
+
+        // load ward by disctrict when change in dropdownlist
+        $("#district_dll").change(function () {
+            $.ajax({
+                url: '@Url.Action("getWard","KT_TAUTHUYEN")',
+                type: 'post',
+                data: {
+                    ma_QuanHuyen: $('#district_dll').val()
+                }
+            }).done(function (response) {
+                var a = '<option value></option>' + response;   // defaut value
+                $("#ward_dll").html(a);
+            });
+        });
+
+
+        // mask edit cho truong ngay thang (su dung jquery.maskedinput)
+        $("#NGAY_DK_TU").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#NGAY_DK_DEN").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+
+
+        // an hien khung tim kiem
+        $(".criteria_search").hide();
+
+        $(".show_hide").click(function (e) {
+            $(".criteria_search").slideToggle("fast");
+            var val = $(this).text() == "Ẩn khung tìm kiếm" ? "Hiển thị khung tìm kiếm" : "Ẩn khung tìm kiếm";
+            $(this).hide().text(val).fadeIn("fast");
+            e.preventDefault();
+        });
+    });
+</script>
+
+
+<div class="container fdb-div-content fdb-div-corner-all">
+
+    <h3 class="text-center fdb-title-search-form">Danh sách tàu thuyền chưa cấp phép</h3>
+
+    @using (Html.BeginForm("TauChuaCapPhep", "KT_TAUTHUYEN", FormMethod.Get))
+    {
+        <a href="#" class="show_hide">Hiển thị khung tìm kiếm</a>
+        <div class="criteria_search">
+            <br />
+            <div class="row">
+                <div class="col-md-2 control-label">
+                    Số đăng ký
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.SO_DK, new { @class = "form-control" })
+                </div>
+                <div class="col-md-2 control-label">
+                    Chủ phương tiện
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.CHU_PHUONG_TIEN, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Tỉnh/thành phố
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.MA_TINHTP, (SelectList)ViewBag.TINH_THANHPHOs, string.Empty, new { @class = "form-control", @id = "province_dll" })
+                </div>
+                <div class="col-md-2 control-label">
+                    Huyện
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.MA_QUANHUYEN, (SelectList)ViewBag.QUAN_HUYENs, string.Empty, new { @class = "form-control", @id = "district_dll" })
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Xã/phường
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.MA_PHUONGXA, (SelectList)ViewBag.PHUONG_XAs, string.Empty, new { @class = "form-control", @id = "ward_dll" })
+                </div>
+                <div class="col-md-2 control-label">
+                    Công dụng tàu cá
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.DCONG_DUNG_TAUID, (SelectList)ViewBag.CONG_DUNG_TAU_CAs, string.Empty, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Nhóm tàu
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.DNHOM_TAUID, (SelectList)ViewBag.NHOM_TAUs, string.Empty, new { @class = "form-control" })
+                </div>
+                <div class="col-md-2 control-label">
+                    Tình trạng tàu
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.DTINH_TRANG_TAUID, (SelectList)ViewBag.TINH_TRANG_TAUs, string.Empty, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Tình trạng đăng kiểm
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.DTINH_TRANG_DANG_KIEMID, (SelectList)ViewBag.TINH_TRANG_DANG_KIEMs, string.Empty, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Công suất từ
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.KT_TONG_CONG_SUAT_TU, new { @class = "form-control totalPower", @type = "number" })
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Đến
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.KT_TONG_CONG_SUAT_DEN, new { @class = "form-control totalPower", @type = "number" })
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Ngày đăng ký từ
+                </div>
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.NGAY_DK_TU)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Đến
+                </div>
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.NGAY_DK_DEN)
+                </div>
+            </div>
+
+        </div>
+        <p class="margin-top-05">
+
+            <button type="submit" class="btn btn-primary btn-sm">
+                <span class="glyphicon glyphicon-search"></span> Tìm kiếm
+            </button>
+
+            <button type="submit" class="btn btn-primary btn-sm" name="SearchButton" value="Xuất Excel">
+                <i class='fa fa-file-excel-o'></i> Xuất Excel
+            </button>
+            @*@Html.NoEncodeActionLink("<i class='fa fa-file-excel-o'></i> Import Excel", "Import Excel", "ImportExcel", "KT_GIAYPHEP", null, htmlAttributes: new { @class = "btn btn-primary btn-sm" })*@
+        </p>
+    }
+
+    <fieldset class="fdb-scheduler-border">
+        <legend class="fdb-scheduler-search-border">Kết quả tìm kiếm</legend>
+        <label id="lblMessageTotal" style="color:blue; font-weight:bold">Tổng số bản ghi: @ViewBag.TotalRow</label>
+        <table class="table table-hover table-bordered table-condensed">
+            <tr>
+                <th>
+                    Số đăng ký
+                </th>
+                <th>
+                    Ngày đăng ký
+                </th>
+                <th>
+                    Chủ phương tiện
+                </th>
+                <th>
+                    Địa chỉ
+                </th>
+                <th>
+                    Tên tàu
+                </th>
+                <th>
+                    Nhóm tàu
+                </th>
+                <th>
+                    Công suất tàu
+                </th>
+                <th>
+                    Tình trạng tàu
+                </th>
+                <th>
+                    Vật liệu vỏ
+                </th>
+                <th>
+                    Tỉnh/TP
+                </th>
+                <th></th>
+            </tr>
+            @{
+                if (Model.SearchResults != null)
+                {
+                    foreach (var item in Model.SearchResults)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SO_DK)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NGAY_DK)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CHU_PHUONG_TIEN)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DIA_CHI)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TEN_TAU)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DNHOM_TAU.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.KT_TONG_CONG_SUAT)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DTINH_TRANG_TAU.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DVAT_LIEU_VO.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DTINHTP.TEN_TINHTP)
+                            </td>
+                            <td>
+                                <div class="pull-right">
+                                    <a href="@Url.Action("Create", "KT_GIAYPHEP", new { id = System.Uri.EscapeDataString(item.SO_DK) })">
+                                        <img src="@Url.Content("~/fonts/grid-approve-icon.png")" title="Cấp phép" />
+                                    </a>
+
+                                    @*<a href="@Url.Action("Details", "KT_TAUTHUYEN", new { id = item.SO_DK })" class="lnkDetails" data-modal="">
+                                        <img src="@Url.Content("~/fonts/grid-view-icon.png")" title="Xem chi tiết" />
+                                    </a>*@
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+
+        </table>
+
+    </fieldset>
+
+    <div class="pagination-sm">
+        @Html.PagedListPager(Model.SearchResults, page => Url.Action("TauChuaCapPhep", new
+                                                                       {
+                                                                           page,
+                                                                           Model.SO_DK,
+                                                                           Model.CHU_PHUONG_TIEN,
+                                                                           Model.MA_TINHTP,
+                                                                           Model.MA_QUANHUYEN,
+                                                                           Model.MA_PHUONGXA,
+                                                                           Model.DCONG_DUNG_TAUID,
+                                                                           Model.DNHOM_TAUID,
+                                                                           Model.DTINH_TRANG_TAUID,
+                                                                           Model.DTTDANG_KIEMID,
+                                                                           Model.DTINH_TRANG_DANG_KIEMID,
+                                                                           Model.KT_TONG_CONG_SUAT_TU,
+                                                                           Model.KT_TONG_CONG_SUAT_DEN,
+                                                                           Model.NGAY_DK_TU,
+                                                                           Model.NGAY_DK_DEN
+                                                                       }))
+    </div>
+</div>
+
+
+
+
+
+
+<!--
+<script src="~/Scripts/jquery-ui-1.11.4.min-custom.js"></script>
+
+ Cac div de chua noi dung cho dialog
+<div id="dialog-edit" style="display: none">
+
+</div>
+    -->
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/modalform")
+}

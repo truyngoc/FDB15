@@ -1,0 +1,213 @@
+﻿@model FDB.Models.ViewModelSearchDM_DOITUONG_KT
+
+@using PagedList.Mvc;
+
+@using FDB.Helpers;
+
+@{
+    ViewBag.Title = "Danh mục đối tượng khai thác";
+}
+
+<script>
+    $(document).ready(function () {
+        var url = "";
+
+        $("#dialog-delete-confirm").dialog({
+            autoOpen: false,
+            resizable: false,
+            height: 170,
+            width: 350,
+            show: { effect: 'drop', direction: "up" },
+            modal: true,
+            draggable: true,
+            open: function (event, ui) {
+                $(".ui-dialog-titlebar-close").hide();
+            },
+            buttons: {
+                "OK": function () {
+                    $(this).dialog("close");
+                    window.location.href = url;
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        // hien thi confirm dialog khi click delete tren grid
+        $(".lnkDelete").click(function () {
+            url = $(this).attr('href');
+            $("#dialog-delete-confirm").dialog('open');
+
+            return false;
+        });
+
+    });
+</script>
+
+<div id="dialog-delete-confirm" style="display: none">
+    <p>
+        <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+        Bạn có chắc chắn muốn xóa không?
+    </p>
+</div>
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <h3 class="text-center fdb-title-search-form">Danh sách đối tượng khai thác</h3>
+    <br />
+
+    <div class="container">
+        @using (Html.BeginForm("Index", "DM_DOITUONG_KT", FormMethod.Get))
+        {
+            <fieldset class="fdb-scheduler-border">
+
+                @*<div class="row">
+                    <div class="col-md-2 control-label">
+                        Loại khai thác
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.LOAI_KHAI_THAC, (SelectList)ViewBag.DMLoaiKhaiThac, string.Empty, new { @class = "form-control", @id = "LoaiKhaiThac" })
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                      
+                    </div>
+                    <div class="col-md-4">
+                        
+                    </div>
+                </div>*@
+                @*<br />*@
+                <div class="row">
+                    <div class="col-md-2 control-label">
+                        @*Tên nhóm đối tượng*@ Tên đối tượng
+                    </div>
+                    <div class="col-md-4">
+                        @*@Html.DropDownListFor(model => model.DM_NHOMDOITUONG_KTID, (SelectList)ViewBag.NHOMDOITUONGs, "--Chọn nhóm đối tượng--", new { @class = "form-control", @id = "NhomDoiTuongKhaiThac" })*@
+                        @Html.TextBoxFor(model => model.TEN_DOI_TUONG, new { @class = "form-control" })
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        
+                    </div>
+                    <div class="col-md-4">
+                       
+                    </div>
+                </div>
+
+                <br />
+                <p class="margin-top-05">
+
+
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <span class="glyphicon glyphicon-search"></span> Tìm kiếm
+                    </button>
+
+                    @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-plus'></span> Thêm mới", "Thêm mới", "Create", "DM_DOITUONG_KT", null, htmlAttributes: new { @class = "btn btn-primary btn-sm" })
+
+
+                </p>
+            </fieldset>
+        }
+        
+            <label id="lblMessageTotal" style="color:blue; font-weight:bold">Tổng số bản ghi: @ViewBag.TotalRow</label>
+            <table class="table table-hover table-bordered table-condensed">
+                <tr>
+                    <th>
+                        Tên đối tượng
+                    </th>
+                    <th>
+                        Mô tả
+                    </th>
+                    @*<th>
+                        Nhóm đối tượng
+                    </th>*@
+
+
+                    <th></th>
+                </tr>
+                @{
+                    if (Model.SearchResults != null)
+                    {
+                        foreach (var item in Model.SearchResults)
+                        {
+
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TEN_DOI_TUONG)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MO_TA)
+                                </td>
+                                @*<td>
+                                    @Html.DisplayFor(modelItem => item.DM_NHOMDOITUONG_KT.TEN_NHOM)
+                                </td>*@
+
+
+                                <td class="text-center">
+
+                                    <a href="@Url.Action("Edit", "DM_DOITUONG_KT", new { id = item.ID })">
+                                        <img src="@Url.Content("~/fonts/grid-edit-icon.png")" title="Sửa" />
+                                    </a>
+
+                                    <a href="@Url.Action("Delete", "DM_DOITUONG_KT", new { id = item.ID })" class="lnkDelete">
+                                        <img src="@Url.Content("~/fonts/grid-delete-icon1.gif")" title="Xóa" />
+                                    </a>
+
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+
+            </table>
+       
+        <br />
+
+        <br />
+
+
+        @Html.PagedListPager(Model.SearchResults, page => Url.Action("Index", new { page, Model.DM_NHOMDOITUONG_KTID, Model.TEN_DOI_TUONG }))
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    
+
+
+
+    // load district by province when change in dropdownlist
+    $("#LoaiKhaiThac").change(function () {
+        $.ajax({
+            url: '@Url.Action("getNhomDoiTuongByMatNuoc", "DM_DOITUONG_KT")',
+            type: 'post',
+            data: {
+                ma_MatNuoc: $('#LoaiKhaiThac').val()
+            }//NhomDoiTuongKhaiThac
+        }).done(function (response) {
+            // update district by province
+            var a = '<option value></option>' + response;   // defaut value
+            $("#NhomDoiTuongKhaiThac").html(a);
+
+            // reset ward
+            var b = '<option value></option>'
+            $('#DoiTuongKhaiThac').html(b);
+        });
+    });
+
+
+    // load ward by disctrict when change in dropdownlist
+    $("#NhomDoiTuongKhaiThac").change(function () {
+        $.ajax({
+            url: '@Url.Action("getDoiTuongByNhom", "DM_DOITUONG_KT")',
+            type: 'post',
+            data: {
+                ma_NhomDoiTuong: $('#NhomDoiTuongKhaiThac').val()
+            }
+        }).done(function (response) {
+            var a = '<option value></option>' + response;   // defaut value
+            $("#DoiTuongKhaiThac").html(a);
+        });
+    });
+
+</script>

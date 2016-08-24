@@ -1,0 +1,139 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+       
+        var number1 = parseInt(@ViewBag.TotalRow);
+        var number2 = parseInt(@ViewBag.CountGPSapHetHan);
+        var number3 = parseInt(@ViewBag.CountDKHetHan);
+        var number4 = parseInt(@ViewBag.CountDKSapHetHan);
+        var MyDiv = document.getElementById('MyDiv');
+        if (number1 > 0 || number2 > 0 || number3 > 0 || number4 > 0)
+        {            
+
+            MyDiv.style.display = 'block';
+        }
+
+        else
+        {
+            MyDiv.style.display = 'none'
+        }
+    });
+
+</script>
+
+<style>
+    #MyDiv {
+        text-align: center;
+        margin: 0 auto;
+        margin-top: 45px;
+        align-content: center;
+        left: 400px;
+        z-index: 100;
+        width: 550px;
+        top: 200px;
+        font-size: 22px;
+    }
+
+    .alert-box {
+        color: #555;
+        border-radius: 10px;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-size: 22px;
+        padding: 10px 10px 10px 36px;
+        margin: 10px;
+    }
+
+    .warning {
+        background: #fff8c4 url('images/warning.png') no-repeat 10px 50%;
+        border: 1px solid #f2c779;
+    }
+
+    .notice {
+        background: #e3f7fc url('images/notice.png') no-repeat 10px 50%;
+        border: 1px solid #8ed9f6;
+    }
+</style>
+
+<script src="~/Scripts/bootstrap-notify.js"></script>
+<script src="~/Scripts/bootstrap-notify.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/datepicker.js"></script>
+
+@*<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+        var MyDiv = document.getElementById('MyDiv');
+        $("#bt1").click(function () {
+            MyDiv.style.display = 'none';
+        });
+    });
+</script>*@
+
+<div id="MyDiv" class="alert-box notice" style="display:none">
+
+    <table class="table-condensed">
+
+        <tr>
+
+            <td>
+                <h4> Giấy phép : </h4>
+
+                Có <a href="@Url.Action("ListGiaHan_Partial", "KT_GIAYPHEP")" data-modal=""><b style="color: red;">@ViewBag.TotalRow</b></a> giấy phép hết hạn
+                <a href="@Url.Action("ListGiaHan_Partial", "KT_GIAYPHEP")" data-modal="">Chi tiết</a><br />
+                Có <a href="@Url.Action("ListSapHetHan_Partial", "KT_GIAYPHEP")" data-modal=""><b style="color: red;">@ViewBag.CountGPSapHetHan</b></a> giấy phép sẽ hết hạn trong 10 ngày tới
+                <a href="@Url.Action("ListSapHetHan_Partial", "KT_GIAYPHEP")" data-modal="">Chi tiết</a><br />
+
+            </td>
+
+
+        </tr>
+        <tr>
+
+            <td>
+                <h4> Đăng kiểm :</h4>
+
+                Có <a href="@Url.Action("ListGiaHan_Partial", "KT_DANGKIEM")" data-modal="">
+                    <b style="color: red;">
+                        @ViewBag.CountDKHetHan
+                    </b>
+                </a> đăng kiểm hết hạn
+                <a href="@Url.Action("ListGiaHan_Partial", "KT_DANGKIEM")" data-modal="">Chi tiết</a><br />
+                Có <a href="@Url.Action("ListSapHetHan_Partial", "KT_DANGKIEM")" data-modal="">
+                    <b style="color: red;">
+                        @ViewBag.CountDKSapHetHan
+                    </b>
+                </a> đăng kiểm sẽ hết hạn trong 10 ngày tới
+                <a href="@Url.Action("ListSapHetHan_Partial", "KT_DANGKIEM")" data-modal="">Chi tiết</a><br />
+
+            </td>
+        </tr>
+    </table>
+</div>
+
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+            @*<iframe src="" id='myModalContent'></iframe>*@
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/modalform")
+}
+
+
+
+
+
+

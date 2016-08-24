@@ -1,0 +1,90 @@
+﻿@model FDB.Models.SelectUsersInGroupViewModel
+@using FDB.Helpers;
+
+@{
+    ViewBag.Title = "GroupRemoveUsers";
+}
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <br />
+    <h4>Bỏ người dùng  @ViewBag.TenTTP ra khỏi nhóm: @Html.DisplayFor(model => model.GroupName)  @ViewBag.TenTTP</h4>
+    <hr />
+
+    @using (Html.BeginForm("GroupRemoveUsers", "Groups", FormMethod.Post, new { encType = "multipart/form-data", name = "myform" }))
+    {
+        @Html.AntiForgeryToken()
+        @*Add a new checkbox in its own div element:*@
+        @*<div>
+                <input type="checkbox" id="checkall" /><span>Check All</span>
+            </div>*@
+
+        @*Wrap the table element in a div named "checkboxes":*@
+        <div id="checkboxes">
+            <table class="table">
+                @Html.HiddenFor(model => model.GroupId)
+                <tr>
+                    <th>
+                        <input type="checkbox" id="checkall" />
+                    </th>
+                    <th>
+                        Tên đăng nhập
+                    </th>
+                    <th>
+                        Họ đệm
+                    </th>
+                    <th>
+                        Tên
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th></th>
+                </tr>
+                @Html.EditorFor(model => model.UserInGroup)
+            </table>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-danger btn-sm">
+                    <span class="glyphicon glyphicon-trash"></span> Xóa người dùng đã chọn
+                </button>
+                &nbsp;
+                @Html.ActionLink("Quay lại", "Index", "Groups", null, new { @class = "btn btn-primary btn-sm" })
+            </div>
+        </div>
+        <br />
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+
+        function toggleChecked(status) {
+            $("#checkboxes input").each(function () {
+                // Set the checked status of each to match the
+                // checked status of the check all checkbox:
+                $(this).prop("checked", status);
+            });
+        }
+
+        $(document).ready(function () {
+
+            // Grab a reference to the check all box:
+            var checkAllBox = $("#checkall");
+
+            //Set the default value of the global checkbox to true:
+            checkAllBox.prop('checked', false);
+
+            // Attach the call to toggleChecked to the
+            // click event of the global checkbox:
+            checkAllBox.click(function () {
+                var status = checkAllBox.prop('checked');
+                toggleChecked(status);
+            });
+        });
+    </script>
+
+}

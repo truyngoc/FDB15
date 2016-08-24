@@ -1,0 +1,240 @@
+﻿@model FDB.Models.ViewModelSearchKT_KHU_BAO_TON
+@using PagedList.Mvc;
+@using FDB.Helpers;
+
+<link rel="stylesheet" type="text/css" href="~/Content/PagedList.css" />
+
+@{
+    ViewBag.Title = "Tra cứu khu bảo tồn";
+}
+<script>
+    $(document).ready(function () {
+        var url = "";
+
+        $("#dialog-delete-confirm").dialog({
+            autoOpen: false,
+            resizable: false,
+            height: 170,
+            width: 350,
+            show: { effect: 'drop', direction: "up" },
+            modal: true,
+            draggable: true,
+            open: function (event, ui) {
+                $(".ui-dialog-titlebar-close").hide();
+            },
+            buttons: {
+                "OK": function () {
+                    $(this).dialog("close");
+                    window.location.href = url;
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        // hien thi confirm dialog khi click delete tren grid
+        $(".lnkDelete").click(function () {
+            url = $(this).attr('href');
+            $("#dialog-delete-confirm").dialog('open');
+
+
+
+            return false;
+        });
+        $("#province_dll").change(function () {
+            $.ajax({
+                url: '@Url.Action("getDistrict","KT_KHUBAOTON")',
+                type: 'post',
+                data: {
+                    ma_TinhTP: $('#province_dll').val()
+                }
+            }).done(function (response) {
+                // update district by province
+                var a = '<option value></option>' + response;   // defaut value
+                $("#district_dll").html(a);
+
+                // reset ward
+                var b = '<option value></option>'
+                $('#ward_dll').html(b);
+            });
+        });
+
+
+        // load ward by disctrict when change in dropdownlist
+        $("#district_dll").change(function () {
+            $.ajax({
+                url: '@Url.Action("getWard", "KT_KHUBAOTON")',
+                type: 'post',
+                data: {
+                    ma_QuanHuyen: $('#district_dll').val()
+                }
+            }).done(function (response) {
+                var a = '<option value></option>' + response;   // defaut value
+                $("#ward_dll").html(a);
+            });
+
+        });
+
+    });
+</script>
+
+
+
+<!-- Cac div de chua noi dung cho dialog -->
+<div id="dialog-delete-confirm" style="display: none">
+    <p>
+        <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+        Bạn có chắc chắn muốn xóa không?
+    </p>
+</div>
+
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <h3 class="text-center fdb-title-search-form">Tra cứu khu bảo tồn biển, nội địa</h3>
+    <br />
+
+    <div class="container">
+        @using (Html.BeginForm("Search", "KT_KHUBAOTON", FormMethod.Get))
+        {
+            <fieldset class="fdb-scheduler-border">
+                <legend class="fdb-scheduler-search-border">Chỉ tiêu tra cứu</legend>
+                <div class="row">
+                    <div class="col-md-2 control-label">
+                        Tên khu bảo tồn
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.TEN_KHU_BAO_TON, new { @class = "form-control" })
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        Địa chỉ
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.DIA_CHI, new { @class = "form-control" })
+                    </div>
+
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Loại khu bảo tồn
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.DKHU_BAO_TONID, (SelectList)ViewBag.DM_KHUBAOTONs, "--Chọn loại khu bảo tồn--", new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-2 control-label">
+                        Tỉnh/TP
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.MA_TINHTP, (SelectList)ViewBag.DTINHTPs, "--Chọn tỉnh/TP--", new { @class = "form-control", @id = "province_dll" })
+                    </div>
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Quận/Huyện
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.MA_QUANHUYEN, (SelectList)ViewBag.QUAN_HUYENs, string.Empty, new { @class = "form-control", @id = "district_dll" })
+                    </div>
+                    <div class="col-md-2 control-label">
+                        Xã/phường
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.MA_PHUONGXA, (SelectList)ViewBag.PHUONG_XAs, string.Empty, new { @class = "form-control", @id = "ward_dll" })
+                    </div>
+                </div>
+
+
+
+
+                <p class="margin-top-05">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <span class="glyphicon glyphicon-search"></span> Tìm kiếm
+                    </button>
+
+                    <button type="submit" class="btn btn-primary btn-sm" name="SearchButton" value="Xuất Excel">
+                        <i class='fa fa-file-excel-o'></i>
+                        Xuất Excel
+                    </button>
+
+                    @*@Html.NoEncodeActionLink("<span class='glyphicon glyphicon-plus'></span> Xem bản đồ", "Xem bản đồ", "Gmap", "KT_KHUBAOTON", null, htmlAttributes: new { @class = "btn btn-primary btn-sm" })*@
+                </p>
+            </fieldset>
+        }
+        <label id="lblMessageExport" style="color:blue; font-weight:bold">@ViewBag.MSG_EXPORT</label>
+        <fieldset class="fdb-scheduler-border">
+            <legend class="fdb-scheduler-search-border">Kết quả tra cứu</legend>
+            <label id="lblMessageTotal" style="color:blue; font-weight:bold">Tổng số bản ghi: @ViewBag.TotalRow</label>
+            <table class="table table-hover table-bordered table-condensed">
+                <tr>
+                    <th>
+                        Tên khu bảo tồn
+                    </th>
+                    <th>
+                        Địa chỉ
+                    </th>
+                    <th>
+                        Tổng diện tích
+                    </th>
+                    <th>
+                        Phần đất liền
+                    </th>
+                    <th>
+                        Phần nước
+                    </th>
+                    <th>
+                        Loại khu bảo tồn
+                    </th>
+                    <th>
+                        Tỉnh/TP
+                    </th>
+                </tr>
+                @{
+                    if (Model.SearchResults != null)
+                    {
+                        foreach (var item in Model.SearchResults)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TEN_KHU_BAO_TON)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DIA_CHI)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TONG_DIENTICH)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PHAN_DATLIEN)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PHAN_NUOC)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DKHU_BAO_TON.Name)
+
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DTINHTP.TEN_TINHTP)
+
+                                </td>
+
+
+                            </tr>
+                        }
+                    }
+                }
+
+            </table>
+        </fieldset>
+        <br />
+
+
+        <br />
+
+
+        @Html.PagedListPager(Model.SearchResults, page => Url.Action("Search", new { page, Model.TEN_KHU_BAO_TON, Model.DIA_CHI, Model.DKHU_BAO_TONID }))
+    </div>
+</div>

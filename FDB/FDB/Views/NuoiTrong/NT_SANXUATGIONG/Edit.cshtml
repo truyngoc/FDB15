@@ -1,0 +1,381 @@
+﻿@model FDB.Models.NT_SANXUATGIONG
+@{
+    ViewBag.Title = "Sản xuất giống thủy sản";
+}
+
+@using (Html.BeginForm("Edit", "NT_SANXUATGIONG", FormMethod.Post, new { @id = "formEdit" }))
+{
+    <div class="container fdb-div-content fdb-div-corner-all">
+
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        @Html.HiddenFor(m => m.ID)
+        <div class="fdb-title-form-24 text-center col-md-12">
+            Sản xuất giống thủy sản
+
+        </div>
+
+        <div class="form-horizontal">
+            <fieldset class="fdb-scheduler-border">
+                <legend class="fdb-scheduler-border">
+                    Thông tin chung
+
+                </legend>
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-10"><label id="lblValidThangQuy" style="color: #b94a48"></label></div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-2 control-label">
+                        Tháng <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @*@Html.TextBoxFor(m => m.THANG, new { @class = "form-control", @type = "number" })*@
+                        @Html.DropDownListFor(m => m.THANG, new List<SelectListItem>
+                    {                   new SelectListItem() {Text = "", Value=""},
+                                        new SelectListItem() {Text = "Tháng 1", Value="1"},
+                                        new SelectListItem() {Text = "Tháng 2", Value="2"},
+                                        new SelectListItem() {Text = "Tháng 3", Value="3"},
+                                        new SelectListItem() {Text = "Tháng 4", Value="4"},
+                                        new SelectListItem() {Text = "Tháng 5", Value="5"},
+                                        new SelectListItem() {Text = "Tháng 6", Value="6"},
+                                        new SelectListItem() {Text = "Tháng 7", Value="7"},
+                                        new SelectListItem() {Text = "Tháng 8", Value="8"},
+                                        new SelectListItem() {Text = "Tháng 9", Value="9"},
+                                        new SelectListItem() {Text = "Tháng 10", Value="10"},
+                                        new SelectListItem() {Text = "Tháng 11", Value="11"},
+                                        new SelectListItem() {Text = "Tháng 12", Value="12"}
+                    }, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.THANG)
+                        <span id="lblValidateTHANG" style="color:red;display:none"></span>
+                    </div>
+                    <div class="col-md-2 control-label">
+                        Năm <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(m => m.NAM, new { @class = "form-control", @type = "text" })
+                        @Html.ValidationMessageFor(model => model.NAM)
+                        <span id="lblValidateNAM" style="color: #b94a48; display: none"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-2 control-label">
+                        Tỉnh/Thành phố <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.MA_TINHTP, (SelectList)ViewBag.DMTThanhPho, new { @class = "form-control", @id = "province_dll" })
+                        @Html.ValidationMessageFor(model => model.MA_TINHTP)
+                    </div>
+                    <div class="col-md-2 control-label">
+                        Ngày nhập <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(m => m.NGAY_NHAP, "{0:dd/MM/yyyy}", new { @class = "form-control", @readonly = true })
+
+                    </div>
+                </div>
+
+            </fieldset>
+
+            <fieldset class="fdb-scheduler-border">
+                <legend class="fdb-scheduler-border">Thông tin chi tiết</legend>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <label id="lblValidateDETAIL" style="color: #b94a48"></label>
+
+                        <table class="table table-hover table-bordered table-condensed table-responsive" id="Table1">
+                            <tr>
+                                <th rowspan="2" style="text-align:center">
+                                    Đối tượng giống
+                                </th>
+                                <th rowspan="2" style="text-align:center">
+                                    Sản lượng giống<br />(triệu con)
+                                </th>
+                                <th rowspan="2" style="text-align:center;">
+                                    Tổng cơ sở <br />SX giống
+                                </th>
+                                <th colspan="3" style="width:300px;text-align:center" align="center">
+                                    Tổng cơ sở
+                                </th>
+                                <th rowspan="2" style="text-align:center">
+                                    Tổng số trại giống
+                                </th>
+                                <th rowspan="2" style="text-align:center">
+                                    Tổng số giống <br />được kiểm dịch <br />(triệu con)
+                                </th>
+
+                                <th rowspan="2" style="text-align:center">
+                                    Tổng số bố mẹ <br />sản xuất(triệu con)
+                                </th>
+                                <th rowspan="2" style="text-align:center">
+                                    Bố mẹ nhập<br />(triệu con)
+                                </th>
+                                <th rowspan="2" valign="middle">
+                                    <label class="BtnPlus" style="cursor:pointer"><img src="@Url.Content("~/fonts/button-add-icon.png")" title="Thêm mới" /></label>
+
+                                </th>
+
+                            </tr>
+                            <tr>
+
+                                <th align="center" style="text-align:center">
+                                    Loại A
+                                </th>
+                                <th align="center" style="text-align:center">
+                                    Loại B
+                                </th>
+                                <th align="center" style="text-align:center">
+                                    Loại C
+                                </th>
+
+                            </tr>
+                            @{
+
+    int i = 1;
+    string lblID = "";
+
+    if (Model.DSNT_SanXuatGiongDetail.Count > 0)
+    {
+        List<FDB.Models.DM_DOITUONG_NUOI_SANXUATGIONG> lstDMDoiTuongNuoi = (new FDB.DataAccessLayer.FDBContext()).DM_DOITUONG_NUOI_SANXUATGIONG.ToList();
+
+        foreach (var item in Model.DSNT_SanXuatGiongDetail)
+        {
+
+            lblID = "lblDetail_" + i.ToString();
+            <tr>
+                <td class="col-md-2">
+                    <select class="selectLoaiMatNuoc" name="ddlID_NUOI_SX_DOITUONG_@i.ToString()" id="ddlID_NUOI_SX_DOITUONG_@i.ToString()">
+                        @foreach (var itemDM in lstDMDoiTuongNuoi)
+                        {
+                            <option value="@itemDM.ID.ToString()" @(itemDM.ID == item.ID_NUOI_SX_DOITUONG ? "selected" : "")>@itemDM.TEN_DOI_TUONG</option>
+                        }
+
+                    </select>
+                </td>
+                <td><input type="text" value="@item.SAN_LUONG_GIONG" class="form-control" style="width:85px;text-align:left" id="txtSAN_LUONG_GIONG_@i.ToString()" name="txtSAN_LUONG_GIONG_@i.ToString()" /></td>
+                <td><input type="number" value="@item.TONG_COSO_SX_GIONG" class="form-control" style="width:85px;text-align:left" id="txtTONG_COSO_SX_GIONG_@i.ToString()" name="txtTONG_COSO_SX_GIONG_@i.ToString()" /></td>
+                <td><input type="number" value="@item.TONG_COSO_LOAI_A" class="form-control" style="width:85px;text-align:left" id="txtTONG_COSO_LOAI_A_@i.ToString()" name="txtTONG_COSO_LOAI_A_@i.ToString()" /></td>
+                <td><input type="number" value="@item.TONG_COSO_LOAI_B" class="form-control" style="width:85px;text-align:left" id="txtTONG_COSO_LOAI_B_@i.ToString()" name="txtTONG_COSO_LOAI_B_@i.ToString()" /></td>
+                <td><input type="number" value="@item.TONG_COSO_LOAI_C" class="form-control" style="width:85px;text-align:left" id="txtTONG_COSO_LOAI_C_@i.ToString()" name="txtTONG_COSO_LOAI_C_@i.ToString()" /></td>
+
+                <td><input type="number" value="@item.TONG_TRAI_GIONG" class="form-control" style="width:85px;text-align:left" id="txtTONG_TRAI_GIONG_@i.ToString()" name="txtTONG_TRAI_GIONG_@i.ToString()" /></td>
+                <td><input type="text" value="@item.TONG_GIONG_KIEMDICH" class="form-control" style="width:85px;text-align:left" id="txtTONG_GIONG_KIEMDICH_@i.ToString()" name="txtTONG_GIONG_KIEMDICH_@i.ToString()" /></td>
+                <td><input type="text" value="@item.TONG_BOME_SX" class="form-control" style="width:85px;text-align:left" id="txtTONG_BOME_SX_@i.ToString()" name="txtTONG_BOME_SX_@i.ToString()" /></td>
+                <td><input type="text" value="@item.TONG_BOME_NHAP" class="form-control" style="width:85px;text-align:left" id="txtTONG_BOME_NHAP_@i.ToString()" name="txtTONG_BOME_NHAP_@i.ToString()" /></td>
+                <td>
+                    <label class="BtnPlus" style="cursor:pointer"><img src="@Url.Content("~/fonts/button-add-icon.png")" title="Thêm mới" /></label>
+                    <label class="BtnMinus" id="@lblID" style="cursor:pointer"><img src="@Url.Content("~/fonts/DELETE.GIF")" title="Xóa" /></label>
+                </td>
+            </tr>
+                        i++;
+        }
+
+        ViewBag.sMaxID = i;
+    }
+                            }
+                            @Html.Raw(@ViewBag.sEditHTML)
+                        </table>
+                    </div>
+                    <div class="col-md-push-4"></div>
+                </div>
+            </fieldset>
+
+        </div>
+
+    </div>
+
+
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-danger btn-sm" id="btnsubmit">
+                <span class="glyphicon glyphicon-floppy-disk"></span> Cập nhật
+            </button>
+            &nbsp;&nbsp;
+            @Html.ActionLink("Quay lại", "Index", "NT_SANXUATGIONG", null, new { @class = "btn btn-primary btn-sm" })
+        </div>
+    </div>
+}
+
+<input id="txtDMDoiTuongNuoi" style="display:none" value="@ViewBag.DMDoiTuongSX" />
+<label id="lblMaxID" style="display:none">@ViewBag.sMaxID </label>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script src="~/Scripts/datepicker.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/jquery.maskMoney.js"></script>
+<script src="~/Scripts/jquery.number.js"></script>
+<script src="~/Scripts/jquery.masknumber.js"></script>
+<script src="~/Scripts/moment.js"></script>
+
+<script type="text/javascript">
+
+    $("#NGAY_NHAP").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+    $('#NAM').maskNumber({ integer: true, decimal: '', thousands: '' });
+    $(function () {
+        $(document).tooltip();
+    });
+
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $("#Table1").find('input[type=text]').number(true, 2);
+        $("#Table1").find('input[type=number]').maskNumber({ integer: true, decimal: '', thousands: '' });
+
+        var lblID = "#lblDetail_1";
+        var ID = 1;
+
+        if ($('#lblMaxID').html().trim() != "") {
+            ID = parseInt($('#lblMaxID').html().toString());
+        }
+
+        var strDoiTuongSX = $('#txtDMDoiTuongNuoi').val();
+        var strDDL2 = strDoiTuongSX + '</select>';
+
+        function addRow() {
+            var html =
+                '<tr >' +
+                    '<td class="col-md-2"><select  name="ddlID_NUOI_SX_DOITUONG_' + ID + '" class="selectLoaiMatNuoc" id="ddlID_NUOI_SX_DOITUONG_' + ID + '">' + strDDL2 + '</td>' +
+                    '<td ><input type="number" value="" class="form-control" style="width:85px;text-align:left" id="txtSAN_LUONG_GIONG_' + ID + '" name="txtSAN_LUONG_GIONG_' + ID + '" /></td>' +
+                    '<td ><input type="number" value="" class="form-control" style="width:85px;text-align:left" id="txtTONG_COSO_SX_GIONG_' + ID + '" name="txtTONG_COSO_SX_GIONG_' + ID + '" /></td>' +
+                    '<td ><input type="number" value="" class="form-control" style="width:85px;text-align:left" id="txtTONG_COSO_LOAI_A_' + ID + '" name="txtTONG_COSO_LOAI_A_' + ID + '" /></td>' +
+                    '<td ><input type="number" value="" class="form-control" style="width:85px;text-align:left" id="txtTONG_COSO_LOAI_B_' + ID + '" name="txtTONG_COSO_LOAI_B_' + ID + '" /></td>' +
+                    '<td ><input type="number" value="" class="form-control" style="width:85px;text-align:left" id="txtTONG_COSO_LOAI_C_' + ID + '" name="txtTONG_COSO_LOAI_C_' + ID + '" /></td>' +
+                    //'<td class="col-md-2">' +
+                    //    '<select  class="form-control" id="txtPHAN_LOAI_COSO_' + ID + '"  name="txtPHAN_LOAI_COSO_' + ID + '">' +
+                    //        '<option value="1">Loại A</option>' +
+                    //        '<option value="2">Loại B</option>' +
+                    //        '<option value="3">Loại C</option>' +
+                    //        '<option value="0">Chưa xếp loại</option>' +
+                    //    '</select>' +
+                    // '</td>' +
+                    '<td ><input type="number" value="" class="form-control" style="width:85px;text-align:left" id="txtTONG_TRAI_GIONG_' + ID + '" name="txtTONG_TRAI_GIONG_' + ID + '" /></td>' +
+                    '<td ><input type="number" value="" class="form-control" style="width:85px;text-align:left" id="txtTONG_GIONG_KIEMDICH_' + ID + '" name="txtTONG_GIONG_KIEMDICH_' + ID + '" /></td>' +
+                    '<td ><input type="number" value="" class="form-control" style="width:85px;text-align:left" id="txtTONG_BOME_SX_' + ID + '" name="txtTONG_BOME_SX_' + ID + '" /></td>' +
+                    '<td ><input type="number" value="" class="form-control" style="width:85px;text-align:left" id="txtTONG_BOME_NHAP_' + ID + '" name="txtTONG_BOME_NHAP_' + ID + '" /></td>' +
+
+                    '<td> <label class="BtnPlus" style="cursor:pointer" ><img src="@Url.Content("~/fonts/button-add-icon.png")" title="Thêm mới" /></label>' +
+                    ' <label class="BtnMinus" id="lblDetail_' + ID + '" style="cursor:pointer"><img src="@Url.Content("~/fonts/DELETE.GIF")" title="Xóa"  /></label>' +
+                    '</td>' +
+                '</tr>'
+            $(html).appendTo($("#Table1"));
+            // mask decimal ở đây:
+            //$("#Table1").find('input[type=text]').number(true, 2);
+            // $("#Table1").find('input[type=text]').number(true, 2);
+            $("#Table1").find('input[type=number]').maskNumber({ integer: true, decimal: '', thousands: '' });
+
+            ID++;
+
+        };
+        $("#Table1").on("click", ".BtnPlus", addRow);
+
+        $("#Table1").on("click", ".BtnMinus", deleteRow);
+
+
+
+        function deleteRow() {
+            lblID = $(this).attr('id');
+            lblID = "#" + lblID.toString().trim();
+            if (confirm("Bạn chắc chắn muốn xóa?")) {
+                var par = $(this).parent().parent();
+                par.remove();
+            }
+
+            return false;
+
+        };
+
+
+        var validateNGAYNHAP = true;
+        $('#btnsubmit').click(function () {
+            var currentTime = new Date();
+            var currentMonth = currentTime.getMonth() + 1;
+            var currentYear = currentTime.getFullYear();
+
+            var lblValidateTHANG = $('#lblValidateTHANG');
+            var lblValidateNAM = $('#lblValidateNAM');
+            lblValidateNAM.html('');
+            lblValidateTHANG.html('');
+
+
+            var txtTHANG = $('#THANG').val();
+            if (txtTHANG == null || txtTHANG == "") {
+                lblValidateTHANG.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+                lblValidateTHANG.html('Tháng là bắt buộc nhập!');
+                lblValidateNAM.html('');
+                lblValidateNAM.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+                return false;
+            }
+
+            var txtNAM = $('#NAM').val();
+            if (txtNAM > currentYear) {
+                lblValidateNAM.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+                lblValidateNAM.html('(*)Năm không được lớn hơn năm hiện tại');
+                lblValidateTHANG.html('');
+                lblValidateTHANG.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+                $('#NAM').focus();
+                return false;
+            }
+            if (txtNAM == currentYear && txtTHANG > currentMonth) {
+                lblValidateTHANG.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+                lblValidateTHANG.html('(*)Tháng không được lớn hơn tháng hiện tại');
+                lblValidateNAM.html('');
+                lblValidateNAM.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+                $('#THANG').focus();
+                return false;
+            }
+
+
+            var table1 = $("#Table1");
+            var countAll = 0;
+            var countVal = 0;
+            var vReturn = true;
+            $(table1).find('tr')
+            .each(function () {
+                $(this).find('td input')
+                .each(function () {
+                    var txt = $(this).val();
+                    if (txt == "") {
+                        countVal++;
+                    }
+                    if (countVal == 9) {
+                        $(this).parent().parent().find('td input').css("border", "solid 1px #b94a48");
+                        $(this).parent().parent().find('td input').eq(0).focus();
+                        vReturn = false;
+                    }
+                    else {
+                        $(this).css("border", "solid 1px #cccccc");
+
+                    }
+                    countAll++;
+                });
+                countVal = 0;
+
+            });
+
+            if (countAll == 0) {
+                $('#lblValidateDETAIL').html('(*)Bạn phải nhập danh sách chi tiết!');
+                vReturn = false;
+            }
+            else {
+                $('#lblValidateDETAIL').html('');
+
+            }
+
+            return vReturn;
+        }
+       );
+
+
+
+    });
+</script>

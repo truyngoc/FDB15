@@ -1,0 +1,56 @@
+﻿@model IEnumerable<FDB.Models.Group>
+@using FDB.Helpers;
+
+@{ ViewBag.Title = "Index"; }
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <h3 class="text-center fdb-title-search-form">Danh sách nhóm người dùng  @ViewBag.TenTTP</h3>
+    <hr class="fdb-hr" />
+    @using (Html.BeginForm("Index", "Groups", FormMethod.Get))
+    {
+        <div class="row">
+            <div class="col-md-2 control-label">
+                Tên nhóm:
+            </div>
+            <div class="col-md-4">
+                <input type="text" name="txtTenNhom" class="form-control" />
+            </div>
+        </div>
+
+        <br />
+        <p class="margin-top-05">
+
+            <button type="submit" class="btn btn-primary btn-sm">
+                <span class="glyphicon glyphicon-search"></span> Tìm kiếm
+            </button>
+
+            @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-plus'></span> Thêm mới", "Thêm mới", "Create", "Groups", null, htmlAttributes: new { @class = "btn btn-primary btn-sm" })
+        </p>
+    }
+
+    <label id="lblMessageTotal" style="color:blue; font-weight:bold">Tổng số bản ghi: @ViewBag.TotalRow</label>
+    <table class="table table-hover table-striped table-condensed">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.ActionLink("Sửa", "Edit", new { id = item.Id }) |
+                    @*@Html.ActionLink("Quyền", "GroupRoles", new { id = item.Id }) |*@
+                    @Html.ActionLink("Thêm người dùng", "GroupAddUsers", new { id = item.Id }) |
+                    @Html.ActionLink("Xóa  người dùng", "GroupRemoveUsers", new { id = item.Id }) |
+                    @Html.ActionLink("Xóa", "Delete", new { id = item.Id }) |
+                    @Html.ActionLink("Phân quyền chức năng", "GroupAddMenu", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    </table>
+</div>

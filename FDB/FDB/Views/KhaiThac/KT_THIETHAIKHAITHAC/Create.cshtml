@@ -1,0 +1,283 @@
+﻿@model FDB.Models.ViewModelAddKT_THIETHAIKHAITHAC
+
+@{
+    ViewBag.Title = "Thiệt hại khai thác";
+}
+
+@using (Html.BeginForm("Create", "KT_THIETHAIKHAITHAC", FormMethod.Post, new { @id = "formCreate" }))
+{
+    <div class="container fdb-div-content fdb-div-corner-all">
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <div class="form-group">
+
+                <div class="fdb-title-form-24 text-center col-md-6">
+                    Báo cáo tai nạn tàu cá
+                </div>
+                <div class="col-md-6"></div>
+            </div>
+
+            <div class="form-group">
+                <div class="control-label col-md-2">Số đăng ký tàu<label style="color:red;">(*)</label></div>
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.SO_DK_TAU, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.SO_DK_TAU)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="control-label col-md-2">Số thuyền viên</div>
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.SO_THUYENVIEN, new { @class = "form-control", @type = "number" })
+                    @Html.ValidationMessageFor(model => model.SO_THUYENVIEN)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="control-label col-md-2">Khu vực gặp nạn</div>
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.KHUVUC_GAPNAN, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.KHUVUC_GAPNAN)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="control-label col-md-2">Vĩ độ</div>
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.VIDO, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.VIDO)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="control-label col-md-2">Kinh độ</div>
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.KINHDO, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.KINHDO)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="control-label col-md-2">Thời gian gặp nạn</div>
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.TG_GAPNAN, "{0:dd/MM/yyyy}", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TG_GAPNAN)
+                    <span id="lblValidateTG_GAPNAN" style="color: #b94a48; display: none; "></span>
+                </div>
+            </div>
+        
+  
+            <div class="form-group">
+                <div class="col-md-2 control-label">Sự cố về tàu</div>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.SUCOVETAU, new { @class = "form-control"})
+                   
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="control-label col-md-2">Khác</div>
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.TAU_KHAC, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TAU_KHAC)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-2 control-label">Sự cố về người</div>
+                <div class="col-md-10">
+                    @Html.EditorFor(x => x.SUCOVENGUOI, new { @class = "form-control" })
+                    <span id="lblValidateSUCO" style="color: #b94a48; display: none; "></span>
+
+                </div>
+            </div>
+            <div class="form-group" id="div1">
+                <div class="control-label col-md-2">Số lượng người mất tích</div>
+                <div class="col-md-2">
+                    @Html.TextBoxFor(model => model.SO_NGUOI_MAT_TICH, new { @class = "form-control", @id = "txtSoMatTich",@type="number" })
+                    @Html.ValidationMessageFor(model => model.SO_NGUOI_MAT_TICH)
+                </div>
+            </div>
+            <div class="form-group" id="div2">
+                <div class="control-label col-md-2">Số lượng người chết</div>
+                <div class="col-md-2">
+                    @Html.TextBoxFor(model => model.SO_NGUOI_CHET, new { @class = "form-control", @id = "txtSoNguoiChet" ,@type="number" })
+                    @Html.ValidationMessageFor(model => model.SO_NGUOI_CHET)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="control-label col-md-2">Khác</div>
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.NGUOI_KHAC, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.NGUOI_KHAC)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-2 control-label">Thiệt hại ước tính (VNĐ)</div>
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.THIETHAI_UOCTINH, new { @class = "form-control", data_val_number = "Thiệt hại ước tính phải là số." })
+                    @Html.ValidationMessageFor(model => model.THIETHAI_UOCTINH)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-2 control-label">Cơ quan đã xử lý</div>
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.COQUAN_XULY, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.COQUAN_XULY)
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-danger btn-sm" id="btnsubmit">
+                <span class="glyphicon glyphicon-floppy-disk"></span> Cập nhật
+            </button>
+            &nbsp;
+            @Html.ActionLink("Quay lại", "Index", "KT_THIETHAIKHAITHAC", null, new { @class = "btn btn-primary btn-sm" })
+        </div>
+    </div>
+
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js" type="text/javascript"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/jquery.maskMoney.js"></script>
+<script src="~/Scripts/jquery.number.js"></script>
+<script src="~/Scripts/datepicker.js"></script>
+<script src="~/Scripts/moment.js"></script>
+<script src="~/Scripts/CustomValidation.js"></script>
+
+
+
+<script type="text/javascript">
+    $("#TG_GAPNAN").datepicker({
+            changeMonth: true,
+            changeYear: true,
+
+            dateFormat: 'dd/mm/yy'
+        });
+
+
+    $("#TG_GAPNAN").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+
+    // cho phep nhap so thap phan (su dung jquery.number)
+    $("#THIETHAI_UOCTINH").number(true, 0, '', ',');
+
+  
+
+    var validateNGAYNHAP = true;
+    
+    $('#btnsubmit').click(function () {
+      
+        //validate thang < thang hien tai
+        if (validateNGAYNHAP == false) {
+            $('#lblValidateTG_GAPNAN').html('Thời gian gặp nạn không được lớn hơn ngày hiện tại!');
+            $('#lblValidateTG_GAPNAN').attr("style", "display:block;color: #b94a48;font-size: 12px;line-height: 1.428");
+            return false;
+        }
+        else {
+            $('#lblValidateTG_GAPNAN').html('');
+            $('#lblValidateTG_GAPNAN').attr("style", "display:none");
+
+        }
+        //-----------END validate thang < thang hien tai
+        
+        //bat buoc nhap su co ve tau hoac nguoi
+        var valid = true;
+
+        if ($('input[type=checkbox]:checked').length == 0) {
+            $('#lblValidateSUCO').html('Sự cố về tàu hoặc người bắt buộc nhập!');
+            $('#lblValidateSUCO').attr("style", "display:block;color: #b94a48;font-size: 12px;line-height: 1.428");          
+            return valid = false;
+        }
+        else
+        {
+             valid = true;
+        }
+          
+        
+    }
+     );
+
+    //lblValidateTG_GAPNAN
+    $("#TG_GAPNAN").change(function () {
+        var someDate = $("#TG_GAPNAN").val();
+        var currentDate = new Date();
+        var year = currentDate.getFullYear();
+        var month = currentDate.getMonth() + 1;
+        var day = currentDate.getDate();
+
+        var day_2 = day;
+        if (day < 10)
+            day_2 = '0' + day.toString();
+
+        var month_2 = month;
+        if (month < 10)
+            month_2 = '0' + month.toString();
+
+        // alert(day_2 + '/' + month_2 + '/' + year);
+        if (moment(someDate, 'DD/MM/YYYY') > moment(day_2 + '/' + month_2 + '/' + year, 'DD/MM/YYYY')) {
+            $('#lblValidateTG_GAPNAN').html('Thời gian gặp nạn không được lớn hơn ngày hiện tại!');
+            $('#lblValidateTG_GAPNAN').attr("style", "display:block;color: #b94a48;font-size: 12px;line-height: 1.428");
+            validateNGAYNHAP = false;
+        }
+
+        else {
+            $('#lblValidateTG_GAPNAN').html('');
+            $('#lblValidateTG_GAPNAN').attr("style", "display:none");
+            validateNGAYNHAP = true;
+        }
+        
+    });
+
+    $(document).ready(function () {        
+            $('#SUCOVENGUOI_2__IsChecked').click(function () {
+                var $this = $(this);
+                if ($this.is(':checked')) {
+                   
+                    $('#div1').show();
+                    //$('#txtSoMatTich').show();
+                    //$('#lblMatTich').show();
+                } else {
+                    $('#div1').hide();
+                    //$('#txtSoMatTich').hide();
+                    //$('#lblMatTich').hide();
+                   
+                }
+            });
+
+            $('#SUCOVENGUOI_3__IsChecked').click(function () {
+                var $this = $(this);
+                if ($this.is(':checked')) {
+                    $('#div2').show();
+                    //$('#txtSoNguoiChet').show();
+                    //$('#lblCHET').show();
+                } else {
+                    $('#div2').hide();
+                    //$('#txtSoNguoiChet').hide();
+                    //$('#lblCHET').hide();
+                    
+                }
+            });
+        });
+  
+
+    </script>
+
+<style type="text/css">
+    div#div1 {
+        display: none;
+    }
+    div#div2 {
+        display: none;
+    }
+</style>
+
+
+
+

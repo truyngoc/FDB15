@@ -1,0 +1,395 @@
+﻿@model FDB.Models.NT_NUOILONGBE
+@{
+    ViewBag.Title = "Báo cáo thể tích, sản lượng nuôi lồng bè";
+}
+
+<style>
+    fieldset.scheduler-border {
+        /*border: 1px solid #dddddd;*/
+        padding: 0 1.4em 1.4em 1.4em !important;
+        /*margin: 0 0 1.5em 0 !important;*/
+        -webkit-box-shadow: 0px 0px 0px 0px #000;
+        box-shadow: 0px 0px 0px 0px #000;
+    }
+
+    legend.scheduler-border {
+        font-size: 14px;
+        text-align: left !important;
+        /*width: auto;*/
+        /*padding: 0 10px;*/
+        /*border-bottom: none;*/
+        margin: 0px;
+        color: #006bc1;
+        font-style: italic;
+    }
+</style>
+
+@using (Html.BeginForm("Create", "NT_NUOILONGBE", FormMethod.Post, new { @id = "formCreate" }))
+{
+    <div class="container fdb-div-content fdb-div-corner-all">
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+     
+                <div class="fdb-title-form-24 text-center col-md-12">
+                    Báo cáo thể tích, sản lượng nuôi lồng bè<br />
+                    <div class="text-center fdb-title-form-14 col-md-12">
+                        (Tần suất thu thập 1 tháng/1 lần)
+                    </div>
+                </div>
+         
+
+        <div class="form-horizontal">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-10"><label id="lblValidThangQuy" style="color: #b94a48"></label></div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-md-2 control-label">
+                    Tháng <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @*@Html.TextBoxFor(m => m.THANG, new { @class = "form-control", @type = "number" })*@
+                    @Html.DropDownListFor(m => m.THANG, new List<SelectListItem>
+                    {                   new SelectListItem() {Text = "", Value=""},
+                                        new SelectListItem() {Text = "Tháng 1", Value="1"},
+                                        new SelectListItem() {Text = "Tháng 2", Value="2"},
+                                        new SelectListItem() {Text = "Tháng 3", Value="3"},
+                                        new SelectListItem() {Text = "Tháng 4", Value="4"},
+                                        new SelectListItem() {Text = "Tháng 5", Value="5"},
+                                        new SelectListItem() {Text = "Tháng 6", Value="6"},
+                                        new SelectListItem() {Text = "Tháng 7", Value="7"},
+                                        new SelectListItem() {Text = "Tháng 8", Value="8"},
+                                        new SelectListItem() {Text = "Tháng 9", Value="9"},
+                                        new SelectListItem() {Text = "Tháng 10", Value="10"},
+                                        new SelectListItem() {Text = "Tháng 11", Value="11"},
+                                        new SelectListItem() {Text = "Tháng 12", Value="12"}
+                    }, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.THANG)
+                    <span id="lblValidateTHANG" style="color:red;display:none"></span>
+                </div>
+                <div class="col-md-2 control-label">
+                    Năm <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(m => m.NAM, new { @class = "form-control", @type = "text" })
+                    @Html.ValidationMessageFor(model => model.NAM)
+                    <span id="lblValidateNAM" style="color: #b94a48; display: none"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-2 control-label">
+                    Tỉnh/Thành phố <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.MA_TINHTP, (SelectList)ViewBag.DMTThanhPho, string.Empty, new { @class = "form-control", @id = "province_dll" })
+                    @Html.ValidationMessageFor(model => model.MA_TINHTP)
+                </div>
+                <div class="col-md-2 control-label">
+                    Ngày nhập <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(m => m.NGAY_NHAP, "{0:dd/MM/yyyy}", new { @class = "form-control", @readonly = true })
+
+                </div>
+            </div>
+
+
+                <div class="form-group">
+                    <div class="col-md-14 center-table">
+                        <label id="lblValidateDETAIL" style="color: #b94a48"></label>
+                        <table class="table table-hover table-bordered table-condensed" id="Table1">
+
+                            <tr>
+                                <th align="center" valign="middle" style="text-align:center;" width="150px">
+                                    Loại mặt nước
+                                </th>
+                                <th style="width:120px" align="center" valign="top">
+                                    Nhóm đối tượng
+                                </th>
+                                <th style="width:120px" align="center" valign="top">
+                                    Đối tượng
+                                </th>
+                                <th>
+                                    Số lượng lồng
+                                </th>
+                                <th valign="top">
+                                    Thể tích lồng
+                                    <br />(m3)
+                                </th>
+                                <th>
+                                    Mật độ thả
+                                </th>
+                                <th valign="top">
+                                    Sản lượng
+                                    <br />(m3)
+                                </th>
+                                <th valign="top">
+                                    Năng suất <br />
+                                    từ (kg/m3)
+                                </th>
+                                <th valign="top">
+                                    Năng suất <br />
+                                    đến (kg/m3)
+                                </th>
+                                <th valign="top">
+                                    Thức ăn
+                                    <br />(tấn)
+                                </th>
+
+                                <th>
+                                    <label class="BtnPlus" style="cursor:pointer"><img src="@Url.Content("~/fonts/button-add-icon.png")" title="Thêm mới" /></label>
+
+                                </th>
+                            </tr>
+                            @Html.Raw(@ViewBag.AddHTML)
+
+                        </table>
+                    </div>
+                    <div class="col-md-push-4"></div>
+                </div>
+            </div>
+        </div>
+    
+
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-danger btn-sm" id="btnsubmit">
+                <span class="glyphicon glyphicon-floppy-disk"></span> Cập nhật
+            </button>
+            &nbsp;&nbsp;
+            @Html.ActionLink("Quay lại", "Index", "NT_NUOILONGBE", null, new { @class = "btn btn-primary btn-sm" })
+        </div>
+    </div>
+
+
+}
+
+<input id="txtDMLoaiMatNuoc" style="display:none" value="@ViewBag.DMLoaiMatNuoc" />
+<input id="txtDMMoHinhNuoi" style="display:none" value="@ViewBag.DMMoHinhNuoi" />
+<input id="txtDMNhomDoiTuongNuoi" style="display:none" value="@ViewBag.DMNhomDoiTuongNuoi" />
+<input id="txtDMDoiTuongNuoi" style="display:none" value="@ViewBag.DMDoiTuongNuoi" />
+<label id="lblID" style="display:none">@ViewBag.sMaxID </label>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script src="~/Scripts/datepicker.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/jquery.maskMoney.js"></script>
+<script src="~/Scripts/jquery.number.js"></script>
+<script src="~/Scripts/jquery.masknumber.js"></script>
+<script src="~/Scripts/moment.js"></script>
+@*<script src="~/Scripts/CustomValidation.js"></script>*@
+
+
+<script type="text/javascript">
+
+    $("#NGAY_NHAP").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+    $('#NAM').maskNumber({ integer: true, decimal: '', thousands: '' });
+
+
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#Table1").find('input[type=text]').number(true, 2);
+        $("#Table1").find('input[type=number]').maskNumber({ integer: true, decimal: '', thousands: '' });
+        var lblID = "lblDetail_1";
+        var ID = 1;
+
+        if ($('#lblID').html().trim() != "") {
+            ID = parseInt($('#lblID').html().toString());
+        }
+
+        //Loại mặt nước
+        var strDMLoaiMatNuoc = $('#txtDMLoaiMatNuoc').val();
+        var strDDL4 = strDMLoaiMatNuoc + '</select>';
+
+        var strNhomDoiTuongNuoi = $('#txtDMNhomDoiTuongNuoi').val();
+        var strDDL3 = strNhomDoiTuongNuoi + '</select>';
+
+        var strDoiTuongNuoi = $('#txtDMDoiTuongNuoi').val();
+        var strDDL2 = strDoiTuongNuoi + '</select>';
+        function addRow() {
+            var html =
+                '<tr>' +
+                '<td><select  name="ddlID_NUOITRONG_LOAIMATNUOC_' + ID + '" class="selectLoaiMatNuoc" id="ddlID_NUOITRONG_LOAIMATNUOC_' + ID + '">' + strDDL4 + '</td>' +
+                '<td><select  name="ddlID_NUOITRONG_NHOMDOITUONG_' + ID + '" class="selectNhomNghe" id="ddlID_NUOITRONG_NHOMDOITUONG_' + ID + '">' + strDDL3 + '</td>' +
+                '<td><select class="form-control" name="ddlID_NUOITRONG_DOITUONG_' + ID + '" id="ddlID_NUOITRONG_DOITUONG_' + ID + '">' + strDDL2 + '</td>' +
+                '<td><input type="number" value="" class="form-control" name="txtSO_LUONG_LONG_' + ID + '" /></td>' +
+
+                '<td><input type="text" value="" class="form-control" name="txtTHE_TICH_LONG_' + ID + '" /></td>' +
+                '<td><input type="number" value="" class="form-control" name="txtMAT_DO_THA_' + ID + '" /></td>' +
+                '<td><input type="text" value="" class="form-control" name="txtSAN_LUONG_' + ID + '" /></td>' +
+                '<td><input type="text" value="" class="form-control" name="txtNANG_SUAT_TU_' + ID + '" /></td>' +
+                '<td><input type="text" value="" class="form-control" name="txtNANG_SUAT_DEN_' + ID + '" /></td>' +
+                '<td><input type="text" value="" class="form-control" name="txtTHUC_AN_' + ID + '" /></td>' +
+
+
+                '<td> <label class="BtnPlus" style="cursor:pointer" ><img src="@Url.Content("~/fonts/button-add-icon.png")" title="Thêm mới" /></label>' +
+                ' <label class="BtnMinus" id="lblDetail_' + ID + '" style="cursor:pointer"><img src="@Url.Content("~/fonts/DELETE.GIF")" title="Xóa"  /></label>' +
+                '</td>' +
+                '</tr>'
+            $(html).appendTo($("#Table1"));
+            // mask decimal ở đây:
+            $("#Table1").find('input[type=text]').number(true, 2);
+            $("#Table1").find('input[type=number]').maskNumber({ integer: true, decimal: '', thousands: '' });
+            ID++;
+
+        };
+        $("#Table1").on("click", ".BtnPlus", addRow);
+
+        $("#Table1").on("click", ".BtnMinus", deleteRow);
+
+        //Sự kiện on change loại mặt nước ==> nhóm đối tượng
+        $(document).on('change', ".selectLoaiMatNuoc", function () {
+            // alert($(this).val());
+            var loaiMatNuocVal = $(this).val();
+            var thisID = $(this).attr('id');
+            var lastNumber = thisID.split('_');
+            var NhomDoiTuongID = 'ddlID_NUOITRONG_NHOMDOITUONG_' + lastNumber[lastNumber.length - 1].toString();
+            // alert(DoiTuongID);
+            var NhomDoiTuongval = $("#" + NhomDoiTuongID);
+            // alert(DoiTuongval);
+            // load thông tin đối tượng nuôi theo nhóm:
+            $.ajax({
+                url: 'getNhomDoiTuongByMatNuoc',
+                type: 'post',
+                data: {
+                    ma_MatNuoc: loaiMatNuocVal
+                }
+            }).done(function (response) {
+                // alert(response.toString());
+                var a = '<option value></option>' + response;
+                $("#" + NhomDoiTuongID).html(a);
+                //// reset ward
+                //var b = '<option value></option>'
+                //$('#ward_dll').html(b);
+            });
+
+        });
+
+        //Sự kiện on change Nhóm đối tượng nuôi ==> đối tượng nuôi
+        $(document).on('change', ".selectNhomNghe", function () {
+            // alert($(this).val());
+            var nhomDoiTuongVal = $(this).val();
+            var thisID = $(this).attr('id');
+            var lastNumber = thisID.split('_');
+            var DoiTuongID = 'ddlID_NUOITRONG_DOITUONG_' + lastNumber[lastNumber.length - 1].toString();
+            // alert(DoiTuongID);
+            var DoiTuongval = $("#" + DoiTuongID);
+            // alert(DoiTuongval);
+            // load thông tin đối tượng nuôi theo nhóm:
+            $.ajax({
+                url: 'getDoiTuongByNhom',
+                type: 'post',
+                data: {
+                    ma_NhomDoiTuong: nhomDoiTuongVal
+                }
+            }).done(function (response) {
+                // alert(response.toString());
+                var a = '<option value></option>' + response;
+                $("#" + DoiTuongID).html(a);
+
+            });
+
+        });
+
+
+
+        function deleteRow() {
+            lblID = $(this).attr('id');
+            lblID = "#" + lblID.toString().trim();
+            if (confirm("Bạn chắc chắn muốn xóa?")) {
+                var par = $(this).parent().parent();
+                par.remove();
+            }
+
+            return false;
+
+        };
+
+
+        var validateNGAYNHAP = true;
+        $('#btnsubmit').click(function () {
+            var currentTime = new Date();
+            var currentMonth = currentTime.getMonth() + 1;
+            var currentYear = currentTime.getFullYear();
+
+            var lblValidateTHANG = $('#lblValidateTHANG');
+            var lblValidateNAM = $('#lblValidateNAM');
+            lblValidateNAM.html('');
+            lblValidateTHANG.html('');
+
+
+            var txtTHANG = $('#THANG').val();
+            var txtNAM = $('#NAM').val();
+            if (txtNAM > currentYear) {
+                lblValidateNAM.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+                lblValidateNAM.html('(*)Năm không được lớn hơn năm hiện tại');
+                lblValidateTHANG.html('');
+                lblValidateTHANG.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+                $('#NAM').focus();
+                return false;
+            }
+            if (txtNAM == currentYear && txtTHANG > currentMonth) {
+                lblValidateTHANG.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+                lblValidateTHANG.html('(*)Tháng không được lớn hơn tháng hiện tại');
+                lblValidateNAM.html('');
+                lblValidateNAM.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+                $('#THANG').focus();
+                return false;
+            }
+
+
+            var table1 = $("#Table1");
+            var countAll = 0;
+            var countVal = 0;
+            var vReturn = true;
+            $(table1).find('tr')
+            .each(function () {
+                $(this).find('td input')
+                .each(function () {
+                    var txt = $(this).val();
+                    if (txt == "") {
+                        countVal++;
+                    }
+                    if (countVal == 10) {
+                        $(this).parent().parent().find('td input').css("border", "solid 1px #b94a48");
+                        $(this).parent().parent().find('td input').eq(0).focus();
+                        vReturn = false;
+                    }
+                    else {
+                        $(this).css("border", "solid 1px #cccccc");
+
+                    }
+                    countAll++;
+                });
+                countVal = 0;
+
+            });
+
+            if (countAll == 0) {
+                $('#lblValidateDETAIL').html('(*)Bạn phải nhập danh sách chi tiết!');
+                vReturn = false;
+            }
+            else {
+                $('#lblValidateDETAIL').html('');
+
+            }
+
+            return vReturn;
+        }
+       );
+
+
+
+    });
+</script>

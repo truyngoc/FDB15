@@ -1,0 +1,142 @@
+﻿@model FDB.Models.ViewModelSearchAcc_Login
+@using PagedList.Mvc;
+@using FDB.Helpers;
+
+<link rel="stylesheet" type="text/css" href="~/Content/PagedList.css" />
+
+
+
+
+@{
+    ViewBag.Title = "AccountLogs";
+}
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <h3 class="text-center fdb-title-search-form">Thống kê truy cập người sử dụng</h3>
+    <br />
+   
+    <hr class="fdb-hr" />
+
+    @using (Html.BeginForm("AccountLogs", "Account", FormMethod.Get))
+    {
+        <div class="row">
+            <div class="col-md-2 control-label">
+                Tỉnh/TP
+            </div>
+            <div class="col-md-4">
+                @Html.DropDownListFor(model => model.MA_TINHTP, (SelectList)ViewBag.DTINHTPs,"Tất cả" ,new { @class = "form-control", @id = "province_dll" })
+                
+            </div>
+
+            <div class="col-md-2 control-label">
+               
+            </div>
+            <div class="col-md-4">
+               
+            </div>
+        </div>
+
+      <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Thời gian đăng nhập từ
+                    </div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.TU_NGAY)
+                        @Html.ValidationMessageFor(model => model.TU_NGAY)
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        đến
+                    </div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.DEN_NGAY)
+                        @Html.ValidationMessageFor(model => model.DEN_NGAY)
+                    </div>
+                </div>
+
+
+        <p class="margin-top-05">
+            <button type="submit" class="btn btn-primary btn-sm">
+                <span class="glyphicon glyphicon-search"></span> Tìm kiếm
+            </button>
+
+           
+        </p>
+    }
+
+    <label id="lblMessageTotal" style="color:blue; font-weight:bold">Tổng số bản ghi: @ViewBag.TotalRow</label>
+
+    <div class="col-md-8 center-table">
+        <table class="table table-hover table-striped table-condensed table-responsive">
+            <tr>
+                <th>
+                    Mã Tỉnh/TP
+                </th>
+                <th>
+                    Tên Tỉnh/TP
+                </th>
+                <th>
+                    Người dùng
+                </th>
+                <th>
+                    Số lần đăng nhập
+                </th>
+                <th></th>
+            </tr>
+            @{
+            if (Model.SearchResults != null)
+            {
+                foreach (var item in Model.SearchResults)
+                {
+
+                    <tr>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MA_TINHTP)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TEN_TTP)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SO_LAN_DANG_NHAP)
+
+
+                        </td>
+                        <td>
+                            <div class="pull-right">
+                                <a href="@Url.Action("DetailAccountLogs", "Account", new  { ma_ttp = item.MA_TINHTP,username = item.UserName })" data-modal="">
+                                    <img src="@Url.Content("~/fonts/grid-view-icon.png")" title="Xem chi tiết" />
+                                </a>
+
+                             
+
+                            </div>
+                        </td>
+
+                    </tr>
+                }
+            }
+            }
+
+        </table>
+    </div>
+
+    <br />
+</div>
+
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+            @*<iframe src="" id='myModalContent'></iframe>*@
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/modalform")
+}

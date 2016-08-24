@@ -1,0 +1,161 @@
+﻿@model FDB.Models.ViewModelSearchKT_DANGKIEM_ThongKe
+@using PagedList.Mvc;
+@using FDB.Helpers;
+@using FDB.Models
+@using FDB.DataAccessLayer
+
+@{
+    ViewBag.Title = "Tra cứu thông tin đăng kiểm";
+}
+
+
+<div class="container fdb-div-content fdb-div-corner-all">
+
+    <h3 class="text-center fdb-title-search-form">Tra cứu đăng kiểm tàu thuyền</h3>
+
+
+    @using (Html.BeginForm("Search", "KT_DANGKIEM", FormMethod.Get))
+    {
+
+        <br />
+        <fieldset class="fdb-scheduler-border">
+            <legend class="fdb-scheduler-search-border">Chỉ tiêu tra cứu</legend>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Tỉnh/thành phố
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.MA_TINHTP, (SelectList)ViewBag.TINH_THANHPHOs, string.Empty, new { @class = "form-control", @id = "province_dll" })
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Vật liệu vỏ
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.DVAT_LIEU_VOID, (SelectList)ViewBag.VAT_LIEU_VOs, string.Empty, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.DVAT_LIEU_VOID)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Công dụng tàu
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.DCONG_DUNG_TAUID, (SelectList)ViewBag.DCONG_DUNG_TAUs, string.Empty, new { @class = "form-control" })
+                </div>
+                <div class="col-md-2 control-label">
+
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Ngày biên bản KTKT từ
+                </div>
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.NGAY_KIEM_TRA_TU)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Đến
+                </div>
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.NGAY_KIEM_TRA_DEN)
+                </div>
+            </div>
+
+
+            <p class="margin-top-05">
+                <button type="submit" class="btn btn-primary btn-sm" name="SearchButton" value="Tìm kiếm">
+                    <span class="glyphicon glyphicon-search"></span> Thống kê
+                </button>
+            </p>
+
+        </fieldset>
+    }
+
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#tblKetQua tr td.myResult').each(function () {
+                var val = $(this).text();
+
+                if (!isNaN(val) && val != 0) {
+                    //$(this).parent().css('background-color', '#f00');
+                    $(this).addClass('success')
+                }
+            });
+
+        });
+    </script>
+
+
+
+    @{
+        FDBContext _db = new FDBContext();
+
+        var _lstNhomCongSuat = _db.DNHOM_TAU.ToList();
+        var iSTT = 0;
+
+        // cols
+        List<string> Columns_BaoCaoDangKiem = new List<string> {
+                { "TongSoTauDangKiem" },
+                { "SoTauConHanDangKiem" },
+                { "SoTauHetHanDangKiem" },
+                { "KiemTra_HangNam" },
+                { "KiemTra_DongMoi" },
+                { "KiemTra_CaiHoan" },
+                { "KiemTra_Khac" }
+            };
+    }
+
+
+    <div class="row margin-top-05">
+        <div class="col-md-10 center-table">
+            <table class="table table-hover table-bordered table-condensed table-responsive" id="tblKetQua">
+                <tr>
+                    <th rowspan="2" style="text-align:center;">STT</th>
+                    <th rowspan="2" style="text-align:center;">Nhóm tàu</th>
+                    <th rowspan="2" style="text-align:center;">Tổng số tàu cá <br />đăng kiểm</th>
+                    <th rowspan="2" style="text-align:center;">Số tàu còn hạn <br />đăng kiểm</th>
+                    <th rowspan="2" style="text-align:center;">Số tàu hết hạn <br />đăng kiểm</th>
+                    <th colspan="4" style="text-align:center;">Kiểm tra trong kỳ</th>
+                </tr>
+
+                <tr>
+                    <td>Hàng năm</td>
+                    <td>Đóng mới</td>
+                    <td>Cải hoán</td>
+                    <td>Khác</td>
+                </tr>
+
+                @foreach (var nhomtau in _lstNhomCongSuat)
+                {
+                    ++@iSTT;
+
+                    <tr>
+                        <td style="text-align:center;">@iSTT</td>
+                        <td>@nhomtau.Name</td>
+
+                        @foreach (var col in Columns_BaoCaoDangKiem)
+                        {
+                            <td class="myResult">
+                                @Model.BaoCaoDangKiem[Model.MA_TINHTP + "#" + nhomtau.ID + "#" + col.ToString()]
+                            </td>
+                        }
+                    </tr>
+                }
+
+
+            </table>
+        </div>
+    </div>
+
+</div>

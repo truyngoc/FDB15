@@ -1,0 +1,234 @@
+﻿
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - FDB</title>
+
+
+
+    @Styles.Render("~/Content/css")
+
+    @Scripts.Render("~/bundles/modernizr")
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/angular")
+    @*<link href="@Url.Content("~/Content/themes/base/minified/jquery-ui.min.css")" rel="stylesheet" />
+        <script src="@Url.Content("~/Scripts/jquery-2.1.0.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/jquery-ui-1.10.4.min.js")"></script>*@
+    @*@Scripts.Render("~/Content/my-themes")*@
+    @*@Styles.Render("~/Content/themes/base/css")*@
+
+    <script type="text/javascript">
+        $(function () {
+            // This will make every element with the class "date-picker" into a DatePicker element
+            $('.date-picker').datepicker();
+        })
+    </script>
+
+    <script>
+        //$('#topnavbar').affix({
+        //    offset: {
+        //        top: $('#banner').height()
+        //    }
+        //});
+    </script>
+</head>
+<body>
+   
+    <div class="container">
+        <div class="row logo-wrap" id="banner">
+            @*<img src="~/fonts/logo-m.png">*@
+            <img src="~/fonts/vnfishbase.jpg">
+        </div>
+
+        @*<div class="navbar navbar-inverse navbar-fixed-top">*@
+        <div class="navbar navbar-default navbar-static-top" role="navigation" id="topnavbar">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    @*@Html.ActionLink("Contoso University", "Index", "Home", null, new { @class = "navbar-brand" })*@
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+
+                          
+                            if (Session["MyMenu"] == null)
+                            {
+
+                                Session["MyMenu"] = @Html.Partial("~/Views/Shared/_FDBMenu.cshtml");
+                            }
+                            @Session["MyMenu"]
+
+                            if (Session["lstMenu"] != null)
+                            {
+                                string _URL = Request.Url.AbsolutePath;
+                                int _count = _URL.Count(f => f == '/');
+                                int fIndex = _URL.IndexOf('/');
+                                int indexSecond = _URL.IndexOf('/', _URL.IndexOf('/') + 1);
+                                int lIndex = _URL.LastIndexOf('/');
+                                _URL = _count > 1 ? _URL.Substring(fIndex + 1, indexSecond - 1) : _URL;
+
+                                List<FDB.Models.MenuItem>
+                                    _lstMenu = Session["lstMenu"] as List<FDB.Models.MenuItem>
+                                        ;
+                                if (_URL != "Home" && !_lstMenu.Any(o => !string.IsNullOrEmpty(o.Item_Controller) && o.Item_Controller.Contains(_URL)))
+                                {
+
+                                    Html.RenderPartial("../Shared/PartialDenied");
+
+                                }
+
+                            }
+
+
+                                    <!-- Quản trị hệ thống -->
+                            @*<li class="dropdown">
+                                    <a href="#" class="dropdown-toggle js-activated">Quản trị hệ thống </a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.SecureActionLink("1. Người dùng", "Index", "Account")</li>
+                                        <li>@Html.SecureActionLink("2. Nhóm người dùng", "Index", "Groups")</li>
+                                        <li>@Html.SecureActionLink("3. Quyền truy cập", "Index", "Roles")</li>
+
+                                        <li class="dropdown-submenu">
+                                            <a href="#">4. Danh mục</a>
+                                            <ul class="dropdown-menu">
+                                                <li>@Html.SecureActionLink("1. Nhóm đối tượng nuôi", "Index", "DM_NHOMDOITUONG_NUOI")</li>
+                                                <li>@Html.SecureActionLink("2. Đối tượng nuôi", "Index", "DM_DOITUONG_NUOI")</li>
+                                                <li>@Html.SecureActionLink("3. Nhóm đối tượng khai thác", "Index", "DM_NHOMDOITUONG_KT")</li>
+                                                <li>@Html.SecureActionLink("4. Đối tượng khai thác", "Index", "DM_DOITUONG_KT")</li>
+                                                <li>@Html.SecureActionLink("5. Nhóm nghề khai thác", "Index", "DM_NhomNghe")</li>
+                                                <li>@Html.SecureActionLink("6. Nghề khai thác", "Index", "DM_Nghe")</li>
+
+                                            </ul>
+                                        </li>
+                                        <li>@Html.ActionLink("5. Đổi mật khẩu", "Manage", "Account")</li>
+
+                                    </ul>
+                                </li>*@
+
+                        }
+                    </ul>
+                    @Html.Partial("_LoginPartial")
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="container body-content">
+       
+        @{ Html.RenderPartial("_Alerts"); }     <!--Doan nay de nhung phan Alert -->
+        @{ Html.RenderPartial("_Notify"); }     <!--Doan nay de nhung phan Notify -->
+        @RenderBody()
+
+        @*<div id="footer">
+                &copy; @DateTime.Now.Year VNFISHBASE - Vietnam Fisheries Database <br />
+            </div>*@
+    </div>
+
+
+    <footer class="footer-distributed">
+        <div class="footer-left">
+            Hệ thống cơ sở dữ liệu nghề cá quốc gia Việt Nam
+            <div class="ftext">Cơ quan chủ quản: Tổng cục Thủy sản</div>
+            <div class="ftext">Cơ quan quản lý hệ thống: Trung tâm Thông tin thủy sản</div>
+            <div class="ftext">Chịu trách nhiệm: Giám đốc Trung tâm Thông tin thủy sản</div>
+
+            <p class="footer-links">
+                <a href="#">Home</a>
+                ·
+                <a href="#">About</a>
+                ·
+                <a href="#">Faq</a>
+                ·
+                <a href="#">Contact</a>
+            </p>
+            <p class="footer-company-name">&copy; @DateTime.Now.Year VNFISHBASE - Vietnam Fisheries Database</p>
+        </div>
+        <div class="footer-center">
+            <div>
+                <i class="fa fa-map-marker"></i>
+                <p><span>Số 10 Nguyễn Công Hoan</span> Ba Đình, Hà Nội</p>
+            </div>
+            <div>
+                <i class="fa fa-phone"></i>
+                <p>+84.4.66805011</p>
+            </div>
+            <div>
+                <i class="fa fa-envelope"></i>
+                <p><a href="mailto:ttam.bts@hn.vnn.vn">ttam.bts@hn.vnn.vn</a></p>
+            </div>
+        </div>
+        <div class="footer-right">
+            <p class="footer-company-about">
+                <span>Tổng quan hệ thống</span>
+                Hệ thống giúp thực hiện hiệu quả công tác thu thập số liệu, thống kê báo cáo trong lĩnh vực khai thác, nuôi trồng thủy sản.
+            </p>
+            @*<div class="footer-icons">
+                    <a href="#"><i class="fa fa-facebook"></i></a>
+                    <a href="#"><i class="fa fa-twitter"></i></a>
+                    <a href="#"><i class="fa fa-linkedin"></i></a>
+                    <a href="#"><i class="fa fa-github"></i></a>
+                </div>*@
+
+            <div class="footer-icons">
+                <a href="[full link to your Twitter]">
+                    <img title="Twitter" alt="Twitter" src="~/fonts/twitter.png" width="35" height="35" />
+                </a>
+                <a href="[full link to your Pinterest]">
+                    <img title="Pinterest" alt="Pinterest" src="~/fonts/pinterest.png" width="35" height="35" />
+                </a>
+                <a href="[full link to your Facebook page]">
+                    <img title="Facebook" alt="Facebook" src="~/fonts/facebook.png" width="35" height="35" />
+                </a>
+                <a href="mailto:[email address]">
+                    <img title="Email" alt="Email" src="~/fonts/email.png" width="35" height="35" />
+                </a>
+                <a href="[full link to your RSS feed]">
+                    <img title="RSS" alt="RSS" src="~/fonts/rss.png" width="35" height="35" />
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <div id="fdb-scroll" class="a-scroll-to" style="display: none;">
+        <ul>
+            <li><a href="#" class="scroll-top top" title="Lên đầu"></a></li>
+        </ul>
+    </div>
+
+
+    @RenderSection("scripts", required: false)
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.js-activated').dropdownHover().dropdown();
+
+
+            var offset = $('#fdb-scroll').offset();
+            $(window).scroll(function () {
+                var scrollTop = $(window).scrollTop();
+                // check the visible top of the browser
+                if (offset.top < scrollTop) {
+                    //$('#fdb-scroll').addClass('fixed');
+                    $('#fdb-scroll').css({ 'display': 'block' })
+                } else {
+                    //$('#fdb-scroll').removeClass('fixed');
+                    $('#fdb-scroll').css({ 'display': 'none' })
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

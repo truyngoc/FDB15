@@ -1,0 +1,103 @@
+﻿@model FDB.Models.ViewModelSearchKT_GIAYPHEP
+@using PagedList.Mvc;
+@using FDB.Helpers;
+
+@{
+    ViewBag.Title = "Danh sách giấy phép hết hạn";
+}
+
+
+
+
+    <div class="modal-header fdb-panel-header-10">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h5 class="modal-title" id="myModalLabel">Danh sách giấy phép khai thác hết hạn</h5>
+    </div>
+
+    
+
+    <div class="modal-body fdb-panel-body-0">
+   
+        @*<label id="lblMessageTotal" style="color:blue; font-weight:bold">Tổng số bản ghi: @ViewBag.TotalRow</label>*@
+        <table class="table table-hover table-bordered table-condensed">
+            <tr>
+                <th>
+                    Số giấy phép
+                </th>
+                <th>
+                    Số đăng ký
+                </th>
+                <th>
+                    Tên tàu
+                </th>
+                <th>
+                    Chủ tàu
+                </th>
+                <th>
+                    Ngày cấp
+                </th>
+                <th>
+                    Ngày hiệu lực
+                </th>
+                <th>
+                    Ngày hết hạn
+                </th>
+                <th>
+                    Tỉnh/TP
+                </th>
+                <th></th>
+            </tr>
+            @{
+                if (Model.SearchResults != null)
+                {
+                    foreach (var item in Model.SearchResults)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(m => item.SO_GP)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.SO_DK)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.TEN_TAU)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.CHU_PHUONG_TIEN)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.NGAY_GP)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.NGAY_HL_GP)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.NGAY_HHL_GP)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.DTINHTP.TEN_TINHTP)
+                            </td>
+                            <td>
+                                <div class="pull-right">
+
+
+                                    <a href="@Url.Action("GiaHan", "KT_GIAYPHEP", new { id = item.KT_GIAYPHEPID })">
+                                        <img src="@Url.Content("~/fonts/grid-approve-icon.png")" title="Gia hạn giấy phép" />
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+                }
+            }
+
+        </table>
+ 
+</div>
+
+
+
+
+

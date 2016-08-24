@@ -1,0 +1,308 @@
+﻿@model FDB.Models.ViewModelSearchKT_THIETHAIKHAITHAC
+@using PagedList.Mvc;
+@using FDB.Helpers;
+<link rel="stylesheet" type="text/css" href="~/Content/PagedList.css" />
+
+@{
+    ViewBag.Title = "Tra cứu tai nạn tàu cá";
+}
+<script src="~/Scripts/datepicker.js"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script>
+    $(document).ready(function () {
+        var url = "";
+
+        $("#dialog-delete-confirm").dialog({
+            autoOpen: false,
+            resizable: false,
+            height: 170,
+            width: 350,
+            show: { effect: 'drop', direction: "up" },
+            modal: true,
+            draggable: true,
+            open: function (event, ui) {
+                $(".ui-dialog-titlebar-close").hide();
+            },
+            buttons: {
+                "OK": function () {
+                    $(this).dialog("close");
+                    window.location.href = url;
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        // hien thi confirm dialog khi click delete tren grid
+        $(".lnkDelete").click(function () {
+            url = $(this).attr('href');
+            $("#dialog-delete-confirm").dialog('open');
+
+
+
+            return false;
+        });
+
+
+        $("#TU_NGAY").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#DEN_NGAY").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+    });
+</script>
+<div class="container fdb-div-content fdb-div-corner-all">
+    <h3 class="text-center fdb-title-search-form">Tra cứu tai nạn tàu cá</h3>
+    <hr />
+
+    <div class="container">
+        @using (Html.BeginForm("Search", "KT_THIETHAIKHAITHAC", FormMethod.Get))
+        {
+            <fieldset class="fdb-scheduler-border">
+                <legend class="fdb-scheduler-search-border">Chỉ tiêu tra cứu</legend>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Thời gian gặp nạn từ
+                    </div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.TU_NGAY)
+                        @Html.ValidationMessageFor(model => model.TU_NGAY)
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        đến
+                    </div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.DEN_NGAY)
+                        @Html.ValidationMessageFor(model => model.DEN_NGAY)
+                    </div>
+                </div>
+
+
+
+                <p class="margin-top-05">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <span class="glyphicon glyphicon-search"></span> Thống kê
+                    </button>
+
+
+                </p>
+            </fieldset>
+        }
+
+        <label id="lblMessageTotal" style="color:blue; font-weight:bold">Tổng số bản ghi: @ViewBag.TotalRow</label>
+        <table class="table table-hover table-bordered table-condensed table-responsive" id="Table1">
+            <tr>
+                <th rowspan="2" style="text-align:center">
+                    Số đăng ký tàu
+                </th>
+                <th rowspan="2" style="text-align:center">
+                    Số thuyền viên
+                </th>
+                <th rowspan="2" style="text-align:center;">
+                    Khu vực gặp nạn
+                </th>
+                <th rowspan="2" style="text-align:center" align="center">
+                    Thời gian gặp nạn
+                </th>
+                <th rowspan="2" style="text-align:center">
+                    Thiệt hại ước tính<br /> (VNĐ)
+                </th>
+                <th colspan="5" style="text-align:center">
+                    Sự cố về tàu
+                </th>
+
+                <th colspan="6" style="text-align:center">
+                    Sự cố về người
+                </th>
+                <th rowspan="2" style="text-align:center">
+                    Cơ quan xử lý
+                </th>
+
+
+            </tr>
+            <tr>
+
+                <th align="center" style="text-align:center">
+                    Cháy nổ
+                </th>
+                <th align="center" style="text-align:center">
+                    Chìm đắm
+                </th>
+                <th align="center" style="text-align:center">
+                    Đâm va
+                </th>
+                <th align="center" style="text-align:center">
+                    Hỏng máy trôi dạt
+                </th>
+                <th align="center" style="text-align:center">
+                    Mất liên lạc
+                </th>
+
+                <th align="center" style="text-align:center">
+                    Ốm/tai nạn lao động
+                </th>
+                <th align="center" style="text-align:center">
+                    Rơi xuống biển
+                </th>
+                <th align="center" style="text-align:center">
+                    Mất tích
+                </th>
+                <th align="center" style="text-align:center">
+                    Bị chết
+                </th>
+                <th align="center" style="text-align:center">
+                    Số người chết
+                </th>
+                <th align="center" style="text-align:center">
+                    Số người mất tích
+                </th>
+
+
+            </tr>
+            @{
+                if (Model.StatisticsResults != null)
+                {
+                    foreach (var item in Model.StatisticsResults)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SO_DK_TAU)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SO_THUYENVIEN)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.KHUVUC_GAPNAN)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TG_GAPNAN)
+                            </td>
+                            <td align="right">
+                                @if (item.THIETHAI_UOCTINH.HasValue)
+                                {
+                                    @(String.Format("{0}", item.THIETHAI_UOCTINH == null ? string.Empty : item.THIETHAI_UOCTINH.Value.ToString("#,###")))
+                                }
+
+                            </td>
+                            @foreach (var tau in item.SUCOVETAU)
+                            {
+                                <td align="center" style="color:black;font-weight:bold">
+
+                                    @{
+                                if (tau.IsChecked)
+                                {
+                                    @Html.Label("x");
+                                    //@(String.Format("{0}", "x"));
+                                }
+                                    }
+                                </td>
+                            }
+                            @foreach (var nguoi in item.SUCOVENGUOI)
+                            {
+                                <td align="center" style="color:black;font-weight:bold">
+                                    @{
+                                if (nguoi.IsChecked)
+                                {
+                                    @Html.Label("x");
+                                }
+                                    }
+                                </td>
+                            }
+
+                            <td align="center" style="color:black">
+                                @Html.DisplayFor(modelItem => item.SO_NGUOI_CHET)
+                            </td>
+                            <td align="center" style="color:black">
+                                @Html.DisplayFor(modelItem => item.SO_NGUOI_MAT_TICH)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.COQUAN_XULY)
+
+                            </td>
+
+                        </tr>
+
+                    }
+
+                    <tr style="background-color: #dff0d8 !important;">
+                        <td align="left" valign="bottom"><b>Tổng</b></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td align="right" style="color:blue">
+                            @ViewBag.tongthiethai
+                        </td>
+                        @foreach (var itemCountTau in ViewBag.CountSuCoTAU)
+                        {
+                            <td align="center" style="color: blue; font-weight: bolder">
+
+
+                                @itemCountTau.chay_no
+
+                            </td>
+                            <td align="center" style="color: blue; font-weight: bolder">
+
+                                @itemCountTau.chim_dam
+                            </td>
+                            <td align="center" style="color: blue; font-weight: bolder">
+                                @itemCountTau.dam_va
+
+                            </td>
+                            <td align="center" style="color: blue; font-weight: bolder">
+                                @itemCountTau.hong_may_troi_dat
+
+                            </td>
+                            <td align="center" style="color: blue; font-weight: bolder">
+                                @itemCountTau.mat_lien_lac
+
+                            </td>
+                        }
+
+                        @foreach (var itemCountNGUOI in ViewBag.CountSuCoNGUOI)
+                        {
+                            <td align="center" style="color:blue;font-weight:bolder">
+                                @itemCountNGUOI.tai_nan_lao_dong
+
+                            </td>
+                            <td align="center" style="color: blue; font-weight: bolder">
+
+                                @itemCountNGUOI.roi_xuong_bien
+                            </td>
+                            <td align="center" style="color: blue; font-weight: bolder">
+                                @itemCountNGUOI.mat_tich
+
+                            </td>
+                            <td align="center" style="color: blue; font-weight: bolder">
+                                @itemCountNGUOI.bi_chet
+
+                            </td>
+
+                        }
+                        <td align="center" style="color: blue; font-weight: bolder">
+                            @ViewBag.tong_chet
+                        </td>
+                        <td align="center" style="color: blue; font-weight: bolder">
+                            @ViewBag.tong_mat_tich
+                        </td>
+                        <td></td>
+                    </tr>
+                }
+            }
+
+        </table>
+
+        <br />
+
+
+        <br />
+
+
+        @Html.PagedListPager(Model.StatisticsResults, page => Url.Action("Search", new { page, Model.TU_NGAY, Model.DEN_NGAY }))
+    </div>
+</div>
+
+<script type="text/javascript">
+
+
+</script>

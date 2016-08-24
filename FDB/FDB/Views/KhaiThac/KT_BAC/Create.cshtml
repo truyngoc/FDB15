@@ -1,0 +1,235 @@
+﻿@model FDB.Models.KT_BAC
+
+@{
+    ViewBag.Title = "Cường lực khai thác (BAC)";
+}
+
+@using (Html.BeginForm("Create", "KT_BAC", FormMethod.Post, new { @id = "formCreate" }))
+{
+    <div class="container fdb-div-content fdb-div-corner-all">
+        <br />
+
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true)
+
+            <div class="col-md-12">
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="fdb-title-form col-md-8 text-center">
+                            Thông tin điều tra BAC
+                        </div>
+                    </div>
+
+                    <br />
+                    <div class="row">
+                        <div class="col-md-3 control-label text-left text-left">
+                            Ngày điều tra <label style="color:red;">(*)</label>
+
+                        </div>
+                        <div class="col-md-9">
+                            @Html.EditorFor(model => model.NGAY_DIEU_TRA, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.NGAY_DIEU_TRA)
+                        </div>
+
+                    </div>
+
+                    <div class="row margin-top-05">
+                        <div class="col-md-3 control-label text-left text-left">
+                            Cán bộ điều tra
+
+                        </div>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.CAN_BO_DIEU_TRA, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.CAN_BO_DIEU_TRA)
+                        </div>
+
+                    </div>
+
+                    <div class="row margin-top-05">
+                        <div class="col-md-3 control-label text-left">
+                            Nghề khai thác <label style="color:red;">(*)</label>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.DropDownListFor(model => model.DM_NhomNgheID, (SelectList)ViewBag.DM_NHOMNGHEs, string.Empty, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.DM_NhomNgheID)
+                        </div>
+                    </div>
+
+                    <div class="row margin-top-05">
+                        <div class="col-md-3 control-label text-left">
+                            Nhóm công suất <label style="color:red;">(*)</label>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.DropDownListFor(model => model.DNHOM_TAUID, (SelectList)ViewBag.NHOM_TAUs, string.Empty, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.DNHOM_TAUID)
+                        </div>
+                    </div>
+
+                    <div class="row margin-top-05">
+                        <div class="col-md-3 control-label text-left">
+                            Tháng <label style="color:red;">(*)</label>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.DropDownListFor(model => model.THANG, new List<SelectListItem>
+                    {
+                                        new SelectListItem() {Text = "Tháng 1", Value="1"},
+                                        new SelectListItem() {Text = "Tháng 2", Value="2"},
+                                        new SelectListItem() {Text = "Tháng 3", Value="3"},
+                                        new SelectListItem() {Text = "Tháng 4", Value="4"},
+                                        new SelectListItem() {Text = "Tháng 5", Value="5"},
+                                        new SelectListItem() {Text = "Tháng 6", Value="6"},
+                                        new SelectListItem() {Text = "Tháng 7", Value="7"},
+                                        new SelectListItem() {Text = "Tháng 8", Value="8"},
+                                        new SelectListItem() {Text = "Tháng 9", Value="9"},
+                                        new SelectListItem() {Text = "Tháng 10", Value="10"},
+                                        new SelectListItem() {Text = "Tháng 11", Value="11"},
+                                        new SelectListItem() {Text = "Tháng 12", Value="12"}
+                    }, new { @class = "form-control" })
+
+                            @*@Html.TextBoxFor(model => model.THANG, new { @class = "form-control" })*@
+                            @Html.ValidationMessageFor(model => model.THANG)
+                        </div>
+                    </div>
+
+                    <div class="row margin-top-05">
+                        <div class="col-md-3 control-label text-left">
+                            Năm <label style="color:red;">(*)</label>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.DropDownListFor(model => model.NAM, new List<SelectListItem>
+                    {
+                                        new SelectListItem() {Text = "2010", Value="2010"},
+                                        new SelectListItem() {Text = "2011", Value="2011"},
+                                        new SelectListItem() {Text = "2012", Value="2012"},
+                                        new SelectListItem() {Text = "2013", Value="2013"},
+                                        new SelectListItem() {Text = "2014", Value="2014"},
+                                        new SelectListItem() {Text = "2015", Value="2015"},
+                                        new SelectListItem() {Text = "2016", Value="2016"},
+                                        new SelectListItem() {Text = "2017", Value="2017"},
+                                        new SelectListItem() {Text = "2018", Value="2018"},
+                                        new SelectListItem() {Text = "2019", Value="2019"},
+                                        new SelectListItem() {Text = "2020", Value="2020"},
+                                        new SelectListItem() {Text = "2021", Value="2021"},
+                                        new SelectListItem() {Text = "2022", Value="2022"},
+                                        new SelectListItem() {Text = "2023", Value="2023"},
+                                        new SelectListItem() {Text = "2024", Value="2024"},
+                                        new SelectListItem() {Text = "2025", Value="2025"},
+                                        new SelectListItem() {Text = "2026", Value="2026"},
+                                        new SelectListItem() {Text = "2027", Value="2027"},
+                                        new SelectListItem() {Text = "2028", Value="2028"},
+                                        new SelectListItem() {Text = "2029", Value="2029"},
+                                        new SelectListItem() {Text = "2030", Value="2030"}
+                    }, new { @class = "form-control" })
+
+                            @*@Html.TextBoxFor(model => model.NAM, new { @class = "form-control" })*@
+                            @Html.ValidationMessageFor(model => model.NAM)
+                        </div>
+                    </div>
+
+                    <div class="row margin-top-05">
+
+
+                        <div class="col-md-3 control-label text-left">
+                            Số tàu chọn mẫu <label style="color:red;">(*)</label>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.SO_TAU_CHON_MAU, new { @class = "form-control", @type = "number" })
+                            @Html.ValidationMessageFor(model => model.SO_TAU_CHON_MAU)
+                        </div>
+
+                        <div class="col-md-1">
+                            <div class="help-tip">
+                                <p>
+                                    Số tàu mẫu được chọn vào ngày điều tra tại bến cá mẫu
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row margin-top-05">
+
+
+                        <div class="col-md-3 control-label text-left">
+                            Số tàu chọn mẫu đi biển <label style="color:red;">(*)</label>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(model => model.SO_TAU_CHON_MAU_DI_BIEN, new { @class = "form-control", @type = "number" })
+                            @Html.ValidationMessageFor(model => model.SO_TAU_CHON_MAU_DI_BIEN)
+                        </div>
+
+
+                        <div class="col-md-1">
+                            <div class="help-tip">
+                                <p>
+                                    Số tàu mẫu đi biển vào ngày điều tra tại bến cá mẫu
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row margin-top-05">
+                        <div class="col-md-3 control-label text-left">
+                            Tỉnh/TP <label style="color:red;">(*)</label>
+                        </div>
+                        <div class="col-md-9">
+                            @Html.DropDownListFor(model => model.MA_TINHTP, (SelectList)ViewBag.TINH_THANHPHOs, new { @class = "form-control", @id = "province_dll" })
+                            @Html.ValidationMessageFor(model => model.MA_TINHTP)
+                        </div>
+                    </div>
+
+                    <br />
+                    @Html.HiddenFor(model => model.NGUOI_NM)
+                    @Html.HiddenFor(model => model.NGAY_NM)
+                </div>
+
+                <div class="col-md-4"></div>
+            </div>
+
+
+
+
+            <br />
+            <br />
+
+        </div>
+
+
+    </div>
+
+    <br />
+
+    <div class="form-group">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-danger btn-sm">
+                <span class="glyphicon glyphicon-floppy-disk"></span> Cập nhật
+            </button>
+            &nbsp;
+            @Html.ActionLink("Quay lại", "Index", "KT_BAC", null, new { @class = "btn btn-primary btn-sm" })
+        </div>
+    </div>
+}
+
+
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script src="~/Scripts/datepicker.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/jquery.maskMoney.js"></script>
+<script src="~/Scripts/jquery.number.js"></script>
+
+
+<script src="~/Scripts/mvcfoolproof.unobtrusive.min.js"></script>
+
+<script type="text/javascript">
+
+
+    $("#NGAY_DIEU_TRA").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+
+
+
+</script>

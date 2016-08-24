@@ -1,0 +1,109 @@
+﻿@{
+    ViewBag.Title = "Cơ sở đóng sửa tàu thuyền";
+}
+
+<h3 class="text-center">Cơ sở đóng sửa tàu thuyền</h3>
+<hr />
+
+<div class="container">
+    @using (Html.BeginForm("Index", "DongSuaTauThuyen", FormMethod.Get))
+    {
+        <div class="row">
+            <div class="col-md-2 control-label">
+                Tên cơ sở
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" />
+            </div>
+
+            <div class="col-md-2 control-label">
+                
+            </div>
+            <div class="col-md-4">
+                
+            </div>
+        </div>
+
+        <div class="row margin-top-05">
+            <div class="col-md-2 control-label">
+                Địa chỉ
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" />
+            </div>
+            <div class="col-md-2 control-label">
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+        
+        <div class="row margin-top-05">
+            <div class="col-md-2 control-label">
+                Tên chủ cơ sở
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" />
+            </div>
+            <div class="col-md-2 control-label">
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+        
+
+        <p class="margin-top-05">
+            <input type="submit" value="Tìm kiếm" class="btn btn-primary btn-sm" />
+            @Html.ActionLink("Thêm mới", "Create", null, new { @class = "btn btn-primary btn-sm" })
+            @Html.ActionLink("Xuất Excel", "ExportExcel", null, new { @class = "btn btn-primary btn-sm" })
+        </p>
+    }
+
+
+    <table class="table table-hover table-bordered table-condensed">
+        <tr>
+            <th>
+                Tên cơ sở
+            </th>
+            <th>
+                Địa chỉ
+            </th>
+            <th>
+                Điện thoại
+            </th>
+            <th>
+                Tên chủ cơ sở
+            </th>
+            <th></th>
+        </tr>
+        @{
+            for (var i = 0; i < 5; i++)
+            {
+                <tr>
+                    <td>
+                        Út Mập
+                    </td>
+                    <td>
+                        Thành phố Quy Nhơn, Bình định
+                    </td>
+                    <td>
+                       0977777777
+                    </td>
+                    <td>
+                        Nguyễn Văn C
+                    </td>
+                    <td>
+                        <a href="#">
+                            <img src="@Url.Content("~/fonts/btn-details.png")" />
+                        </a>
+
+                        <a href="#">
+                            <img src="@Url.Content("~/fonts/btn-delete.png")" />
+                        </a>
+                    </td>
+                </tr>
+            }
+
+        }
+
+    </table>
+</div>

@@ -1,0 +1,52 @@
+﻿@model FDB.Models.NT_BC_MAU4
+
+@{
+    ViewBag.Title = "Báo cáo về thức ăn, chế phẩm vi sinh, khoáng-hóa chất và thuốc thú y";
+}
+
+<div class="container fdb-div-content fdb-div-corner-all">   
+    <div class="row">
+        <div class="fdb-title-form-24 text-center col-md-12">
+            Báo cáo về thức ăn, chế phẩm vi sinh, khoáng-hóa chất và thuốc thú y <br />
+            <div class="text-center fdb-title-form-14 col-md-12">
+                (vật tư đầu vào)
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="container">
+        @using (Html.BeginForm("NT_BC_MAU4", "BC_NUOITRONG", FormMethod.Get, new { target = "_blank" }))
+        {
+            <div class="row">
+                <div class="col-md-2 control-label">
+                    Ngày báo cáo từ
+                </div>
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.TU_NGAY)
+                    @Html.ValidationMessageFor(model => model.TU_NGAY)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Đến ngày
+                </div>
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.DEN_NGAY)
+                    @Html.ValidationMessageFor(model => model.DEN_NGAY)
+                </div>
+            </div>
+
+            <p class="margin-top-05">
+                <button type="submit" class="btn btn-primary btn-sm" name="SearchButton" value="Generate report">
+                    @*<i class='fa fa-file-excel-o'></i>*@
+                    Xuất báo cáo
+                </button>
+            </p>
+        }
+    </div>
+</div>
+
+
+
+
+
+

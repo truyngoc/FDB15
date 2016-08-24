@@ -1,0 +1,183 @@
+﻿@model FDB.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Thêm mới người dùng";
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script src="~/Scripts/datepicker.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/jquery.maskMoney.js"></script>
+<script src="~/Scripts/jquery.number.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        // load district by province when change in dropdownlist
+        $("#province_dll").change(function () {
+            $.ajax({
+                url: 'getDistrict',
+                type: 'post',
+                data: {
+                    ma_TinhTP: $('#province_dll').val()
+                }
+            }).done(function (response) {
+                // update district by province
+                var a = '<option value></option>' + response;   // defaut value
+                $("#district_dll").html(a);
+
+                // reset ward
+                var b = '<option value></option>'
+                $('#ward_dll').html(b);
+            });
+        });
+
+
+        // load ward by disctrict when change in dropdownlist
+        $("#district_dll").change(function () {
+            $.ajax({
+                url: 'getWard',
+                type: 'post',
+                data: {
+                    ma_QuanHuyen: $('#district_dll').val()
+                }
+            }).done(function (response) {
+                var a = '<option value></option>' + response;   // defaut value
+                $("#ward_dll").html(a);
+            });
+        });
+    });
+
+</script>
+
+
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <br />
+    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true)
+        <div class="form-group">
+            <div class="col-md-2 control-label">
+                Tên đăng nhập <label style="color:red;">(*)</label>
+                @Html.Hidden("IsEdit", 0)
+            </div>
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.UserName)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2 control-label">
+                Mật khẩu <label style="color:red;">(*)</label>
+            </div>
+            <div class="col-md-10">
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Password)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2 control-label">
+                Nhập lại mật khẩu <label style="color:red;">(*)</label>
+            </div>
+            <div class="col-md-10">
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.ConfirmPassword)
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            <div class="col-md-2 control-label">
+                Họ đệm
+            </div>
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.FirstName)
+            </div>
+        </div>*@
+        <div class="form-group">
+            <div class="col-md-2 control-label">
+               Họ và Tên
+            </div>
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.LastName)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2 control-label">
+                Email
+            </div>
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Email)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2 control-label">
+                Đơn vị công tác
+            </div>
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.DON_VI_CONG_TAC, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2 control-label">
+                Chức vụ
+            </div>
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.CHUC_VU, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2 control-label">
+                Tỉnh/Thành phố <label style="color:red;">(*)</label>
+            </div>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.MA_TINHTP, (SelectList)ViewBag.TINH_THANHPHOs, string.Empty, new { @class = "form-control", @id = "province_dll" })
+                @Html.ValidationMessageFor(model => model.MA_TINHTP)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2 control-label">
+                Quận/huyện/thị xã
+            </div>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.MA_QUANHUYEN, (SelectList)ViewBag.DEFAULT_VALUE_DDL, string.Empty, new { @class = "form-control", @id = "district_dll" })
+                @Html.ValidationMessageFor(model => model.MA_QUANHUYEN)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2 control-label">
+                Xã/phường
+            </div>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.MA_PHUONGXA, (SelectList)ViewBag.DEFAULT_VALUE_DDL, string.Empty, new { @class = "form-control", @id = "ward_dll" })
+                @Html.ValidationMessageFor(model => model.MA_PHUONGXA)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-danger btn-sm">
+                    <span class="glyphicon glyphicon-floppy-disk"></span> Cập nhật
+                </button>
+                &nbsp;
+                @Html.ActionLink("Quay lại", "Index", "Account", null, new { @class = "btn btn-primary btn-sm" })
+            </div>
+        </div>
+    }
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

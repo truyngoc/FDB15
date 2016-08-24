@@ -1,0 +1,212 @@
+﻿@model FDB.Models.ViewModelSearchKT_KHUNEODAU
+@using PagedList.Mvc;
+@using FDB.Helpers;
+
+<link rel="stylesheet" type="text/css" href="~/Content/PagedList.css" />
+@{
+    ViewBag.Title = "Tra cứu khu neo đậu, tránh trú bão";
+}
+<script>
+    $(document).ready(function () {
+        var url = "";
+
+        $("#dialog-delete-confirm").dialog({
+            autoOpen: false,
+            resizable: false,
+            height: 170,
+            width: 350,
+            show: { effect: 'drop', direction: "up" },
+            modal: true,
+            draggable: true,
+            open: function (event, ui) {
+                $(".ui-dialog-titlebar-close").hide();
+            },
+            buttons: {
+                "OK": function () {
+                    $(this).dialog("close");
+                    window.location.href = url;
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        // hien thi confirm dialog khi click delete tren grid
+        $(".lnkDelete").click(function () {
+            url = $(this).attr('href');
+            $("#dialog-delete-confirm").dialog('open');
+
+            return false;
+        });   // load district by province when change in dropdownlist
+        $("#province_dll").change(function () {
+            $.ajax({
+                url: '@Url.Action("getDistrict","KT_KHUNEODAU")',
+                type: 'post',
+                data: {
+                    ma_TinhTP: $('#province_dll').val()
+                }
+            }).done(function (response) {
+                // update district by province
+                var a = '<option value></option>' + response;   // defaut value
+                $("#district_dll").html(a);
+
+                // reset ward
+                var b = '<option value></option>'
+                $('#ward_dll').html(b);
+            });
+        });
+
+
+        // load ward by disctrict when change in dropdownlist
+        $("#district_dll").change(function () {
+            $.ajax({
+                url: '@Url.Action("getWard", "KT_KHUNEODAU")',
+                type: 'post',
+                data: {
+                    ma_QuanHuyen: $('#district_dll').val()
+                }
+            }).done(function (response) {
+                var a = '<option value></option>' + response;   // defaut value
+                $("#ward_dll").html(a);
+            });
+
+        });
+
+    });
+</script>
+<div class="container fdb-div-content fdb-div-corner-all">
+    <h3 class="text-center fdb-title-search-form">Tra cứu khu neo đậu, tránh trú bão</h3>
+    <br />
+
+    <div class="container">
+        @using (Html.BeginForm("Search", "KT_KHUNEODAU", FormMethod.Get))
+        {
+            <fieldset class="fdb-scheduler-border">
+                <legend class="fdb-scheduler-search-border">Chỉ tiêu tra cứu</legend>
+                <div class="row">
+                    <div class="col-md-2 control-label">
+                        Tên khu neo đậu
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.TEN_KHUNEODAU, new { @class = "form-control" })
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        Địa chỉ khu neo đậu
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.DIA_CHI, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Loại khu neo đậu
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.DPHAN_LOAI_KHUNEODAUID, (SelectList)ViewBag.LOAIKHUNEODAUs, "--Chọn loại khu neo đậu--", new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-2 control-label">
+                        Tỉnh/TP
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.MA_TINHTP, (SelectList)ViewBag.DTINHTPs, "--Chọn tỉnh/TP--", new { @class = "form-control", @id = "province_dll" })
+                    </div>
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Quận/Huyện
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.MA_QUANHUYEN, (SelectList)ViewBag.QUAN_HUYENs, string.Empty, new { @class = "form-control", @id = "district_dll" })
+                    </div>
+                    <div class="col-md-2 control-label">
+                        Xã/phường
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.MA_PHUONGXA, (SelectList)ViewBag.PHUONG_XAs, string.Empty, new { @class = "form-control", @id = "ward_dll" })
+                    </div>
+                </div>
+
+
+                <p class="margin-top-05">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <span class="glyphicon glyphicon-search"></span> Thống kê
+                    </button>
+
+
+                    @*@Html.NoEncodeActionLink("<i class='fa fa-file-excel-o'></i> Xuất Excel", "Xuất Excel", "ExportExcel", "KT_KHUNEODAU", null, htmlAttributes: new { @class = "btn btn-primary btn-sm" })*@
+                </p>
+            </fieldset>
+        }
+        <fieldset class="fdb-scheduler-border">
+            <legend class="fdb-scheduler-search-border">Kết quả tra cứu</legend>
+            <label id="lblMessageTotal" style="color:blue; font-weight:bold">Tổng số bản ghi: @ViewBag.TotalRow</label>
+            <table class="table table-hover table-bordered table-condensed">
+                <tr>
+                    <th>
+                        Tên khu neo đậu
+                    </th>
+                    <th>
+                        Địa chỉ
+                    </th>
+                    <th>
+                        Vĩ độ
+                    </th>
+                    <th>
+                        Kinh độ
+                    </th>
+                    <th>
+                        Số lượng tàu được neo đậu
+                    </th>
+                    <th>
+                        Công suất tàu tối đa được neo đậu (CV)
+                    </th>
+                   
+                </tr>
+                @{
+                    if (Model.SearchResults != null)
+                    {
+                        foreach (var item in Model.SearchResults)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TEN_KHUNEODAU)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DIA_CHI)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.VIDO)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.KINHDO)
+
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SOLUONGTAU_NEODAU)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CONGSUATTAU_NEODAU)
+
+                                </td>
+                            
+
+                            </tr>
+                        }
+                    }
+                }
+
+            </table>
+        </fieldset>
+        <br />
+
+
+        <br />
+
+
+        @Html.PagedListPager(Model.SearchResults, page => Url.Action("Search", new { page, Model.TEN_KHUNEODAU, Model.DIA_CHI }))
+    </div>
+</div>

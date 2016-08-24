@@ -1,0 +1,125 @@
+﻿@{
+    ViewBag.Title = "Khu bảo tồn";
+}
+
+<h3 class="text-center">Khu bảo tồn thủy sản</h3>
+<hr />
+
+<div class="container">
+    @using (Html.BeginForm("Index", "KhuBaoTon", FormMethod.Get))
+    {
+        <div class="row">
+            <div class="col-md-2 control-label">
+                Tên khu bảo tồn
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" />
+            </div>
+
+            <div class="col-md-2 control-label">
+                
+            </div>
+            <div class="col-md-4">
+                
+            </div>
+        </div>
+
+        <div class="row margin-top-05">
+            <div class="col-md-2 control-label">
+                Địa chỉ
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" />
+            </div>
+            <div class="col-md-2 control-label">
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+        
+        <div class="row margin-top-05">
+            <div class="col-md-2 control-label">
+                Loại khu bảo tồn
+            </div>
+            <div class="col-md-4">
+                <select class="form-control">
+                    <option value="">Khu bảo tồn biển</option>
+                    <option value="">Khu bảo tồn nội địa</option>
+                </select>
+            </div>
+            <div class="col-md-2 control-label">
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+
+
+
+        <p class="margin-top-05">
+            <input type="submit" value="Tìm kiếm" class="btn btn-primary btn-sm" />
+            @Html.ActionLink("Thêm mới", "Create", null, new { @class = "btn btn-primary btn-sm" })
+            @Html.ActionLink("Xuất Excel", "ExportExcel", null, new { @class = "btn btn-primary btn-sm" })
+        </p>
+    }
+
+
+    <table class="table table-hover table-bordered table-condensed">
+        <tr>
+            <th>
+                Tên khu bảo tồn
+            </th>
+            <th>
+                Địa chỉ
+            </th>
+            <th>
+                Tổng diện tích
+            </th>
+            <th>
+                Phần đất liền
+            </th>
+            <th>
+                Phần biển
+            </th>
+            <th>
+                Loại khu bảo tồn
+            </th>
+            <th></th>
+        </tr>
+        @{
+            for (var i = 0; i < 5; i++)
+            {
+                <tr>
+                    <td>
+                        Khu bảo tồn Vịnh Nha Trang
+                    </td>
+                    <td>
+                        Thành phố Nha Trang, Khánh Hòa
+                    </td>
+                    <td>
+                        15000
+                    </td>
+                    <td>
+                        3000
+                    </td>
+                    <td>
+                        12000
+                    </td>
+                    <td>
+                        Khu bảo tồn biển
+                    </td>
+                    <td>
+                        <a href="#">
+                            <img src="@Url.Content("~/fonts/btn-details.png")" />
+                        </a>
+
+                        <a href="#">
+                            <img src="@Url.Content("~/fonts/btn-delete.png")" />
+                        </a>
+                    </td>
+                </tr>
+            }
+
+        }
+
+    </table>
+</div>

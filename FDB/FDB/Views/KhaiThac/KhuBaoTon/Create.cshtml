@@ -1,0 +1,70 @@
+﻿@{
+    ViewBag.Title = "Khu bảo tồn";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        <div class="form-group">
+            <div class="col-md-2 control-label">Loại khu bảo tồn</div>
+            <div class="col-md-10">
+                <select class="form-control">
+                    <option value="">Khu bảo tồn biển</option>
+                    <option value="">Khu bảo tồn nội địa</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2 control-label">Tên khu bảo tồn</div>
+            <div class="col-md-10">
+                <input type="text" value="Khu bảo tồn Vịnh Nha Trang" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2 control-label">Địa chỉ</div>
+            <div class="col-md-10">
+                <input type="text" value="Thành phố Nha Trang, Khánh Hòa" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2 control-label">Tổng diện tích (ha)</div>
+            <div class="col-md-10">
+                <input type="text" value="15000" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2 control-label">Phần đất liền (ha)</div>
+            <div class="col-md-10">
+                <input type="text" value="3000" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2 control-label">Phần biển (ha)</div>
+            <div class="col-md-10">
+                <input type="text" value="12000" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2 control-label">Đặc điểm</div>
+            <div class="col-md-10">
+                <textarea class="form-control fdb_textarea">Là đường di cư của một số loài cá có tập tính di cư sinh sản sông biển, biển sông hoặc di cư  ngắn trong sông</textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Cập nhật" class="btn btn-primary" />
+                &nbsp;
+                @Html.ActionLink("Quay lại", "Index")
+            </div>
+        </div>
+    </div>
+}

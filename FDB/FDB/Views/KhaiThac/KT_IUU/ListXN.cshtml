@@ -1,0 +1,166 @@
+﻿@model FDB.Models.ViewModelSearchKT_IUU_XN
+@using PagedList.Mvc;
+@using FDB.Helpers;
+
+<link rel="stylesheet" type="text/css" href="~/Content/PagedList.css" />
+@{
+    ViewBag.Title = "Giấy xác nhận";
+}
+<script src="~/Scripts/datepicker.js"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script>
+    $(document).ready(function () {
+
+
+        $("#NGAY_XN").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        
+    });
+</script>
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <h3 class="text-center fdb-title-search-form">Tra cứu giấy xác nhận nguyên liệu thủy sản khai thác</h3>
+<div class="container">
+    @using (Html.BeginForm("ListXN", "KT_IUU", FormMethod.Get))
+    {
+        
+      
+            <br />
+            <div class="row">
+                <div class="col-md-2 control-label">
+                    Số xác nhận
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.SO_XN, new { @class = "form-control" })
+                </div>
+                <div class="col-md-2 control-label">
+                    Ngày xác nhận
+                </div>
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.NGAY_XN)
+                    @Html.ValidationMessageFor(model => model.NGAY_XN)
+
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Tỉnh/TP
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.MA_TINHTP, (SelectList)ViewBag.DTINHTPs, "--Chọn tỉnh/TP--", new { @class = "form-control", @id = "province_dll" })
+                </div>
+                <div class="col-md-2 control-label">
+                    Số đăng ký tàu
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.SO_DK_TAU, new { @class = "form-control" })
+                </div>
+            </div>
+       
+
+
+    
+        <p class="margin-top-05">
+
+            <button type="submit" class="btn btn-primary btn-sm">
+                <span class="glyphicon glyphicon-search"></span> Tìm kiếm
+            </button>
+
+            @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-plus'></span> Thêm mới", "Thêm mới", "CreateXN", "KT_IUU", null, htmlAttributes: new { @class = "btn btn-primary btn-sm" })
+
+            @Html.NoEncodeActionLink("<i class='fa fa-file-excel-o'></i> Xuất Excel", "Xuất Excel", "ExportExcel", "KT_IUU", null, htmlAttributes: new { @class = "btn btn-primary btn-sm" })
+
+
+        </p>
+    }
+
+    <label id="lblMessageTotal" style="color:blue; font-weight:bold">Tổng số bản ghi: @ViewBag.TotalRow</label>
+    <table class="table table-hover table-bordered table-condensed">
+    <tr>
+        <th>
+            Số xác nhận
+        </th>
+        <th>
+            Ngày xác nhận
+        </th>
+        <th>
+            Số đăng ký tàu
+        </th>
+        <th>
+            Thời gian khai thác
+        </th>
+        <th>
+            Vùng khai thác
+        </th>
+        <th>
+            Cảng đăng ký
+        </th>
+        <th>
+            Tỉnh/TP
+        </th>
+        <th></th>
+    </tr>
+    @{
+        if (Model.SearchResults != null)
+        {
+            foreach (var item in Model.SearchResults)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SO_XN)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NGAY_XN)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SO_DK_TAU)
+                    </td>
+                    <td>
+                        @if (item.TU_NGAY.HasValue || item.DEN_NGAY.HasValue)
+                        {
+                            @(String.Format("{0} đến {1}", item.TU_NGAY == null ? string.Empty : item.DEN_NGAY.Value.ToString("d"), @item.TU_NGAY == null ? string.Empty : item.DEN_NGAY.Value.ToString("d")))
+                        }
+
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VUNG_KHAITHAC)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CANG_DANGKY)
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DTINHTP.TEN_TINHTP)
+
+                    </td>
+
+                    <td>
+                        <a href="@Url.Action("EditXN", "KT_IUU", new { id = item.SO_XN })">
+                            <img src="@Url.Content("~/fonts/grid-edit-icon.png")" title="Sửa" />
+                        </a>
+
+                        <a href="@Url.Action("DeleteXN", "KT_IUU", new { id = item.SO_XN })" onclick="return confirm('Bạn chắc chắn muốn xóa không?');">
+                            <img src="@Url.Content("~/fonts/grid-delete-icon1.gif")" title="Xóa" />
+                        </a>
+
+
+                    </td>
+                </tr>
+            }
+        }
+    }
+
+</table>
+<br />
+
+
+<br />
+
+
+@Html.PagedListPager(Model.SearchResults, page => Url.Action("ListXN", new { page, Model.SO_XN, Model.NGAY_XN, Model.SO_DK_TAU }))
+    </div>
+</div>
+
+
+

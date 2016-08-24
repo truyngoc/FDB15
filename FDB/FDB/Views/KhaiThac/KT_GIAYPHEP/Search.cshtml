@@ -1,0 +1,656 @@
+﻿@model FDB.Models.ViewModelSearchKT_GIAYPHEP_THONGKE
+
+@using PagedList.Mvc;
+@using FDB.Helpers;
+@using FDB.DataAccessLayer;
+
+<link rel="stylesheet" type="text/css" href="~/Content/PagedList.css" />
+@{
+    ViewBag.Title = "Tra cứu giấy phép khai thác";
+}
+
+<script src="~/Scripts/datepicker.js"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script>
+  
+</script>
+
+
+
+
+
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <h3 class="text-center fdb-title-search-form">Tra cứu giấy phép khai thác</h3>
+    <br />
+    <div class="container">
+        @using (Html.BeginForm("Search", "KT_GIAYPHEP", FormMethod.Get))
+        {
+            <div class="row">
+                <div class="col-md-2 control-label">
+                    Tỉnh/TP
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.MA_TINHTP, (SelectList)ViewBag.TINH_THANHPHOs, "--Chọn tỉnh/TP--", new { @class = "form-control" })
+
+                </div>
+
+                <div class="col-md-2 control-label">
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Ngày cấp từ
+                </div>
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.TU_NGAY)
+                    @Html.ValidationMessageFor(model => model.TU_NGAY)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Đến
+                </div>
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.DEN_NGAY)
+                    @Html.ValidationMessageFor(model => model.DEN_NGAY)
+                </div>
+            </div>
+
+            <p class="margin-top-05">
+
+
+                <button type="submit" class="btn btn-primary btn-sm">
+                    <span class="glyphicon glyphicon-search"></span> Thống kê
+                </button>
+
+
+            </p>
+        }
+        <br />
+        <fieldset class="fdb-scheduler-border">
+            
+            <legend class="fdb-scheduler-search-border">@ViewBag.strTitle</legend>
+            <table class="table table-hover table-bordered table-condensed table-responsive">
+
+                <tr>
+
+                    <th rowspan="3" style="text-align:center;vertical-align:middle">
+                        Nhóm nghề
+                    </th>
+                    <th colspan="18" style="text-align:center">
+                        NHÓM CÔNG SUẤT (cv)
+                    </th>
+                    <th colspan="3" style="text-align:center">
+
+                        Tổng
+                    </th>
+
+                </tr>
+
+                <tr>
+
+
+                    <th colspan="3" align="center" style="text-align:center;border-width:1px">
+                        Nhỏ hơn<br />20cv
+                    </th>
+                    <th colspan="3" align="center" style="text-align: center; border-left: 1px solid black; ">
+                        20cv- nhỏ <br />hơn 50cv
+                    </th>
+                    <th colspan="3" align="center" style="text-align: center; border-left: 1px solid black; ">
+                        50cv - nhỏ <br />hơn 90cv
+                    </th>
+                    <th colspan="3" align="center" style="text-align: center; border-width: 1px; ">
+                        90cv –nhỏ <br />hơn 250
+                    </th>
+                    <th colspan="3" align="center" style="text-align: center; border-width: 1px; ">
+                        250cv- nhỏ <br />hơn 400cv
+                    </th>
+
+                    <th colspan="3" align="center" style="text-align: center; border-width: 1px; ">
+                        Lớn <br />hơn 400cv
+                    </th>
+                    <th rowspan="2" align="center" style="text-align: center; border-width: 1px; ">
+                        Tổng số tàu đã đăng ký
+                    </th>
+
+                    <th rowspan="2" align="center" style="text-align: center; border-width: 1px; ">
+                        Tổng số tàu đã cấp phép
+                    </th>
+
+                    <th rowspan="2" align="center" style="text-align: center; border-width: 1px; ">
+                        Tổng số giấy phép đã hết hạn
+                    </th>
+
+
+                </tr>
+
+                <tr>
+
+
+                    <td align="center" style="text-align:center">
+                        Tổng số tàu đã đăng ký
+                    </td>
+                    <td align="center" style="text-align:center">
+                        Tổng số tàu đã cấp phép
+                    </td>
+                    <td align="center" style="text-align:center">
+                        Tổng số giấy phép đã hết hạn
+                    </td>
+
+
+                    <td align="center" style="text-align:center">
+                        Tổng số tàu đã đăng ký
+                    </td>
+                    <td align="center" style="text-align:center">
+                        Tổng số tàu đã cấp phép
+                    </td>
+                    <td align="center" style="text-align:center">
+                        Tổng số giấy phép đã hết hạn
+                    </td>
+
+                    <td align="center" style="text-align:center">
+                        Tổng số tàu đã đăng ký
+                    </td>
+                    <td align="center" style="text-align:center">
+                        Tổng số tàu đã cấp phép
+                    </td>
+                    <td align="center" style="text-align:center">
+                        Tổng số giấy phép đã hết hạn
+                    </td>
+
+
+                    <td align="center" style="text-align:center">
+                        Tổng số tàu đã đăng ký
+                    </td>
+                    <td align="center" style="text-align:center">
+                        Tổng số tàu đã cấp phép
+                    </td>
+                    <td align="center" style="text-align:center">
+                        Tổng số giấy phép đã hết hạn
+                    </td>
+
+
+                    <td align="center" style="text-align:center">
+                        Tổng số tàu đã đăng ký
+                    </td>
+                    <td align="center" style="text-align:center">
+                        Tổng số tàu đã cấp phép
+                    </td>
+                    <td align="center" style="text-align:center">
+                        Tổng số giấy phép đã hết hạn
+                    </td>
+
+
+                    <td align="center" style="text-align:center">
+                        Tổng số tàu đã đăng ký
+                    </td>
+                    <td align="center" style="text-align:center">
+                        Tổng số tàu đã cấp phép
+                    </td>
+                    <td align="center" style="text-align:center">
+                        Tổng số giấy phép đã hết hạn
+                    </td>
+
+
+
+                </tr>
+
+                @{
+                    if (Model.StatisticsResults != null)
+                    {
+                        var tong1 = 0;
+                        var tong2 = 0;
+                        var tong3 = 0;
+                        var tong4 = 0;
+                        var tong5 = 0;
+                        var tong6 = 0;
+                        var tong7 = 0;
+                        var tong8 = 0;
+                        var tong9 = 0;
+                        var tong10 = 0;
+                        var tong11 = 0;
+                        var tong12 = 0;
+                        var tong13 = 0;
+                        var tong14 = 0;
+                        var tong15 = 0;
+                        var tong16 = 0;
+                        var tong17 = 0;
+                        var tong18 = 0;
+                        var tong19 = 0;
+                        var tong20 = 0;
+                        var tong21 = 0;
+
+                        foreach (var item in Model.StatisticsResults)
+                        {
+                            <tr>
+
+
+
+                                <td style="font-weight:bold;font-style:italic">
+                                    @Html.DisplayFor(modelItem => item.NHOM_NGHE)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.TAU_20)
+
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.TAU_20_CP)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.TAU_20_GP_HH)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.TAU_50)
+                                </td>
+
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.TAU_50_CP)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.TAU_50_GP_HH)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.TAU_90)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.TAU_90_CP)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.TAU_90_GP_HH)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.TAU_250)
+                                </td>
+
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.TAU_250_CP)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.TAU_250_GP_HH)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.TAU_400)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.TAU_400_CP)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.TAU_400_GP_HH)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.TAU_MORE_400)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.TAU_MORE_400_CP)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.TAU_MORE_400_GP_HH)
+                                </td>
+
+                                <td class="text-right" style="font-weight:bolder;color:blue">
+                                    @Html.DisplayFor(modelItem => item.TOTAL_SO_DK)
+                                </td>
+                                <td class="text-right" style="font-weight:bolder;color:blue">
+                                    @Html.DisplayFor(modelItem => item.TOTAL_SO_DK_CP)
+                                </td>
+                                <td class="text-right" style="font-weight:bolder;color:blue">
+                                    @Html.DisplayFor(modelItem => item.TOTAL_SO_GP_HH)
+                                </td>
+
+                            </tr>
+
+
+                            tong1 += item.TAU_20.Value;
+                            tong2 += item.TAU_20_CP.Value;
+                            tong3 += item.TAU_20_GP_HH.Value;
+                            tong4 += item.TAU_50.Value;
+                            tong5 += item.TAU_50_CP.Value;
+                            tong6 += item.TAU_50_GP_HH.Value;
+
+                            tong7 += item.TAU_90.Value;
+                            tong8 += item.TAU_90_CP.Value;
+                            tong9 += item.TAU_90_GP_HH.Value;
+                            tong10 += item.TAU_250.Value;
+                            tong11 += item.TAU_250_CP.Value;
+                            tong12 += item.TAU_250_GP_HH.Value;
+                            tong13 += item.TAU_400.Value;
+                            tong14 += item.TAU_400_CP.Value;
+                            tong15 += item.TAU_400_GP_HH.Value;
+
+                            tong16 += item.TAU_MORE_400.Value;
+                            tong17 += item.TAU_MORE_400_CP.Value;
+                            tong18 += item.TAU_MORE_400_GP_HH.Value;
+                            tong19 += item.TOTAL_SO_DK.Value;
+                            tong20 += item.TOTAL_SO_DK_CP.Value;
+                            tong21 += item.TOTAL_SO_GP_HH.Value;
+
+
+
+
+
+                        }
+                        <tr>
+                            <td style="font-weight:bold;font-style:italic">Tổng</td>
+                            <td class="text-right" style="font-weight:bolder;color:blue">@tong1</td>
+                            <td class="text-right" style="font-weight:bolder;color:blue">@tong2</td>
+                            <td class="text-right" style="font-weight:bolder;color:blue">@tong3</td>
+                            <td class="text-right" style="font-weight:bolder;color:blue">@tong4</td>
+                            <td class="text-right" style="font-weight:bolder;color:blue">@tong5</td>
+                            <td class="text-right" style="font-weight:bolder;color:blue">@tong6</td>
+                            <td class="text-right" style="font-weight:bolder;color:blue">@tong7</td>
+                            <td class="text-right" style="font-weight:bolder;color:blue">@tong8</td>
+                            <td class="text-right" style="font-weight:bolder;color:blue">@tong9</td>
+                            <td class="text-right" style="font-weight:bolder;color:blue">@tong10</td>
+                            <td class="text-right" style="font-weight:bolder;color:blue">@tong11</td>
+                            <td class="text-right" style="font-weight:bolder;color:blue">@tong12</td>
+                            <td class="text-right" style="font-weight:bolder;color:blue">@tong13</td>
+                            <td class="text-right" style="font-weight:bolder;color:blue">@tong14</td>
+                            <td class="text-right" style="font-weight:bolder;color:blue">@tong15</td>
+                            <td class="text-right" style="font-weight:bolder;color:blue">@tong16</td>
+                            <td class="text-right" style="font-weight:bolder;color:blue">@tong17</td>
+                            <td class="text-right" style="font-weight:bolder;color:blue">@tong18</td>
+                            <td class="text-right" style="font-weight:bolder;color:blue">@tong19</td>
+                                <td class="text-right" style="font-weight:bolder;color:blue">@tong20</td>
+                                <td class="text-right" style="font-weight:bolder;color:blue">@tong21</td>
+
+                            </tr>
+
+
+
+                    }
+
+
+                }
+
+
+
+
+
+
+            </table>
+
+
+           
+            </fieldset>
+            <br />
+
+
+            <br />
+
+
+
+</div>
+
+</div>
+
+@*@{
+        if (Model != null)
+        {
+            <tr>
+                <td style="text-align: center;font-weight:bold; font-style: italic">
+                    1
+                </td>
+                <td style="font-weight:bold;font-style:italic">
+                    Nghề lưới kéo
+                </td>
+                <td class="text-right">@Model.TAU_20_NGHEKEO</td>
+                <td class="text-right">@Model.TAU_20_NGHEKEO_CP</td>
+                <td class="text-right">@Model.TAU_50_NGHEKEO</td>
+                <td class="text-right">@Model.TAU_50_NGHEKEO_CP</td>
+                <td class="text-right">@Model.TAU_90_NGHEKEO</td>
+                <td class="text-right">@Model.TAU_90_NGHEKEO_CP</td>
+                <td class="text-right">@Model.TAU_250_NGHEKEO</td>
+                <td class="text-right">@Model.TAU_250_NGHEKEO_CP</td>
+                <td class="text-right">@Model.TAU_400_NGHEKEO</td>
+                <td class="text-right">@Model.TAU_400_NGHEKEO_CP</td>
+                <td class="text-right">@Model.TAU_TREN_400_NGHEKEO</td>
+                <td class="text-right">@Model.TAU_TREN_400_NGHEKEO_CP</td>
+                <td class="text-right">@Model.TOTAL_SO_DK_KEO</td>
+                <td class="text-right">@Model.TOTAL_SO_DK_CP_KEO</td>
+
+            </tr>
+            <tr>
+                <td style="text-align: center;font-weight:bold; font-style: italic">
+                    2
+                </td>
+                <td style="font-weight:bold;font-style:italic">
+                    Nghề vây
+                </td>
+                <td class="text-right">@Model.TAU_20_NGHEVAY</td>
+                <td class="text-right">@Model.TAU_20_NGHEVAY_CP</td>
+                <td class="text-right">@Model.TAU_50_NGHEVAY</td>
+                <td class="text-right">@Model.TAU_50_NGHEVAY_CP</td>
+                <td class="text-right">@Model.TAU_90_NGHEVAY</td>
+                <td class="text-right">@Model.TAU_90_NGHEVAY_CP</td>
+                <td class="text-right">@Model.TAU_250_NGHEVAY</td>
+                <td class="text-right">@Model.TAU_250_NGHEVAY_CP</td>
+                <td class="text-right">@Model.TAU_400_NGHEVAY</td>
+                <td class="text-right">@Model.TAU_400_NGHEVAY_CP</td>
+                <td class="text-right">@Model.TAU_TREN_400_NGHEVAY</td>
+                <td class="text-right">@Model.TAU_TREN_400_NGHEVAY_CP</td>
+                <td class="text-right">@Model.TOTAL_SO_DK_VAY</td>
+                <td class="text-right">@Model.TOTAL_SO_DK_CP_VAY</td>
+
+            </tr>
+
+            <tr>
+                <td style="text-align: center;font-weight:bold; font-style: italic">
+                    3
+                </td>
+                <td style="font-weight:bold;font-style:italic">
+                    Nghề lưới rê
+                </td>
+                <td class="text-right">@Model.TAU_20_NGHERE</td>
+                <td class="text-right">@Model.TAU_20_NGHERE_CP</td>
+                <td class="text-right">@Model.TAU_50_NGHERE</td>
+                <td class="text-right">@Model.TAU_50_NGHERE_CP</td>
+                <td class="text-right">@Model.TAU_90_NGHERE</td>
+                <td class="text-right">@Model.TAU_90_NGHERE_CP</td>
+                <td class="text-right">@Model.TAU_250_NGHERE</td>
+                <td class="text-right">@Model.TAU_250_NGHERE_CP</td>
+                <td class="text-right">@Model.TAU_400_NGHERE</td>
+                <td class="text-right">@Model.TAU_400_NGHERE_CP</td>
+                <td class="text-right">@Model.TAU_TREN_400_NGHERE</td>
+                <td class="text-right">@Model.TAU_TREN_400_NGHERE_CP</td>
+                <td class="text-right">@Model.TOTAL_SO_DK_RE</td>
+                <td class="text-right">@Model.TOTAL_SO_DK_CP_RE</td>
+
+            </tr>
+
+            <tr>
+                <td style="text-align: center;font-weight:bold; font-style: italic">
+                    4
+                </td>
+                <td style="font-weight:bold;font-style:italic">
+                    Nghề câu
+                </td>
+                <td class="text-right">@Model.TAU_20_NGHECAU</td>
+                <td class="text-right">@Model.TAU_20_NGHECAU_CP</td>
+                <td class="text-right">@Model.TAU_50_NGHECAU</td>
+                <td class="text-right">@Model.TAU_50_NGHECAU_CP</td>
+                <td class="text-right">@Model.TAU_90_NGHECAU</td>
+                <td class="text-right">@Model.TAU_90_NGHECAU_CP</td>
+                <td class="text-right">@Model.TAU_250_NGHECAU</td>
+                <td class="text-right">@Model.TAU_250_NGHECAU_CP</td>
+                <td class="text-right">@Model.TAU_400_NGHECAU</td>
+                <td class="text-right">@Model.TAU_400_NGHECAU_CP</td>
+                <td class="text-right">@Model.TAU_TREN_400_NGHECAU</td>
+                <td class="text-right">@Model.TAU_TREN_400_NGHECAU_CP</td>
+                <td class="text-right">@Model.TOTAL_SO_DK_CAU</td>
+                <td class="text-right">@Model.TOTAL_SO_DK_CP_CAU</td>
+
+            </tr>
+
+
+
+            <tr>
+                <td style="text-align: center;font-weight:bold; font-style: italic">
+                    5
+                </td>
+                <td style="font-weight:bold;font-style:italic">
+                    Nghề khác
+                </td>
+                <td class="text-right">@Model.TAU_20_NGHEKHAC</td>
+                <td class="text-right">@Model.TAU_20_NGHEKHAC_CP</td>
+                <td class="text-right">@Model.TAU_50_NGHEKHAC</td>
+                <td class="text-right">@Model.TAU_50_NGHEKHAC_CP</td>
+                <td class="text-right">@Model.TAU_90_NGHEKHAC</td>
+                <td class="text-right">@Model.TAU_90_NGHEKHAC_CP</td>
+                <td class="text-right">@Model.TAU_250_NGHEKHAC</td>
+                <td class="text-right">@Model.TAU_250_NGHEKHAC_CP</td>
+                <td class="text-right">@Model.TAU_400_NGHEKHAC</td>
+                <td class="text-right">@Model.TAU_400_NGHEKHAC_CP</td>
+                <td class="text-right">@Model.TAU_TREN_400_NGHEKHAC</td>
+                <td class="text-right">@Model.TAU_TREN_400_NGHEKHAC_CP</td>
+                <td class="text-right">@Model.TOTAL_SO_DK_KHAC</td>
+                <td class="text-right">@Model.TOTAL_SO_DK_CP_KHAC</td>
+
+            </tr>
+        }
+    }
+    @*<tr>
+            <td style="text-align: center;font-weight:bold; font-style: italic">
+                7
+            </td>
+            <td style="font-weight:bold;font-style:italic">
+                Tàu dịch vụ HC nghề cá
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+
+        </tr>
+
+        <tr>
+            <td style="text-align: center;font-weight:bold; font-style: italic">
+                8
+            </td>
+            <td style="font-weight:bold;font-style:italic">
+                Tàu kiểm ngư
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+
+
+           var tong1 = 0;
+                           var tong2 = 0;
+                             var tong3 = 0;
+                            var tong4 = 0;
+                            var tong5 = 0;
+                             var tong6 = 0;
+                              var tong7 = 0;
+                             var tong8 = 0;
+                             var tong9 = 0;
+                             var tong10 = 0;
+                             var tong11 = 0;
+                             var tong12 = 0;
+                             var tong13 = 0;
+                             var tong14 = 0;
+                             var tong15 = 0;
+                             var tong16 = 0;
+                             var tong17 = 0;
+                              var tong18 = 0;
+                              var tong19 = 0;
+                             var tong20 = 0;
+                              var tong21 = 0;
+
+     <tr>
+
+                                <td style="font-weight:bold;font-style:italic">Tổng</td>
+                                @{
+                                <td>
+                                    tong1 += @item.TAU_20;
+                                </td>
+                                <td>
+                                    tong2 += @item.TAU_20_CP;
+                                </td>
+                                <td>
+                                    tong3 += @item.TAU_20_GP_HH;
+                                </td>
+                                 <td>
+                                    tong4 += @item.TAU_50;
+                                </td>
+                                <td>
+                                    tong5 += @item.TAU_50_CP;
+                                </td>
+                                <td>
+                                    tong6 += @item.TAU_50_GP_HH;
+                                </td>
+                                 <td>
+                                    tong7 += @item.TAU_90;
+                                </td>
+                                <td>
+                                    tong8 += @item.TAU_90_CP;
+                                </td>
+                                <td>
+                                    tong9 += @item.TAU_90_GP_HH;
+                                </td>
+                                 <td>
+                                    tong10 += @item.TAU_250;
+                                </td>
+                                <td>
+                                    tong11 += @item.TAU_250_CP;
+                                </td>
+                                <td>
+                                    tong12 += @item.TAU_250_GP_HH;
+                                </td>
+
+                                     <td>
+                                    tong13 += @item.TAU_400;
+                                </td>
+                                <td>
+                                    tong14 += @item.TAU_400_CP;
+                                </td>
+                                <td>
+                                    tong15 += @item.TAU_400_GP_HH;
+                                </td>
+                                        <td>
+                                    tong16 += @item.TAU_MORE_400;
+                                </td>
+                                <td>
+                                    tong17 += @item.TAU_MORE_400_CP;
+                                </td>
+                                <td>
+                                    tong18 += @item.TAU_MORE_400_GP_HH;
+                                </td>
+
+                                          <td>
+                                    tong19 += @item.TOTAL_SO_DK;
+                                </td>
+                                <td>
+                                    tong20 += @item.TOTAL_SO_DK_CP;
+                                </td>
+                                <td>
+                                    tong21 += @item.TOTAL_SO_GP_HH;
+                                </td>
+                                }
+                            </tr>
+
+*@

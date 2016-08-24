@@ -1,0 +1,148 @@
+﻿@model FDB.Models.DM_DOITUONG_KT
+
+@{
+    ViewBag.Title = "Thêm mới đối tượng khai thác";
+}
+
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <br />
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true)
+
+            @*<div class="form-group">
+                <div class="control-label col-md-2">
+                    Loại khai thác <label style="color:red;">(*)</label>
+
+                </div>
+                <div class="col-md-8">
+                    @Html.DropDownListFor(model => model.LOAI_KHAI_THAC,(SelectList)ViewBag.DMLoaiKhaiThac, "Chọn loại khai thác", new { @class = "form-control", @id = "LoaiKhaiThac" })
+                    <span id="lblValidateLOAIKHAITHAC" style="color: #b94a48; display: none; "></span>
+                    
+                </div>
+            </div>*@
+
+            @*<div class="form-group">
+                <div class="control-label col-md-2">
+                    Nhóm đối tượng <label style="color:red;">(*)</label>
+
+                </div>
+                <div class="col-md-8">
+                   
+                    @Html.DropDownListFor(model => model.DM_NHOMDOITUONG_KTID, (SelectList)ViewBag.NHOMDOITUONGs, "Chọn nhóm đối tượng", new { @class = "form-control", @id = "NhomDoiTuongKhaiThac" })
+                    @Html.ValidationMessageFor(model => model.DM_NHOMDOITUONG_KTID)
+                </div>
+            </div>*@
+
+            <div class="form-group">
+                <div class="control-label col-md-2">
+                    Tên đối tượng <label style="color:red;">(*)</label>
+
+                </div>
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.TEN_DOI_TUONG, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TEN_DOI_TUONG)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="control-label col-md-2">
+                    Mô tả
+                </div>
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.MO_TA, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.MO_TA)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" class="btn btn-danger btn-sm" id="btnSubmit">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Cập nhật
+                    </button>
+                    &nbsp;
+                    @Html.ActionLink("Quay lại", "Index", "DM_DOITUONG_KT", null, new { @class = "btn btn-primary btn-sm" })
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script src="~/Scripts/datepicker.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/jquery.maskMoney.js"></script>
+<script src="~/Scripts/jquery.number.js"></script>
+
+@*<script type="text/javascript">
+
+
+   
+    // load district by province when change in dropdownlist
+    $("#LoaiKhaiThac").change(function () {
+        $.ajax({
+            url: '@Url.Action("getNhomDoiTuongByMatNuoc", "DM_DOITUONG_KT")',
+            type: 'post',
+            data: {
+                ma_MatNuoc: $('#LoaiKhaiThac').val()
+            }//NhomDoiTuongKhaiThac
+        }).done(function (response) {
+            // update district by province
+            var a = '<option value></option>' + response;   // defaut value
+            $("#NhomDoiTuongKhaiThac").html(a);
+
+            // reset ward
+            var b = '<option value></option>'
+            $('#DoiTuongKhaiThac').html(b);
+        });
+    });
+
+
+    // load ward by disctrict when change in dropdownlist
+    $("#NhomDoiTuongKhaiThac").change(function () {
+        $.ajax({
+            url: '@Url.Action("getDoiTuongByNhom", "DM_DOITUONG_KT")',
+            type: 'post',
+            data: {
+                ma_NhomDoiTuong: $('#NhomDoiTuongKhaiThac').val()
+            }
+        }).done(function (response) {
+            var a = '<option value></option>' + response;   // defaut value
+            $("#DoiTuongKhaiThac").html(a);
+        });
+    });
+
+   
+    
+    //$(document).ready(function() {
+    //    $('#formCreate').validate({
+    //        rules: {
+    //            LoaiKhaiThac: {
+    //                required: true
+    //            }
+    //        },
+
+    //        submitHandler: function (form) { // for demo
+    //            alert('valid form submitted'); // for demo
+    //            return false; // for demo
+    //        }
+    //    });
+
+    //    jQuery.validator.addMethod('required', function (value) {
+    //        return (value != '0');
+    //    }, "Loại khai thác bắt buộc nhập");
+    //});​
+
+   
+
+</script>*@

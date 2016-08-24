@@ -1,0 +1,21 @@
+﻿@model FDB.Models.SelectUserEditorViewModel
+
+@Html.HiddenFor(modelItem => modelItem.UserId)
+<tr>
+    <td>
+        @Html.CheckBoxFor(modelItem => modelItem.Selected)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => modelItem.UserName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => modelItem.FirstName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => modelItem.LastName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => modelItem.Email)
+    </td>
+    <td></td>
+</tr>

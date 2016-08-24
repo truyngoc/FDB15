@@ -1,0 +1,43 @@
+﻿@model FDB.Models.Group
+@{ ViewBag.Title = "Create Groups"; }
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <br />
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            <h4>Nhóm</h4>
+            <hr />
+            @Html.ValidationSummary(true)
+            <div class="form-group">
+                @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Name)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-2 control-label">
+                    Tỉnh/Thành phố <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.Ma_TTP, (SelectList)ViewBag.DMTThanhPho, new { @class = "form-control", @id = "province_dll" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Cập nhật
+                    </button>
+                    &nbsp;
+                    @Html.ActionLink("Quay lại", "Index", "Groups", null, new { @class = "btn btn-primary btn-sm" })
+                </div>
+            </div>
+        </div>
+    }
+    @section Scripts { @Scripts.Render("~/bundles/jqueryval") }
+</div>

@@ -1,0 +1,429 @@
+﻿@using (Html.BeginForm("Create", "KT_NHATKYKHAITHAC", FormMethod.Post, new { @id = "formCreate" }))
+{
+    <div class="container fdb-div-content fdb-div-corner-all">
+        <br />
+
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true)
+
+
+
+            <div class="fdb-title-form">
+                Thông tin sổ nhật ký
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 control-label text-left">
+                    Tên tàu
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                    Số đăng ký tàu
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    Tổng công suất máy chính
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                    Số thuyền viên trên tàu
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    Nghề đánh bắt chính
+                </div>
+                <div class="col-md-4">
+                    <select class="form-control">
+                        <option value="">Vây</option>
+                        <option value="">Rê</option>
+                        <option value="">Lưới</option>
+                        <option value="">Kéo</option>
+                        <option value="">Chụp</option>
+                        <option value="">Khác</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                    Thông số cơ bản của lưới (ngư cụ)
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+            
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    Ngày phát sổ
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                    Nơi phát sổ
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    Ngày nộp sổ
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                    Nơi nộp sổ
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+
+            <br />
+            <div class="fdb-title-form margin-top-05">
+                Thông tin chuyến biển
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    Số chuyến biển
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                    Thuyền trưởng
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    Ngày xuất bến
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                    Nơi xuất bến
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    Ngày về bến
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                    Nơi về bến
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    Vùng hoạt động của tàu
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                    Khối lượng chuyển tải (nếu có)
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+
+            <div class="fdb-title-form-14 margin-top-05">
+                1. Mẻ lưới đầu tiên của chuyến biển
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    Thời gian thả lưới
+                </div>
+                <div class="col-md-1">
+                    <input type="text" class="form-control" />
+                </div>                
+                <div class="col-md-1 control-label text-left">Giờ</div>
+                <div class="col-md-1">                    
+                    <input type="text" class="form-control" />
+                </div>
+                <div class="col-md-1 control-label text-left">Phút</div>
+                <div class="col-md-2 control-label text-left">Ngày</div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    Kinh độ
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                    Vĩ độ
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+
+            <br />
+            <div class="fdb-title-form-14 margin-top-05">
+                2. Mẻ lưới cuối cùng của chuyến biển
+            </div>
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    Thời gian thả lưới
+                </div>
+                <div class="col-md-1">
+                    <input type="text" class="form-control" />
+                </div>
+                <div class="col-md-1 control-label text-left">Giờ</div>
+                <div class="col-md-1">
+                    <input type="text" class="form-control" />
+                </div>
+                <div class="col-md-1 control-label text-left">Phút</div>
+                <div class="col-md-2 control-label text-left">Ngày</div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    Kinh độ
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                    Vĩ độ
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+
+            <br />
+            <div class="fdb-title-form-14 margin-top-05">
+                3. Tổng số mẻ lưới trong chuyến biển
+            </div>
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    Tổng số mẻ lưới
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+
+
+            <br />
+            <div class="fdb-title-form-14 margin-top-05">
+                4. Tổng sản lượng của chuyến biển
+            </div>
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    Tổng sản lượng (kg)
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+
+
+            <br />
+            <div class="fdb-title-form-14 margin-top-05">
+                Các sản phẩm đánh bắt được chủ yếu:
+            </div>
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    <b>Tôm</b> (kg)
+                </div>
+                <div class="col-md-4">                    
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="col-md-2 control-label text-left">                    
+                </div>
+                <div class="col-md-4">                    
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    <b>Cá chọn</b> (kg)
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    <b>Cá xô</b> (kg)
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    <b>Cá tạp</b> (kg)
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    <b>Mực ống</b> (kg)
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    <b>Mực nang</b> (kg)
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    <b>Khác</b> (kg)
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+            <br />
+
+        </div>
+
+
+    </div>
+
+    <br />
+
+    <div class="form-group">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-danger btn-sm">
+                <span class="glyphicon glyphicon-floppy-disk"></span> Cập nhật
+            </button>
+            @*&nbsp;
+            @Html.ActionLink("Quay lại", "Index", "KT_DANGKIEM", null, new { @class = "btn btn-primary btn-sm" })*@
+        </div>
+    </div>
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script src="~/Scripts/datepicker.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/jquery.maskMoney.js"></script>
+<script src="~/Scripts/jquery.number.js"></script>
+
+
+<script type="text/javascript">
+
+    function calculateTotal(src) {
+        var sum = 0,
+            tbl = $(src).closest('table');
+
+        tbl.find('input.form-control.power').each(function (index, elem) {
+            var val = parseFloat($(elem).val());
+            if (!isNaN(val)) {
+                sum += val;
+            }
+        });
+
+        //tbl.find('input.form-control.totalPower').html(sum.toFixed(2));
+        //document.getElementById("KT_TONG_CONG_SUAT").value = sum;
+        $('input.form-control.totalPower').val(sum);
+    }
+   
+
+</script>

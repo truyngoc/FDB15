@@ -1,0 +1,41 @@
+﻿@model FDB.Models.SelectUserGroupsViewModel
+@{ ViewBag.Title = "User Groups"; }
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <br />
+    <h4>Tên đăng nhập: @Html.DisplayFor(model => model.UserName)</h4>
+    <hr />
+    @using (Html.BeginForm("UserGroups", "Account", FormMethod.Post, new { encType = "multipart/form-data", name = "myform" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.UserName)
+
+            <h5>Chọn các nhóm @ViewBag.TenTTP gán cho người dùng @Html.DisplayFor(model => model.UserName)</h5>
+            <hr />
+            <table>
+                <tr>
+                    <th>
+                        Chọn
+                    </th>
+                    <th>
+                        Nhóm
+                    </th>
+                </tr>
+                @Html.EditorFor(model => model.Groups)
+            </table>
+            <br />
+            <hr />
+            <div class="form-group">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Cập nhật
+                    </button>
+                    &nbsp;
+                    @Html.ActionLink("Quay lại", "Index", "Account", null, new { @class = "btn btn-primary btn-sm" })
+                </div>
+            </div>
+        </div>
+    }
+</div>

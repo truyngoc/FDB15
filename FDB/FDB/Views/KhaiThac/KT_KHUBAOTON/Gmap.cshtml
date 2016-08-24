@@ -1,0 +1,131 @@
+﻿@model FDB.Models.ViewModelSearchKT_KHU_BAO_TON
+@using PagedList.Mvc;
+@using FDB.Helpers;
+
+<link rel="stylesheet" type="text/css" href="~/Content/PagedList.css" />
+
+@{
+    ViewBag.Title = "Khu bảo tồn";
+}
+
+
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
+
+
+    var myCenter = new google.maps.LatLng(16.7907529, 105.7846275);
+
+    var marker;
+
+    var map;
+
+    $(document).ready(function () {
+
+        
+        window.onload = initialize();
+
+        function initialize() {
+
+            var mapOptions =
+            {
+                center: myCenter,
+                zoom: 6,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            }
+
+            var map = new google.maps.Map($("#dvMap")[0], mapOptions);
+            //map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
+
+
+            $.ajax({
+                url: "@Url.Action("getAllKT_KHUBAOTON", "KT_KHUBAOTON")",
+                data: "",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+
+                    for (var i = 0; i < data.length; i++) {
+
+                        var latlng = new google.maps.LatLng(data[i].VIDO, data[i].KINHDO);
+                        marker = new google.maps.Marker({
+                            position: latlng,
+                            // icon: "../pinkball.png",
+                            map: map,
+                            //animation: google.maps.Animation.BOUNCE,
+                        });
+                        //gan maker vao map
+                        marker.setMap(map);
+
+                        var infowindow = new google.maps.InfoWindow
+                        ({
+                            content: data[i].TEN_KHU_BAO_TON
+
+                        });
+
+                        makeInfoWindowEvent(map, infowindow, marker);
+                    }
+
+                }
+            });
+
+            function makeInfoWindowEvent(map, infowindow, marker) {
+                google.maps.event.addListener(marker, 'click', function () {
+                    infowindow.open(map, marker);
+                });
+            }
+
+            google.maps.event.addDomListener(window, 'load', initialize);
+
+        }
+
+
+
+    });
+
+
+
+    //});
+
+
+</script>
+
+
+
+
+
+
+
+
+
+    <div class="container fdb-div-content fdb-div-corner-all">
+        <h3 class="text-center fdb-title-search-form">Bản đồ vị trí các khu bảo tồn</h3>
+        <br />
+
+        <div class="container">
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    @*<input type="button" id="btnShow" class="btn btn-primary btn-sm" value="Xem bản đồ">*@
+                    @Html.ActionLink("Quay lại", "Index", "KT_KHUBAOTON", null, new { @class = "btn btn-primary btn-sm" })
+                </div>
+
+                <br />
+                <div class="col-md-12">
+                    <div class="col-md-1"></div>
+                    <div id="dvMap" class="col-md-10" style="height:800px;">
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+
+                <br />
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+

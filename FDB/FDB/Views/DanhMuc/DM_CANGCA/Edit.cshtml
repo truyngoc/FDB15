@@ -1,0 +1,355 @@
+﻿@model FDB.Models.DM_CANGCA
+
+@{
+    ViewBag.Title = "Sửa danh mục cảng cá";
+}
+
+@using (Html.BeginForm("Edit", "DM_CANGCA", FormMethod.Post, new { @id = "formEdit" }))
+{
+    <div class="container fdb-div-content fdb-div-corner-all">
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.ID)
+
+            <br />
+            <fieldset class="fdb-scheduler-border">
+                <legend class="fdb-scheduler-border">Thông tin cảng cá</legend>
+
+                <div class="row">
+                    <div class="col-md-2 control-label text-left">
+                        Tỉnh/TP <label style="color:red;">(*)</label>
+
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.MA_TINHTP, (SelectList)ViewBag.DTINHTPs, new { @class = "form-control", @id = "province_dll" })
+                        @Html.ValidationMessageFor(model => model.MA_TINHTP)
+                    </div>
+
+
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label text-left">
+                        Quận/Huyện
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.MA_QUANHUYEN, (SelectList)ViewBag.QUAN_HUYENs, string.Empty, new { @class = "form-control", @id = "district_dll" })
+                        @Html.ValidationMessageFor(model => model.MA_QUANHUYEN)
+                    </div>
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label text-left">
+                        Xã/phường
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.MA_PHUONGXA, (SelectList)ViewBag.PHUONG_XAs, string.Empty, new { @class = "form-control", @id = "ward_dll" })
+                        @Html.ValidationMessageFor(model => model.MA_PHUONGXA)
+                    </div>
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label text-left">
+                        Tên cảng <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.TEN_CANG, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.TEN_CANG)
+                    </div>
+
+
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label text-left">
+                        Địa chỉ
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.DIA_CHI, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.DIA_CHI)
+                    </div>
+
+
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label text-left">
+                        Điện thoại
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.DIEN_THOAI, new { @class = "form-control", @maxlength = "11", @type = "number" })
+                        @Html.ValidationMessageFor(model => model.DIEN_THOAI)
+                    </div>
+
+
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label text-left">
+                        Phân loại cảng <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.DPHAN_LOAI_CANGID, (SelectList)ViewBag.PHAN_LOAI_CANG_CAs, "--Chọn phân loại cảng--", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.DPHAN_LOAI_CANGID)
+                    </div>
+
+
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label text-left">
+                        Vị trí tọa độ (Kinh,vĩ độ)
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.VITRI_TOADO, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.VITRI_TOADO)
+                    </div>
+
+
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label text-left">
+                        Tần số liên lạc
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.TANSO, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.TANSO)
+                    </div>
+
+
+                </div>
+            </fieldset>
+            <br />
+
+            <fieldset class="fdb-scheduler-border">
+                <legend class="fdb-scheduler-border">Đặc điểm kỹ thuật cảng cá</legend>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label text-left">
+                        Cỡ tàu lớn nhất (CV)
+                    </div>
+                    <div class="col-md-2">
+                        @Html.TextBoxFor(model => model.COTAU, new { @class = "form-control", data_val_number = "Cỡ tàu phải là số." })
+                        @Html.ValidationMessageFor(model => model.COTAU)
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="help-tip">
+                            <p>Công suất tối đa của tàu được phép vào cảng</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label text-left">
+                        Độ sâu đậu tàu (m)
+                    </div>
+                    <div class="col-md-2">
+                        @Html.TextBoxFor(model => model.DOSAU_DAUTAU, new { @class = "form-control", data_val_number = "Độ sâu đậu tàu phải là số." })
+                        @Html.ValidationMessageFor(model => model.DOSAU_DAUTAU)
+                    </div>
+
+
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label text-left">
+                        Vị trí bắt đầu của luồng
+                    </div>
+                    <div class="col-md-2">
+                        @Html.TextBoxFor(model => model.VITRI_LUONG, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.VITRI_LUONG)
+                    </div>
+
+
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label text-left">
+                        Độ sâu luồng vào (m)
+                    </div>
+                    <div class="col-md-2">
+                        @Html.TextBoxFor(model => model.DOSAU_LUONGVAO, new { @class = "form-control", data_val_number = "Độ sâu luồng vào phải là số." })
+                        @Html.ValidationMessageFor(model => model.DOSAU_LUONGVAO)
+                    </div>
+
+
+                </div>
+
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label text-left">
+                        Hướng luồng vào (độ N)
+                    </div>
+                    <div class="col-md-2">
+                        @Html.TextBoxFor(model => model.HUONG_LUONGVAO, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.HUONG_LUONGVAO)
+                    </div>
+
+
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label text-left">
+                        Chiều dài cầu cảng (m)
+                    </div>
+                    <div class="col-md-2">
+                        @Html.TextBoxFor(model => model.CHIEUDAI_CAUCANG, new { @class = "form-control", data_val_number = "Chiều dài cầu cảng phải là số." })
+                        @Html.ValidationMessageFor(model => model.CHIEUDAI_CAUCANG)
+                    </div>
+
+
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label text-left">
+                        Năng lực bốc xếp (tấn)
+                    </div>
+                    <div class="col-md-2">
+                        @Html.TextBoxFor(model => model.NANGLUC_BOCXEP, new { @class = "form-control", data_val_number = "Năng lực bốc xếp phải là số." })
+                        @Html.ValidationMessageFor(model => model.NANGLUC_BOCXEP)
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label text-left">
+                        Ghi chú
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextAreaFor(model => model.GHI_CHU, new { @class = "form-control fdb_textarea", @rows = "20", @cols = "50" })
+                        @Html.ValidationMessageFor(model => model.GHI_CHU)
+                    </div>
+
+
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label text-left">
+                        Trạng thái
+                    </div>
+                    <div class="col-md-1">
+                        @*<input type="checkbox" id="cbStatus" name="cbStatus" />*@
+                        @Html.CheckBox("cbStatus")
+                        <div class="help-tip">
+                            <p>
+                                Trạng thái đóng mở cảng cá.Ô tick không được check là cảng cá ở trạng thái mở,được check là cảng cá ở trạng thái đóng
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-5 control-label">
+
+                    </div>
+                    <div class="col-md-4">
+
+                    </div>
+
+
+                </div>
+
+            </fieldset>
+        </div>
+    </div>
+    <br />
+
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-danger btn-sm">
+                <span class="glyphicon glyphicon-floppy-disk"></span> Cập nhật
+            </button>
+            &nbsp;
+            @Html.ActionLink("Quay lại", "Index", "DM_CANGCA", null, new { @class = "btn btn-primary btn-sm" })
+        </div>
+    </div>
+
+}
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js" type="text/javascript"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/jquery.maskMoney.js"></script>
+<script src="~/Scripts/jquery.number.js"></script>
+<script src="~/Scripts/datepicker.js"></script>
+<script src="~/Scripts/moment.js"></script>
+<script src="~/Scripts/CustomValidation.js"></script>
+
+
+@*validate plugin ở đây*@
+<style>
+    #formEdit .error {
+        color: red;
+    }
+</style>
+
+<script type="text/javascript">
+    var model = @Html.Raw(Json.Encode(@Model))
+
+
+
+
+
+    if (model.Status == true)
+    {
+        $("#cbStatus").prop("checked", true);
+    }
+    else
+    {
+        $("#cbStatus").prop("checked", false);
+    }
+
+</script>
+
+<script>
+    $(document).ready(function () {
+        // load district by province when change in dropdownlist
+        $("#province_dll").change(function () {
+            $.ajax({
+                url: '@Url.Action("getDistrict","DM_CANGCA")',
+                type: 'post',
+                data: {
+                    ma_TinhTP: $('#province_dll').val()
+                }
+            }).done(function (response) {
+                // update district by province
+                var a = '<option value></option>' + response;   // defaut value
+                $("#district_dll").html(a);
+
+                // reset ward
+                var b = '<option value></option>'
+                $('#ward_dll').html(b);
+            });
+
+        });
+
+        // load ward by disctrict when change in dropdownlist
+        $("#district_dll").change(function () {
+            $.ajax({
+                url: '@Url.Action("getWard", "DM_CANGCA")',
+                type: 'post',
+                data: {
+                    ma_QuanHuyen: $('#district_dll').val()
+                }
+            }).done(function (response) {
+                var a = '<option value></option>' + response;   // defaut value
+                $("#ward_dll").html(a);
+            });
+        });
+
+
+    });
+</script>

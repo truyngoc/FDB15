@@ -1,0 +1,304 @@
+﻿@model FDB.Models.KT_TONGQUAN_NGHECA
+@using PagedList.Mvc;
+@using FDB.Helpers;
+
+@{
+    ViewBag.Title = "Tổng quan nghề cá địa phương";
+}
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <h3 class="text-center fdb-title-search-form">Tổng quan nghề cá địa phương</h3>
+
+    @using (Html.BeginForm("Index", "KT_TONGQUAN_NGHECA", FormMethod.Get))
+    {
+
+        <div class="criteria_search">
+            <br />
+            <div class="row">
+                <div class="col-md-2 control-label">
+                    Tỉnh/thành phố
+                </div>
+                <div class="col-md-4">
+                    <select class="form-control">
+                        <option value="">Thanh Hóa</option>
+                        <option value="">Nghệ An</option>
+                        <option value="">Hà Tĩnh</option>
+                        <option value="">Bình Định</option>
+                        <option value="">Phú Yên</option>
+                        <option value="">Khánh Hòa</option>
+                        <option value="">Sóc Trăng</option>
+                        <option value="">Cà Mau</option>
+                    </select>
+                    <input type="button" value="Xem" class="btn-default" style="right: 10px; position: absolute; top: 3px; right: 35px; " />
+                </div>
+                <div class="col-md-6"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 control-label" id="toctitle">
+                    <h3>Thanh Hóa</h3>
+                </div>
+                <hr />
+            </div>
+            <div>
+                <div>
+                    -
+                </div>
+            </div>
+
+            <div id="toc" class="toc">
+                <div id="toctitle">
+                    <h2>Mục lục</h2>
+                </div>
+                <ul>
+                    <li class="toclevel-1 tocsection-1"><a href="#1"><span class="tocnumber">1</span> <span class="toctext">Thông tin chung</span></a></li>
+
+                    <li class="toclevel-1 tocsection-3"><a href="#3"><span class="tocnumber">2</span> <span class="toctext">Tổng số tàu thuyển và các nghề khai thác hải sản chủ yếu</span></a></li>
+                    <li class="toclevel-1 tocsection-4"><a href="#4"><span class="tocnumber">3</span> <span class="toctext">Tiềm năng các loại mặt nước nuôi trồng thủy sản</span></a></li>
+                    <li class="toclevel-1 tocsection-5"><a href="#5"><span class="tocnumber">4</span> <span class="toctext">Diện tích đã nuôi trồng thủy sản</span></a></li>
+                    <li class="toclevel-1 tocsection-6"><a href="#6"><span class="tocnumber">5</span> <span class="toctext">Cơ sở sản xuất giống</span></a></li>
+
+                    <li class="toclevel-1 tocsection-6"><a href="#8"><span class="tocnumber">6</span> <span class="toctext">Hệ thống tổ chức quản lý thủy sản </span></a></li>
+                    <li class="toclevel-1 tocsection-7"><a href="#9"><span class="tocnumber">7</span> <span class="toctext">Kết quả sản xuất đã đạt được </span></a></li>
+                    <li class="toclevel-1 tocsection-7"><a href="#10"><span class="tocnumber">8</span> <span class="toctext">Hậu cần</span></a></li>
+                </ul>
+            </div>
+            <hr />
+            <h1>
+                <span class="toc" id="1" style="font-weight: bolder; font-size: 16px;; font-size:16px;">Thông tin chung</span>
+                <span class="mw-editsection">
+                    <span class="mw-editsection-bracket">[</span>
+
+                    <span class="mw-editsection-bracket">]</span>
+                </span>
+            </h1>
+            <p>
+                -	Tên địa phương
+                <br />
+                -	Vị trí địa lý
+                <br />
+                -	Dân cư
+                <br />
+                -	Diện tích chung
+                <br />
+                -	Chiều dài bờ biển
+                <br />
+
+                -	Diện tích vùng biển:
+                <ul>
+                    <li>
+                        ven bờ
+                    </li>
+                    <li>
+                        lộng
+                    </li>
+                    <li>
+                        khơi
+                    </li>
+
+                </ul>
+
+            </p>
+            <hr />
+
+
+            <h1>
+                <span class="mw-headline" id="3" style="font-weight: bolder; font-size: 16px;">Tổng số tàu thuyển và các nghề khai thác hải sản chủ yếu</span>
+                <span class="mw-editsection">
+                    <span class="mw-editsection-bracket">[</span>
+
+                    <span class="mw-editsection-bracket">]</span>
+                </span>
+            </h1>
+            <p>
+                <ul>
+                    <li>
+                        phân theo nhóm công suất
+                    </li>
+                    <li>
+                        các nghề khai thác hải sản chủ yếu
+                    </li>
+                </ul>
+            </p>
+            <hr />
+
+            <h1>
+                <span class="mw-headline" id="4" style="font-weight: bolder; font-size: 16px;">Tiềm năng các loại mặt nước nuôi trồng thủy sản(ngọt,mặn,lợ)</span>
+                <span class="mw-editsection">
+                    <span class="mw-editsection-bracket">[</span>
+
+                    <span class="mw-editsection-bracket">]</span>
+                </span>
+            </h1>
+            <p>
+                <ul>
+                    <li>
+                        ngọt
+                    </li>
+                    <li>
+                        mặn
+                    </li>
+                    <li>
+                        lợ
+                    </li>
+                </ul>
+            </p>
+            <hr />
+            <h1>
+                <span class="mw-headline" id="5" style="font-weight: bolder; font-size: 16px;">Diện tích đã nuôi trồng thủy sản</span>
+                <span class="mw-editsection">
+                    <span class="mw-editsection-bracket">[</span>
+
+                    <span class="mw-editsection-bracket">]</span>
+                </span>
+            </h1>
+            <p>
+                <ul>
+                    <li>
+                        theo loại mặt nước
+                    </li>
+                    <ul>
+                        <li>
+                            ngọt :
+                        </li>
+                        <li>
+                            mặn :
+                        </li>
+                        <li>
+                            lợ   :
+                        </li>
+                    </ul>
+                    <li>
+                        theo hình thức nuôi
+                    </li>
+                </ul>
+            </p>
+            <hr />
+
+            <h1>
+                <span class="mw-headline" id="6" style="font-weight: bolder; font-size: 16px;">Cơ sở sản xuất giống (ngọt,mặn,lợ)</span>
+                <span class="mw-editsection">
+                    <span class="mw-editsection-bracket">[</span>
+
+                    <span class="mw-editsection-bracket">]</span>
+                </span>
+            </h1>
+            <p>
+                <ul>
+                    <li>
+                        ngọt
+                    </li>
+                    <li>
+                        mặn
+                    </li>
+                    <li>
+                        lợ
+                    </li>
+                </ul>
+            </p>
+            <hr />
+
+
+
+
+            <h1>
+                <span class="mw-headline" id="8" style="font-weight: bolder; font-size: 16px;">Hệ thống tổ chức quản lý thủy sản</span>
+                <span class="mw-editsection">
+                    <span class="mw-editsection-bracket">[</span>
+
+                    <span class="mw-editsection-bracket">]</span>
+                </span>
+            </h1>
+            <p>
+                <ul>
+                    <li>
+                        Sở
+                    </li>
+                    <li>
+                        Chi cục
+                    </li>
+                    <li>
+                        phòng
+                    </li>
+                    <li>
+                        Trạm
+                    </li>
+                </ul>
+            </p>
+            <hr />
+
+
+            <h1>
+                <span class="mw-headline" id="9" style="font-weight: bolder; font-size: 16px;">Kết quả sản xuất đã đạt được </span>
+                <span class="mw-editsection">
+                    <span class="mw-editsection-bracket">[</span>
+
+                    <span class="mw-editsection-bracket">]</span>
+                </span>
+            </h1>
+            <p>
+                <ul>
+                    <li>
+                        Tổng sản lượng
+                    </li>
+                    <li>
+                        Sản lượng khai thác
+                    </li>
+                    <li>
+                        Sản lượng nuôi trồng thủy sản
+                    </li>
+                    <li>
+                        Các loại sản phẩm chế biến
+                    </li>
+                </ul>
+            </p>
+            <hr />
+
+            <h1>
+                <span class="mw-headline" id="10" style="font-weight: bolder; font-size: 16px;">Hậu cần</span>
+                <span class="mw-editsection">
+                    <span class="mw-editsection-bracket">[</span>
+
+                    <span class="mw-editsection-bracket">]</span>
+                </span>
+            </h1>
+            <p>
+                <ul>
+                    <li>
+                        Cảng cá
+                    </li>
+                    <li>
+                        Bến cá
+                    </li>
+                    <li>
+                        Khu neo đậu tránh trú bão
+                    </li>
+                    <li>
+                        Khu bảo tồn biển
+                    </li>
+                    <li>
+                        Bảo tồn nội địa
+                    </li>
+                    <li>
+                        Khu bảo vệ nguồn lợi thủy sản
+                    </li>
+                </ul>
+            </p>
+            <hr />
+
+
+        </div>
+
+    }
+
+
+
+
+</div>
+
+
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/modalform")
+}

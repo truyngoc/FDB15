@@ -1,0 +1,97 @@
+﻿@*@model IEnumerable<FDB.Models.SDONVI>*@
+
+@model PagedList.IPagedList<FDB.Models.DM_DONVIHANHCHINH>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Đơn vị hành chính";
+}
+
+
+<h3 class="text-center">Danh mục Đơn vị hành chính</h3>
+
+@using (Html.BeginForm("Index", "DM_DONVIHANHCHINH", FormMethod.Get))
+{
+    <div class="row">
+        <div class="col-md-2 control-label">
+            Mã đơn vị
+        </div>
+        <div class="col-md-4">
+            <input type="text" name="txtMaDonVi" value="@ViewBag.txtMaDonVi" class="form-control" />
+        </div>
+
+        <div class="col-md-2 control-label">
+            Tên đơn vị
+        </div>
+        <div class="col-md-4">
+            <input type="text" name="txtTenDonVi" value="@ViewBag.txtTenDonVi" class="form-control" />
+        </div>
+    </div>
+
+
+    <p class="margin-top-05">
+        <input type="submit" name="SearchButton" value="Tìm kiếm" class="btn btn-primary btn-sm" />
+        @*@Html.ActionLink("Thêm mới", "Register", null, new { @class = "btn btn-primary btn-sm" })*@
+        @*@Html.ActionLink("Create New", "Register")*@
+    </p>
+}
+
+
+<table class="table table-hover table-bordered table-condensed">
+    <tr>
+        <th>
+            STT
+        </th>
+        <th>
+            Mã đơn vị
+        </th>
+        <th>
+            Tên đơn vị
+        </th>
+        <th>
+            Cấp
+        </th>
+        <th>
+            Mã đơn vị cấp trên
+        </th>
+        <th>
+            Tên đơn vị cấp trên
+        </th>
+    </tr>
+
+    @{
+        var iSTT = 1;        
+        iSTT  = (Model.PageNumber == 1) ? iSTT : 
+                                                ((Model.PageNumber - 1) * Model.PageSize) + 1;
+        
+        foreach (var item in Model)
+        {            
+            <tr>
+                <td>
+                    @iSTT
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MA_DV)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TEN_DV)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cap)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MA_DV_CAPTREN)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TEN_DV_CAPTREN)
+                </td>
+            </tr>
+        
+            iSTT++;
+        }
+    }
+</table>
+<div class="pagination-sm">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+    @*Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount*@
+</div>

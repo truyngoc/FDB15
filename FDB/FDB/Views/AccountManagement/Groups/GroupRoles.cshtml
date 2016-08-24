@@ -1,0 +1,41 @@
+﻿@model FDB.Models.SelectGroupRolesViewModel
+@{ ViewBag.Title = "Group Role Permissions"; }
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <br />
+    <h4>Phân quyền cho nhóm: @Html.DisplayFor(model => model.GroupName)</h4>
+    <hr />
+    @using (Html.BeginForm("GroupRoles", "Groups", FormMethod.Post, new { encType = "multipart/form-data", name = "myform" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.GroupName)
+            @Html.HiddenFor(model => model.GroupId)
+            <h5>Chọn các quyền cho nhóm: @Html.DisplayFor(model => model.GroupName)</h5>
+            <hr />
+            <table>
+                <tr>
+                    <th>
+                        Chọn
+                    </th>
+                    <th>
+                        Quyền
+                    </th>
+                </tr>
+                @Html.EditorFor(model => model.Roles)
+            </table>
+            <br />
+            <hr />
+            <div class="form-group">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Cập nhật
+                    </button>
+                    &nbsp;
+                    @Html.ActionLink("Quay lại", "Index", "Groups", null, new { @class = "btn btn-primary btn-sm" })
+                </div>
+            </div>
+        </div>
+    }
+</div>

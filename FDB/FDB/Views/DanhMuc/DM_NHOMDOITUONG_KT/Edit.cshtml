@@ -1,0 +1,63 @@
+﻿@model FDB.Models.DM_NHOMDOITUONG_KT
+
+@{
+    ViewBag.Title = "Sửa  đối tượng khai thác";
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <br />
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.ID)
+
+
+            @*<div class="form-group">
+                <div class="col-md-2 control-label">
+                    Loại khai thác  <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.ID_LOAI_MATNUOC_KT, (SelectList)ViewBag.LOAIMATNUOCs, "--Chọn loại khai thác--", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ID_LOAI_MATNUOC_KT)
+                </div>
+            </div>*@
+
+            <div class="form-group">
+                <div class="col-md-2 control-label">
+                    Tên đối tượng <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.TEN_NHOM, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TEN_NHOM)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-2 control-label">
+                    Mô tả
+                </div>
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.MO_TA, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.MO_TA)
+                </div>
+            </div>
+            <br />
+            <br />
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Cập nhật
+                    </button>
+                    &nbsp;
+                    @Html.ActionLink("Quay lại", "Index", "DM_NHOMDOITUONG_KT", null, new { @class = "btn btn-primary btn-sm" })
+                </div>
+            </div>
+        </div>
+    }
+</div>

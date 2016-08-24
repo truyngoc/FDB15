@@ -1,0 +1,329 @@
+﻿@model FDB.Models.KT_DONGSUA_TAUTHUYEN
+@{
+    ViewBag.Title = "Cơ sở đóng sửa tàu thuyền";
+}
+
+@using (Html.BeginForm("Create", "KT_DONGSUA_TAUTHUYEN", FormMethod.Post, new { @id = "formCreate" }))
+{
+    <div class="container fdb-div-content fdb-div-corner-all">
+
+        @Html.AntiForgeryToken()
+
+
+        <div class="fdb-title-form-24 text-center">
+            Báo cáo cơ sở đóng sửa tàu thuyền
+        </div>
+
+
+        <div class="form-horizontal">
+            <fieldset>
+                <legend class="fdb-scheduler-border">Thông tin chung</legend>
+                <div class="form-group">
+                    <div class="col-md-2 control-label">
+                        Tên cơ sở <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(m => m.TEN_COSO, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.TEN_COSO)
+                    </div>
+                    <div class="col-md-2 control-label">
+                        Tên chủ cơ sở
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(m => m.TEN_CHU_COSO, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.TEN_CHU_COSO)
+                    </div>
+
+
+                </div>
+
+                <div class="form-group">
+
+                    <div class="col-md-2 control-label">
+                        Tỉnh/Thành phố <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.MA_TINHTP, (SelectList)ViewBag.DM_DonVis, string.Empty, new { @class = "form-control", @id = "province_dll" })
+                        @Html.ValidationMessageFor(model => model.MA_TINHTP)
+                    </div>
+                    <div class="col-md-2 control-label">
+                        Quận/huyện 
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.MA_QUANHUYEN, (SelectList)ViewBag.DEFAULT_VALUE_DDL, string.Empty, new { @class = "form-control", @id = "district_dll" })
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-2 control-label">
+                        Phường/xã 
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.MA_PHUONGXA, (SelectList)ViewBag.DEFAULT_VALUE_DDL, string.Empty, new { @class = "form-control", @id = "ward_dll" })
+
+                    </div>
+                    <div class="col-md-2 control-label">
+                        Địa chỉ <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(m => m.DIA_CHI, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.DIA_CHI)
+                    </div>
+
+
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2 control-label">
+                        Điện thoại
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(m => m.DIEN_THOAI, new { @class = "form-control" })
+                    </div>
+
+
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend class="fdb-scheduler-border">Năng lực đóng mới tàu</legend>
+                <div class="form-group">
+                    <div class="col-md-2 control-label">
+                        Số lượng/năm
+                    </div>
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(m => m.SO_TAU_DONG_1_NAM, new { @class = "form-control", @type = "text", @id = "SO_TAU_DONG_1_NAM" })
+                     
+                    </div>
+                    <div class="col-md-3 control-label">
+                        Trọng tải tối đa có thể đóng (bwt)
+                    </div>
+                    <div class="col-md-3">
+                        @*@{Html.EnableClientValidation(false); }*@
+                        @Html.TextBoxFor(m => m.TRONG_TAI_TOIDA_COTHE, new { @class = "form-control", @type = "text", @id = "TRONG_TAI_TOIDA_COTHE",  data_val = false,data_val_number=""  })
+                   
+                    </div>
+
+                </div>
+            </fieldset>
+
+
+            <label id="lblValidateDETAIL" style="color:red"></label>
+            <div class="form-group">
+                <div class="col-md-10  center-table">
+                    <table class="table table-hover table-bordered table-condensed" id="Table1">
+                        <tr>
+                            <th>
+                                Đóng mới vỏ gỗ
+
+                            </th>
+                            <th>
+                                Đóng mới vỏ thép
+                            </th>
+                            <th>
+                                Đóng mới vỏ vật liệu mới
+                            </th>
+                            <th>
+                                Tổng tải trọng (bwt)
+                            </th>
+                            <th>
+                                Sửa chữa
+                            </th>
+                         
+                            <th>
+                                Năm
+                            </th>
+                            <th>
+                                <label class="BtnPlus" style="cursor:pointer"><img src="@Url.Content("~/fonts/button-add-icon.png")" title="Thêm mới" /></label>
+                            </th>
+                        </tr>
+
+                        @Html.Raw(@ViewBag.AddHTML)
+
+                    </table>
+                </div>
+
+
+                <div class="col-md-push-2"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-danger btn-sm" id="btnsubmit">
+                <span class="glyphicon glyphicon-floppy-disk"></span> Cập nhật
+            </button>
+            &nbsp;&nbsp;
+            @Html.ActionLink("Quay lại", "Index", "KT_DONGSUA_TAUTHUYEN", null, new { @class = "btn btn-primary btn-sm" })
+        </div>
+    </div>
+}
+
+<label id="lblMaxID" style="display:none">@ViewBag.sMaxID </label>
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<script src="~/Scripts/jquery-2.1.0.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.10.4.min.js"></script>
+
+<script src="~/Scripts/jquery.maskMoney.js"></script>
+<script src="~/Scripts/jquery.number.js"></script>
+<script src="~/Scripts/jquery.masknumber.js"></script>
+
+<script type="text/javascript">
+
+  
+
+</script>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#SO_TAU_DONG_1_NAM').maskNumber({ integer: true, decimal: '', thousands: '' });
+        $('#TRONG_TAI_TOIDA_COTHE').number(true, 2);
+
+       
+        $("#Table1").find('input[type=text]').number(true, 2);
+
+        var lblID = "#lblDetail_1";
+        var ID = 1;
+
+        if ($('#lblMaxID').html().trim() != "") {
+            ID = parseInt($('#lblMaxID').html().toString());
+        }
+
+        var strID = ID.toString();
+        function addRow() {
+            var html =
+                '<tr>' +
+                '<td><input type="number" min="0" value="" class="form-control" name="txtDONGMOI_VOGO_' + ID + '" /></td>' +
+                '<td><input type="number" min="0" value="" class="form-control" name="txtDONGMOI_VOTHEP_' + ID + '" /></td>' +
+                '<td><input type="number" min="0" value="" class="form-control" name="txtDONGMOI_VOCOMPOSITE_' + ID + '" /></td>' +
+                '<td><input type="text"  value="" class="form-control" name="txtTONG_TAITRONG_' + ID + '" /></td>' +
+                '<td><input type="number" min="0" value="" class="form-control" name="txtSUA_CHUA_' + ID + '" /></td>' +
+                //'<td><input type="number" min="0" value="" class="form-control" name="txtGIAI_BAN_' + ID + '" /></td>' +
+                //'<td><input type="number" min="0" value="" class="form-control" name="txtBAN_TINHKHAC_' + ID + '" /></td>' +
+                '<td><input type="number" min="1900" value="" class="form-control" name="txtNAM_' + ID + '" /></td>' +
+
+                '<td> <label class="BtnPlus" style="cursor:pointer" ><img src="@Url.Content("~/fonts/button-add-icon.png")" title="Thêm mới" /></label>' +
+                '<label class="BtnMinus" id="lblDetail_' + ID + '" style="cursor:pointer"><img src="@Url.Content("~/fonts/DELETE.GIF")" title="Xóa"  /></label>' +
+                '</td>' +
+                '</tr>'
+            $(html).appendTo($("#Table1"));
+            // mask decimal ở đây:
+            //  $("#Table1").find('input').number(true, 2);
+            $("#Table1").find('input[type=text]').number(true, 2);
+            ID++;
+
+        };
+
+        $("#Table1").on("click", ".BtnPlus", addRow);
+
+        $("#Table1").on("click", ".BtnMinus", deleteRow);
+
+
+        function deleteRow() {
+            lblID = $(this).attr('id');
+            lblID = "#" + lblID.toString().trim();
+            if (confirm("Bạn chắc chắn muốn xóa?")) {
+                var par = $(this).parent().parent();
+                par.remove();
+            }
+
+            return false;
+
+        };
+
+        //Validate cac text box, bắt buộc phải nhập 1 trong 7 textbox
+        $('#btnsubmit').click(function () {
+
+            var table1 = $("#Table1");
+            var countAll = 0;
+            var countVal = 0;
+            var vReturn = true;
+            $(table1).find('tr')
+            .each(function () {
+                $(this).find('td input')
+                .each(function () {
+                    var txt = $(this).val();
+                    if (txt == "") {
+                        countVal++;
+                    }
+                    countAll++;
+
+                });
+
+                $(this).find('td input')
+                .each(function () {
+                    if (countVal == 8) {
+                        $(this).css("border", "solid 1px red");
+                        $(this).focus();
+                        vReturn = false;
+                    }
+                    else {
+                        $(this).css("border", "solid 1px #cccccc");
+
+                    }
+
+                });
+                countVal = 0;
+
+            });
+
+            if (countAll == 0) {
+                $('#lblValidateDETAIL').html('(*)Bạn phải nhập danh sách chi tiết!');
+                vReturn = false;
+            }
+            else {
+                $('#lblValidateDETAIL').html('');
+
+            }
+
+            return vReturn;
+        }
+       );
+
+
+        //Load quan huyen, phuong xa:
+
+        // load district by province when change in dropdownlist
+        $("#province_dll").change(function () {
+            $.ajax({
+                url: 'getDistrict',
+                type: 'post',
+                data: {
+                    ma_TinhTP: $('#province_dll').val()
+                }
+            }).done(function (response) {
+                // update district by province
+                var a = '<option value>--Quận/huyện--</option>' + response;   // defaut value
+                $("#district_dll").html(a);
+                // reset ward
+                var b = '<option value></option>'
+                $('#ward_dll').html(b);
+
+            });
+        });
+
+        // load ward by disctrict when change in dropdownlist
+        $("#district_dll").change(function () {
+            $.ajax({
+                url: 'getWard',
+                type: 'post',
+                data: {
+                    ma_QuanHuyen: $('#district_dll').val()
+                }
+            }).done(function (response) {
+                var a = '<option value></option>' + response;   // defaut value
+                $("#ward_dll").html(a);
+            });
+        });
+
+    });
+</script>

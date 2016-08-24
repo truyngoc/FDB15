@@ -1,0 +1,33 @@
+﻿@model FDB.Models.UserPermissionsViewModel
+@{ 
+    ViewBag.Title = "UserPermissions"; 
+}
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <br />
+    <h4>Các quyền có hiệu lực cho người dùng: @Html.DisplayFor(model => model.UserName)</h4>
+    <table class="table">
+        <tr>
+            <th>
+                Quyền
+            </th>
+            <th>
+                Mô tả
+            </th>            
+        </tr>
+        @foreach (var item in Model.Roles)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoleName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+            </tr>
+        }
+    </table>
+    <div class="form-group">
+        @Html.ActionLink("Quay lại", "Index", "Account", null, new { @class = "btn btn-primary btn-sm" })
+    </div>
+</div>

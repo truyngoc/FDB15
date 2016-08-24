@@ -1,0 +1,59 @@
+﻿@model FDB.Models.DM_DOITUONG_NUOI_MANLO
+
+@{
+    ViewBag.Title = "Thêm mới đối tượng nuôi nước mặn lợ";
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <br />
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true)
+
+            <div class="row">
+                <div class="col-md-2 control-label">
+                    Loại hình thức <label style="color:red;">(*)</label>
+
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.LOAI_DOI_TUONG, (SelectList)ViewBag.HINHTHUCNUOIs, "Chọn loại hình thức nuôi", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.LOAI_DOI_TUONG)
+                </div>
+
+
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-2 control-label">
+                    Tên đối tượng <label style="color:red;">(*)</label>
+
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.TEN_DOI_TUONG, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TEN_DOI_TUONG)
+                </div>
+
+
+            </div>
+
+
+            <br />
+            <br />
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Cập nhật
+                    </button>
+                    &nbsp;
+                    @Html.ActionLink("Quay lại", "Index", "DM_DOITUONG_NUOI_MANLO", null, new { @class = "btn btn-primary btn-sm" })
+                </div>
+            </div>
+        </div>
+    }
+</div>

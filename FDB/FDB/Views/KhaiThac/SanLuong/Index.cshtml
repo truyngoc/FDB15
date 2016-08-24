@@ -1,0 +1,144 @@
+﻿@{
+    ViewBag.Title = "Sản lượng";
+}
+
+<h3 class="text-center">Thu thập thông tin sản lượng</h3>
+<br />
+
+<div class="container">
+
+    @using (Html.BeginForm("Index", "SanLuong", FormMethod.Get))
+    {
+        <div class="row">
+            <div class="col-md-2 control-label">
+                Đối tượng khai thác
+            </div>
+            <div class="col-md-4">
+                <select class="form-control">
+                    <option value="">Tôm</option>
+                    <option value="">Mực ống</option>
+                    <option value="">Mực nang</option>
+                    <option value="">Cá chọn</option>
+                    <option value="">Cá xô</option>
+                    <option value="">...</option>
+                </select>
+            </div>
+
+            <div class="col-md-2 control-label">
+                Nghề khai thác
+            </div>
+            <div class="col-md-4">
+                <select class="form-control">
+                    <option value="">Kéo</option>
+                    <option value="">Vây</option>
+                    <option value="">Rê</option>
+                    <option value="">Câu</option>
+                    <option value="">Chụp mực</option>
+                    <option value="">KT Cá ngừ ĐD</option>
+                    <option value="">Khác</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row margin-top-05">
+            <div class="col-md-2 control-label">
+                Tháng
+            </div>
+            <div class="col-md-4">
+                <input type="text" value="09" class="form-control" />
+            </div>
+            <div class="col-md-2 control-label">
+                Năm
+            </div>
+            <div class="col-md-4">
+                <input type="text" value="2015" class="form-control" />
+            </div>
+        </div>
+        
+        <div class="row margin-top-05">
+            <div class="col-md-2 control-label">
+                Đơn vị khai thác
+            </div>
+            <div class="col-md-4">
+                <select class="form-control">
+                    <option value="HT">Thanh Hóa</option>
+                    <option value="TH">Nghệ An</option>
+                    <option value="TH">Hà Tĩnh</option>
+                    <option value="TH">Bình Định</option>
+                    <option value="TH">Phú Yên</option>
+                    <option value="TH">Khánh Hòa</option>
+                    <option value="TH">Sóc Trăng</option>
+                    <option value="TH">Cà Mau</option>
+                </select>
+            </div>
+            <div class="col-md-2 control-label">
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+
+        
+        <p class="margin-top-05">
+            <input type="submit" value="Tìm kiếm" class="btn btn-primary btn-sm" />
+            @Html.ActionLink("Thêm mới", "Create", null, new { @class = "btn btn-primary btn-sm" })
+        </p>
+    }
+
+
+    <table class="table table-hover table-bordered table-condensed">
+        <tr>
+            <th>
+                Đơn vị khai thác
+            </th>
+            <th>
+                Tháng
+            </th>
+            <th>
+                Năm
+            </th>
+            <th>
+                Người nhập
+            </th>
+            <th>
+                Ngày nhập
+            </th>
+            <th></th>
+        </tr>
+        @{
+            for (var i = 0; i < 5; i++)
+            {
+                <tr>
+                    <td>
+                        Thanh hóa
+                    </td>
+                    <td>
+                        9
+                    </td>
+                    <td>
+                        2015
+                    </td>
+                    <td>
+                        TruyBN
+                    </td>
+                    <td>
+                        30/09/2015
+                    </td>
+                    <td>
+                        <a href="#">
+                            <img src="@Url.Content("~/fonts/btn-details.png")" />
+                        </a>
+
+                        <a href="#">
+                            <img src="@Url.Content("~/fonts/btn-delete.png")" />
+                        </a>
+                    </td>
+                </tr>
+            }
+
+        }
+
+    </table>
+
+
+
+</div>

@@ -1,0 +1,237 @@
+﻿@{
+    ViewBag.Title = "Nhập thông tin Điều tra BAC từ file excel";
+}
+
+
+<style type="text/css">
+    .btn-file {
+        position: relative;
+        overflow: hidden;
+    }
+
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            background: red;
+            cursor: inherit;
+            display: block;
+        }
+
+    input[readonly] {
+        background-color: white !important;
+        cursor: text !important;
+    }
+</style>
+
+@using (Html.BeginForm("ImportExcel", "KT_BAC", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+
+    <div class="container fdb-div-content fdb-div-corner-all">
+        <div class="row">
+
+            <div class="col-md-10">
+                <h4>Nhập thông tin Điều tra BAC từ file excel</h4>
+            </div>
+        </div>
+        <br />
+
+        <div class="row margin-top-05">
+            <div class="col-md-2 control-label">
+
+
+            </div>
+
+            <div class="col-md-10">
+
+            </div>
+        </div>
+        @*<label style="color:blue;">@ViewBag.ThongBao</label>*@
+        <div class="row margin-top-05">
+
+            <div class="col-md-10">
+                @Html.Raw(@ViewBag.ThongBao)
+            </div>
+            <br />
+
+        </div>
+
+
+        <fieldset class="fdb-scheduler-border">
+            <legend class="fdb-scheduler-border"><b>Hướng dẫn</b></legend>
+
+            <div class="helpbox_visible block-content margin-top-05">
+                <ul>
+
+                    <li>Tải file mẫu Excel @Html.ActionLink("Tại đây", "KT_BACDownLoadFile", "KT_BAC", null, new { @style = "font-size:16px;font-weight:bold" })</li>
+                    <li>Nhập dữ liệu vào file Excel mẫu vừa tải</li>
+                    <li>Chọn file Excel vừa nhập dữ liệu</li>
+                    <li>Click nút "Đọc file Excel"</li>
+                    <li>
+                        Chú ý: <br />
+                       
+                        + Những cột màu vàng là bắt buộc nhập
+                    </li>
+                </ul>
+            </div>
+            <br />
+
+        </fieldset>
+        <div class="form-horizontal">
+            @*@Html.ValidationSummary(true)*@
+
+            <div class="row">
+                <div class="col-md-2 control-label" style="font-size:12px; font-weight:bold">
+
+                    Chọn file <label style="color:red;">(*)</label>
+                </div>
+                <div class="col-md-10">
+                    @*<input type="file" name="fileUpload" id="fileUpload" style="width:500px" class="btn btn-default btn-file" />*@
+
+                    <div class="col-lg-6 col-sm-6 col-12">
+                        <div class="input-group">
+                            <span style="cursor:pointer" class="input-group-btn">
+                                <span style="cursor:pointer" class="btn btn-primary btn-file">
+                                    Chọn file&hellip; <input type="file" style="cursor:pointer" name="fileUpload" id="fileUpload">
+                                </span>
+                            </span>
+                            <input type="text" class="form-control" style="height:34px" readonly>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <br />
+
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+
+
+                </div>
+
+                @*<div class="col-md-10">
+                    &nbsp;&nbsp;&nbsp; @Html.ActionLink("Tải file mẫu Excel", "KT_BACDownLoadFile", "KT_BAC", null, new { @class = "btn btn-primary btn-sm" })
+                </div>*@
+            </div>
+            @*<div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+
+                        Chọn sheet <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-10">
+                        <select id="ddlSheet" style="width:200px; height:25px"></select>
+                    </div>
+                </div>*@
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+
+
+                </div>
+
+                <div class="col-md-10">
+
+                </div>
+            </div>
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+
+
+                </div>
+
+                <div class="col-md-10">
+
+                </div>
+            </div>
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+
+
+                </div>
+
+                <div class="col-md-10">
+
+                </div>
+            </div>
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+
+
+                </div>
+
+                <div class="col-md-10">
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+
+            <button type="submit" class="btn btn-danger btn-sm" id="btnsubmit" onclick="return CheckFileName();">
+                <span class="glyphicon glyphicon-floppy-disk"></span> Đọc file excel
+            </button>
+            &nbsp;&nbsp;
+            @Html.ActionLink("Quay lại", "Index", "KT_BAC", null, new { @class = "btn btn-primary btn-sm" })
+        </div>
+    </div>
+
+    <input type="text" style="display:none" value="@ViewBag.success" />
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<script src="~/Scripts/jquery-2.1.0.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.10.4.min.js"></script>
+
+<script src="~/Scripts/jquery.maskMoney.js"></script>
+<script src="~/Scripts/jquery.number.js"></script>
+
+<script type="text/javascript">
+    function CheckFileName() {
+        var fileName = document.getElementById("fileUpload").value
+        if (fileName == "") {
+            alert("Hãy chọn file excel template trước khi đọc!");
+            return false;
+        }
+        else if (fileName.split(".")[fileName.split(".").length - 1].toUpperCase() == "XLS" || fileName.split(".")[[fileName.split(".").length - 1]].toUpperCase() == "XLSX")
+            return true;
+        else {
+            alert("Hãy chọn file excel!");
+            return false;
+        }
+        return true;
+    }
+
+    $(document).on('change', '.btn-file :file', function () {
+        var input = $(this),
+            numFiles = input.get(0).files ? input.get(0).files.length : 1,
+            label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+        input.trigger('fileselect', [numFiles, label]);
+    });
+
+    $(document).ready(function () {
+        $('.btn-file :file').on('fileselect', function (event, numFiles, label) {
+
+            var input = $(this).parents('.input-group').find(':text'),
+                log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+            if (input.length) {
+                input.val(log);
+            } else {
+                if (log) alert(log);
+            }
+
+        });
+    });
+</script>

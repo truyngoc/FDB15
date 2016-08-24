@@ -1,0 +1,303 @@
+﻿@model FDB.Models.NT_THIETHAI
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+
+
+
+@using (Html.BeginForm("Edit", "NT_THIETHAI", FormMethod.Post))
+{
+    <div class="container fdb-div-content fdb-div-corner-all">
+        @Html.AntiForgeryToken()
+
+
+        <div class="form-horizontal">
+           
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.ID)
+            <br />
+
+            <div class="col-md-6">
+                <fieldset class="fdb-scheduler-border">
+                    <legend class="fdb-title-form text-center">Báo cáo thiệt hại do thiên tai, dịch bệnh nuôi trồng thủy sản</legend>
+
+
+                    <div class="form-group">
+                        <div class=" control-label col-md-4 text-left">Tỉnh/Thành phố</div>
+                        <div class="col-md-8">
+                            @Html.DropDownListFor(model => model.MA_TINHTP, (SelectList)ViewBag.DTINHTPs, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.MA_TINHTP)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="control-label col-md-4 text-left">Tháng thiệt hại</div>
+                        <div class="col-md-8">
+                            @Html.DropDownListFor(m => m.THANG, new List<SelectListItem>
+                    {                   new SelectListItem() {Text = "", Value=""},
+                                        new SelectListItem() {Text = "Tháng 1", Value="1"},
+                                        new SelectListItem() {Text = "Tháng 2", Value="2"},
+                                        new SelectListItem() {Text = "Tháng 3", Value="3"},
+                                        new SelectListItem() {Text = "Tháng 4", Value="4"},
+                                        new SelectListItem() {Text = "Tháng 5", Value="5"},
+                                        new SelectListItem() {Text = "Tháng 6", Value="6"},
+                                        new SelectListItem() {Text = "Tháng 7", Value="7"},
+                                        new SelectListItem() {Text = "Tháng 8", Value="8"},
+                                        new SelectListItem() {Text = "Tháng 9", Value="9"},
+                                        new SelectListItem() {Text = "Tháng 10", Value="10"},
+                                        new SelectListItem() {Text = "Tháng 11", Value="11"},
+                                        new SelectListItem() {Text = "Tháng 12", Value="12"}
+                    }, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.THANG)
+                            <span id="lblValidateTHANG" style="color:red;display:none"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="control-label col-md-4 text-left">
+                            Năm thiệt hại<label style="color:red;">(*)</label>
+                        </div>
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(m => m.NAM, new { @class = "form-control", data_val_number = "Năm phải là số" })
+                            @Html.ValidationMessageFor(model => model.NAM)
+                            <span id="lblValidateNAM" style="color: #b94a48; display: none"></span>
+                        </div>
+                    </div>
+                   
+
+                    <div class="form-group">
+                        <div class="control-label col-md-4 text-left">Nguyên nhân thiệt hại<label style="color:red;">(*)</label></div>
+                        <div class="col-md-8">
+
+                            <input type="checkbox" value="1" id="DO_MOITRUONG" name="DO_MOITRUONG" /> Do môi trường
+                            <input type="checkbox" value="2" id="DO_DICHBENH" name="DO_DICHBENH" /> Do dịch bệnh
+
+                            <span id="lblValidateNGUYENNHAN" style="color: #b94a48; display: none"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label col-md-4 text-left">Nguyên nhân cụ thể</div>
+                        <div class="col-md-8">
+                            @Html.TextAreaFor(model => model.NGUYENNHAN, new { @class = "form-control fdb_textarea", @rows = "20", @cols = "50" })
+                            @Html.ValidationMessageFor(model => model.NGUYENNHAN)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="control-label col-md-4 text-left">Đối tượng<label style="color:red;">(*)</label></div>
+                        <div class="col-md-8">
+                            @Html.DropDownListFor(model => model.DM_DOITUONG_NUOI_THIETHAIID, (SelectList)ViewBag.DM_DOITUONG_NUOIs, "--Chọn đối tượng nuôi--", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.DM_DOITUONG_NUOI_THIETHAIID)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label col-md-4 text-left">Số ngày nuôi</div>
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(model => model.SONGAYNUOI, new { @class = "form-control", data_val_number = "Số ngày nuôi phải là số." })
+                            @Html.ValidationMessageFor(model => model.SONGAYNUOI)
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <div class="control-label col-md-4 text-left">Diện tích thiệt hại (ha)<label style="color:red;">(*)</label></div>
+
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(model => model.DIENTICH_THIETHAI, new { @class = "form-control", @step = "1", data_val_number = "Diện tích thiệt hại phải là số." })
+                            @Html.ValidationMessageFor(model => model.DIENTICH_THIETHAI)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="control-label col-md-4 text-left">Sản lượng thiệt hại (tấn)</div>
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(model => model.SANLUONG_THIETHAI, new { @class = "form-control", step = "1", data_val_number = "Sản lượng thiệt hại phải là số." })
+                            @Html.ValidationMessageFor(model => model.SANLUONG_THIETHAI)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="control-label col-md-4 text-left">Tỷ lệ thiệt hại (%)<label style="color:red;">(*)</label></div>
+                        <div class="col-md-8">
+                            @Html.DropDownListFor(model => model.DTYLE_THIETHAIID, (SelectList)ViewBag.DTYLE_THIETHAIs, "--Chọn tỷ lệ thiệt hại--", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.DTYLE_THIETHAIID)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="control-label col-md-4 text-left">Thiệt hại ước tính (VNĐ)</div>
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(model => model.THIETHAI_UOCTINH, new { @class = "form-control", data_val_number = "Thiệt hại ước tính phải là số." })
+                            @Html.ValidationMessageFor(model => model.THIETHAI_UOCTINH)
+                        </div>
+                    </div>
+
+              
+
+                </fieldset>
+
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-danger btn-sm" id="btnsubmit">
+                <span class="glyphicon glyphicon-floppy-disk"></span> Cập nhật
+            </button>
+            &nbsp;
+            @Html.ActionLink("Quay lại", "Index", "NT_THIETHAI", null, new { @class = "btn btn-primary btn-sm" })
+        </div>
+    </div>
+
+}
+
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/additional-methods.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js" type="text/javascript"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/jquery.maskMoney.js"></script>
+<script src="~/Scripts/jquery.number.js"></script>
+<script src="~/Scripts/datepicker.js"></script>
+<script src="~/Scripts/moment.js"></script>
+<script src="~/Scripts/CustomValidation.js"></script>
+
+<script type="text/javascript">
+    $("#THOIGIAN").datepicker({
+        changeMonth: true,
+        changeYear: true,
+
+        dateFormat: 'dd/mm/yy'
+    });
+
+    $("#THIETHAI_UOCTINH").number(true, 0, '.', ',');
+
+    $("#THOIGIAN").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+
+    var model = @Html.Raw(Json.Encode(@Model))
+
+   // @*var DO_MOITRUONG = @{@Html.Raw(Json.Encode(@Model.DO_MOITRUONG));}*@
+
+
+
+    if (model.DO_MOITRUONG == "1")
+    {
+        $("#DO_MOITRUONG").prop("checked", true);
+    }
+    else
+    {
+        $("#DO_MOITRUONG").prop("checked", false);
+    }
+
+
+
+
+    if (model.DO_DICHBENH == "2")
+    {
+        $("#DO_DICHBENH").prop("checked", true);
+    }
+    else
+    {
+        $("#DO_DICHBENH").prop("checked", false);
+    }
+
+    var validateNGAYNHAP = true;
+    $('#btnsubmit').click(function () {
+
+        var currentTime = new Date();
+        var currentMonth = currentTime.getMonth() + 1;
+        var currentYear = currentTime.getFullYear();
+
+        var lblValidateTHANG = $('#lblValidateTHANG');
+        var lblValidateNAM = $('#lblValidateNAM');
+        var lblValidateNGUYENNHAN = $('#lblValidateNGUYENNHAN');
+        lblValidateNAM.html('');
+        lblValidateTHANG.html('');
+        lblValidateNGUYENNHAN.html('');
+
+
+        var txtTHANG = $('#THANG').val();
+        var txtNAM = $('#NAM').val();
+        if (txtNAM > currentYear) {
+            lblValidateNAM.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+            lblValidateNAM.html('(*)Năm không được lớn hơn năm hiện tại');
+            lblValidateTHANG.html('');
+            lblValidateTHANG.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+            $('#NAM').focus();
+            return false;
+        }
+        if (txtNAM == currentYear && txtTHANG > currentMonth) {
+            lblValidateTHANG.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+            lblValidateTHANG.html('(*)Tháng không được lớn hơn tháng hiện tại');
+            lblValidateNAM.html('');
+            lblValidateNAM.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+            $('#THANG').focus();
+            return false;
+        }
+
+
+
+        //if ($('input:checkbox', this).is(':checked') )
+        //{
+        //    return true;
+        //}
+        //else
+        //{
+        //    //alert('Please select something!');
+        //    lblValidateNGUYENNHAN.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+        //    lblValidateNGUYENNHAN.html('(*)Nguyên nhân thiệt hại bắt buộc nhập');
+        //    lblValidateNGUYENNHAN.html('');
+        //    lblValidateNGUYENNHAN.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+        //    //$("input[type='checkbox']").focus();
+        //    return false;
+        //}
+
+
+    }
+     );
+
+
+
+    $(document).ready(function () {
+        // load district by province when change in dropdownlist
+        $("#province_dll").change(function () {
+            $.ajax({
+                url: '@Url.Action("getDistrict","NT_THIETHAI")',
+                type: 'post',
+                data: {
+                    ma_TinhTP: $('#province_dll').val()
+                }
+            }).done(function (response) {
+                // update district by province
+                var a = '<option value></option>' + response;   // defaut value
+                $("#district_dll").html(a);
+
+                // reset ward
+                var b = '<option value></option>'
+                $('#ward_dll').html(b);
+            });
+        });
+
+
+        // load ward by disctrict when change in dropdownlist
+        $("#district_dll").change(function () {
+            $.ajax({
+                url: '@Url.Action("getWard","NT_THIETHAI")',
+                type: 'post',
+                data: {
+                    ma_QuanHuyen: $('#district_dll').val()
+                }
+            }).done(function (response) {
+                var a = '<option value></option>' + response;   // defaut value
+                $("#ward_dll").html(a);
+            });
+        });
+    });
+
+</script>

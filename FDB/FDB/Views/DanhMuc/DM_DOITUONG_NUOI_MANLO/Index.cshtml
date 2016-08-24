@@ -1,0 +1,154 @@
+﻿@model FDB.Models.ViewModelSearchDM_DOITUONG_NUOI_MANLO
+
+
+
+
+@using PagedList.Mvc;
+
+@using FDB.Helpers;
+
+@{
+    ViewBag.Title = "Danh mục đối tượng nuôi nước mặn lợ";
+}
+
+<script>
+    $(document).ready(function () {
+        var url = "";
+
+        $("#dialog-delete-confirm").dialog({
+            autoOpen: false,
+            resizable: false,
+            height: 170,
+            width: 350,
+            show: { effect: 'drop', direction: "up" },
+            modal: true,
+            draggable: true,
+            open: function (event, ui) {
+                $(".ui-dialog-titlebar-close").hide();
+            },
+            buttons: {
+                "OK": function () {
+                    $(this).dialog("close");
+                    window.location.href = url;
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        // hien thi confirm dialog khi click delete tren grid
+        $(".lnkDelete").click(function () {
+            url = $(this).attr('href');
+            $("#dialog-delete-confirm").dialog('open');
+
+            return false;
+        });
+
+    });
+</script>
+
+<div id="dialog-delete-confirm" style="display: none">
+    <p>
+        <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+        Bạn có chắc chắn muốn xóa không?
+    </p>
+</div>
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <h3 class="text-center fdb-title-search-form">Danh sách đối tượng nuôi nước mặn lợ</h3>
+    <br />
+
+    <div class="container">
+        @using (Html.BeginForm("Index", "DM_DOITUONG_NUOI_MANLO", FormMethod.Get))
+        {
+            <fieldset class="fdb-scheduler-border">
+
+                <div class="row">
+                    <div class="col-md-2 control-label">
+                        Loại hình thức
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.LOAI_DOI_TUONG, (SelectList)ViewBag.HINHTHUCNUOIs, "--Chọn loại hình thức--", new { @class = "form-control" })
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        Tên đối tượng
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.TEN_DOI_TUONG, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <br />
+                <p class="margin-top-05">
+
+
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <span class="glyphicon glyphicon-search"></span> Tìm kiếm
+                    </button>
+
+                    @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-plus'></span> Thêm mới", "Thêm mới", "Create", "DM_DOITUONG_NUOI_MANLO", null, htmlAttributes: new { @class = "btn btn-primary btn-sm" })
+
+
+                </p>
+            </fieldset>
+        }
+        <fieldset class="fdb-scheduler-border">
+            <legend class="fdb-scheduler-search-border">Kết quả tìm kiếm</legend>
+            <label id="lblMessageTotal" style="color:blue; font-weight:bold">Tổng số bản ghi: @ViewBag.TotalRow</label>
+            <table class="table table-hover table-bordered table-condensed">
+                <tr>
+                    <th>
+                        Tên đối tượng
+                    </th>
+                    <th>
+                        Loại hình thức
+                    </th>
+
+
+                    <th></th>
+                </tr>
+                @{
+                    if (Model.SearchResults != null)
+                    {
+                        foreach (var item in Model.SearchResults)
+                        {
+
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TEN_DOI_TUONG)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DM_HINHTHUC_NUOI.TEN_HINH_THUC)
+                                </td>
+
+
+                                <td class="text-center">
+
+                                    <a href="@Url.Action("Edit", "DM_DOITUONG_NUOI_MANLO", new { id = item.ID })">
+                                        <img src="@Url.Content("~/fonts/grid-edit-icon.png")" title="Sửa" />
+                                    </a>
+
+                                    <a href="@Url.Action("Delete", "DM_DOITUONG_NUOI_MANLO", new { id = item.ID })" class="lnkDelete">
+                                        <img src="@Url.Content("~/fonts/grid-delete-icon1.gif")" title="Xóa" />
+                                    </a>
+
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+
+            </table>
+        </fieldset>
+        <br />
+
+
+        <br />
+
+
+        @Html.PagedListPager(Model.SearchResults, page => Url.Action("Index", new { page, Model.LOAI_DOI_TUONG, Model.TEN_DOI_TUONG }))
+
+    </div>
+</div>

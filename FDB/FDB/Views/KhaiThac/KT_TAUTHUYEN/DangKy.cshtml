@@ -1,0 +1,311 @@
+﻿@model FDB.Models.KT_TAUTHUYEN
+
+@{
+    ViewBag.Title = "Thu thập thông tin tàu thuyền";
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script src="~/Scripts/datepicker.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/jquery.maskMoney.js"></script>
+<script src="~/Scripts/jquery.number.js"></script>
+
+<script type="text/javascript">
+
+    // Voi jQuery 1.9 > thi chi validate gia tri trong active tab
+    // Muon validate nhung gia tri trong cac tab khac nua thi dung jquery.validate 1.8.1 or 1.7
+
+    function getIndexForId(tabsDivId, searchedId) {
+        var index = -1;
+        var i = 0, els = $("#" + tabsDivId).find("a");
+        var l = els.length, e;
+        while (i < l && index == -1) {
+            e = els[i];
+            if ("#" + searchedId == $(e).attr('href')) {
+                index = i;
+            }
+            i++;
+        };
+        return index;
+    }
+
+    function calculateTotal(src) {
+        var sum = 0,
+            tbl = $(src).closest('table');
+
+        tbl.find('input.form-control.power').each(function (index, elem) {
+            var val = parseFloat($(elem).val());
+            if (!isNaN(val)) {
+                sum += val;
+            }
+        });
+
+        //tbl.find('input.form-control.totalPower').html(sum.toFixed(2));
+        //document.getElementById("KT_TONG_CONG_SUAT").value = sum;
+        $('input.form-control.totalPower').val(sum);
+    }
+
+    $(document).ready(function () {
+        $("#tabs").tabs({
+            show: { effect: "fade", duration: 800 },
+        });
+
+        $("#myForm").submit(function () {
+            // get id of tab contain input-validation
+            var id = $("#myForm .input-validation-error").closest(".ui-tabs-panel").get(0).id;
+
+            // get index of tab contain input-validation
+            var index = getIndexForId("tabs", id);
+
+            // select that tab for input valid
+            $('#tabs').tabs('option', 'active', index);
+        });
+
+
+        // calculate total power
+        $('input.form-control.power').keyup(function () {
+            calculateTotal(this);
+        });
+
+
+        // load district by province when change in dropdownlist
+        $("#province_dll").change(function () {
+            $.ajax({
+                url: 'getDistrict',
+                type: 'post',
+                data: {
+                    ma_TinhTP: $('#province_dll').val()
+                }
+            }).done(function (response) {
+                // update district by province
+                var a = '<option value></option>' + response;   // defaut value
+                $("#district_dll").html(a);
+
+                // reset ward
+                var b = '<option value></option>'
+                $('#ward_dll').html(b);
+            });
+        });
+
+
+        // load ward by disctrict when change in dropdownlist
+        $("#district_dll").change(function () {
+            $.ajax({
+                url: 'getWard',
+                type: 'post',
+                data: {
+                    ma_QuanHuyen: $('#district_dll').val()
+                }
+            }).done(function (response) {
+                var a = '<option value></option>' + response;   // defaut value
+                $("#ward_dll").html(a);
+            });
+        });
+
+
+        // mask edit cho truong ngay thang (su dung jquery.maskedinput)
+        $("#NGAY_DK").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#NGAY_DKTCQG").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#NGAY_KIEM_TRA").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#NGAY_CAP_SO_DANG_KIEM").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#HAN_DANG_KIEM").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#NGAY_CAP_GIAY_VSTP").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#KT_NGAY_PD_TK").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+
+        // cho phep nhap so thap phan (su dung jquery.number)
+        $("#KT_CHIEU_DAI").number(true, 2, '.', '');
+        $("#KT_CHIEU_RONG").number(true, 2, '.', '');
+        $("#KT_CHIEU_CAO").number(true, 2, '.', '');
+        $("#KT_MAN_KHO").number(true, 2, '.', '');
+        $("#KT_MON_NUOC").number(true, 2, '.', '');
+        $("#KT_TAN_DANG_KY").number(true, 0, '.', '');
+
+    });
+
+</script>
+
+
+
+@using (Html.BeginForm("Create", "KT_TAUTHUYEN", FormMethod.Post, new { @id = "myForm" }))
+{
+    <div class="container fdb-div-content fdb-div-corner-all">
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true)
+
+
+            <h3 class="text-center fdb-title-search-form">ĐĂNG KÝ TÀU CÁ</h3>
+            
+
+            <div class="fdb-title-form-14 margin-top-05">
+                Thông tin tàu
+            </div>
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    Tên tàu
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                    Hô hiệu tàu
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+
+            
+
+
+
+
+            <div class="fdb-title-form-14 margin-top-05">
+                Thông tin đăng ký
+            </div>
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    Số đăng ký
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                    Nghề khai thác
+                </div>
+                <div class="col-md-4">
+                    <select class="form-control">
+                        <option value=""></option>
+                        <option value="">Vây</option>
+                        <option value="">Rê</option>
+                        <option value="">Lưới</option>
+                        <option value="">Kéo</option>
+                        <option value="">Chụp</option>
+                        <option value="">Khác</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    Nơi đăng ký
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+
+            </div>
+
+            <div class="fdb-title-form-14 margin-top-05">
+                Đặc điểm kỹ thuật
+            </div>
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    Chiều dài/rộng/cao (m)
+                </div>
+                <div class="col-md-1">
+                    <input type="text" class="form-control" />
+                </div>
+                <div class="col-md-1">
+                    <input type="text" class="form-control" />
+                </div>
+                <div class="col-md-1">
+                    <input type="text" class="form-control" />
+                </div>
+                <div class="col-md-1">
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                    Vật liệu tàu
+                </div>
+                <div class="col-md-4">
+                    <select class="form-control">
+                        <option value=""></option>
+                        <option value="">Gỗ</option>
+                        <option value="">Thép</option>
+                        <option value="">Composite</option>
+                    </select>
+                </div>
+            </div>
+            
+
+
+
+            <div class="fdb-title-form-14 margin-top-05">
+                Thông tin máy tàu
+            </div>
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    Số máy
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                    Công suất máy chính (CV)
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+
+
+            <div class="fdb-title-form-14 margin-top-05">
+                Thông tin chủ tàu
+            </div>
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    Chủ tàu
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                    Địa chỉ
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label text-left">
+                    Đại diện chủ tàu
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="col-md-2 control-label text-left">
+                    Địa chỉ
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+
+        </div>
+        <br />
+    </div>
+    <br />
+
+    <div class="row">
+        <div class="col-md-12">
+            @*<input type="submit" value="Cập nhật" class="btn btn-info btn-sm" />*@
+            <button type="submit" class="btn btn-danger btn-sm">
+                <span class="glyphicon glyphicon-floppy-disk"></span> Cập nhật
+            </button>
+            &nbsp;&nbsp;
+            @Html.ActionLink("Quay lại", "Index", null, new { @class = "btn btn-primary btn-sm" })
+        </div>
+
+    </div>
+}

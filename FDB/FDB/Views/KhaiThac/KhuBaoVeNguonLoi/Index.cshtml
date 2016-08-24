@@ -1,0 +1,102 @@
+﻿@{
+    ViewBag.Title = "Khu bảo vệ nguồn lợi thủy sản";
+}
+
+<h3 class="text-center">Khu bảo vệ nguồn lợi thủy sản</h3>
+<hr />
+
+<div class="container">
+    @using (Html.BeginForm("Index", "KhuBaoVeNguonLoi", FormMethod.Get))
+    {
+        <div class="row">
+            <div class="col-md-2 control-label">
+                Tên khu bảo vệ nguồn lợi TS
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" />
+            </div>
+
+            <div class="col-md-2 control-label">
+                
+            </div>
+            <div class="col-md-4">
+                
+            </div>
+        </div>
+
+        <div class="row margin-top-05">
+            <div class="col-md-2 control-label">
+                Địa chỉ
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" />
+            </div>
+            <div class="col-md-2 control-label">
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+        
+
+        <p class="margin-top-05">
+            <input type="submit" value="Tìm kiếm" class="btn btn-primary btn-sm" />
+            @Html.ActionLink("Thêm mới", "Create", null, new { @class = "btn btn-primary btn-sm" })
+            @Html.ActionLink("Xuất Excel", "ExportExcel", null, new { @class = "btn btn-primary btn-sm" })
+        </p>
+    }
+
+
+    <table class="table table-hover table-bordered table-condensed">
+        <tr>
+            <th>
+                Tên khu bảo vệ nguồn lợi
+            </th>
+            <th>
+                Địa chỉ
+            </th>
+            <th>
+                Tổng diện tích
+            </th>
+            <th>
+                Thời gian cấm đánh bắt
+            </th>
+            <th>
+                Đối tượng cấm khai thác
+            </th>
+            <th></th>
+        </tr>
+        @{
+            for (var i = 0; i < 5; i++)
+            {
+                <tr>
+                    <td>
+                        Nam Du
+                    </td>
+                    <td>
+                        Cam Ranh, Khánh Hòa
+                    </td>
+                    <td>
+                        15000
+                    </td>
+                    <td>
+                        01/01/2015 đến 30/12/2015
+                    </td>
+                    <td>
+                        Tôm, cua, ghẹ, mực
+                    </td>
+                    <td>
+                        <a href="#">
+                            <img src="@Url.Content("~/fonts/btn-details.png")" />
+                        </a>
+
+                        <a href="#">
+                            <img src="@Url.Content("~/fonts/btn-delete.png")" />
+                        </a>
+                    </td>
+                </tr>
+            }
+
+        }
+
+    </table>
+</div>

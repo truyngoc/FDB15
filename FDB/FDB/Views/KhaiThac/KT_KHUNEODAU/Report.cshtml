@@ -1,0 +1,109 @@
+﻿@model FDB.Models.ViewModelSearchKT_KHUNEODAU
+@using PagedList.Mvc;
+@using FDB.Helpers;
+
+<link rel="stylesheet" type="text/css" href="~/Content/PagedList.css" />
+
+@{
+    ViewBag.Title = "Report";
+}
+
+
+
+<script src="~/Scripts/datepicker.js"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script>
+    $(document).ready(function () {
+        var url = "";
+
+        $("#dialog-delete-confirm").dialog({
+            autoOpen: false,
+            resizable: false,
+            height: 170,
+            width: 350,
+            show: { effect: 'drop', direction: "up" },
+            modal: true,
+            draggable: true,
+            open: function (event, ui) {
+                $(".ui-dialog-titlebar-close").hide();
+            },
+            buttons: {
+                "OK": function () {
+                    $(this).dialog("close");
+                    window.location.href = url;
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        // hien thi confirm dialog khi click delete tren grid
+        $(".lnkDelete").click(function () {
+            url = $(this).attr('href');
+            $("#dialog-delete-confirm").dialog('open');
+
+
+
+            return false;
+        });
+
+
+        $("#TU_NGAY").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#DEN_NGAY").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+    });
+</script>
+<div class="container fdb-div-content fdb-div-corner-all">
+    <h3 class="text-center">BÁO CÁO TÌNH HÌNH KHU NEO ĐẬU TRÁNH TRÚ BÃO</h3>
+    <br />
+    <div class="container">
+        @using (Html.BeginForm("GetReport", "KT_KHUNEODAU", FormMethod.Get))
+        {
+            <div class="row">
+                <div class="col-md-2 control-label">
+                   Tỉnh/TP
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.MA_TINHTP, (SelectList)ViewBag.DTINHTPs, "--Chọn tỉnh/TP--", new { @class = "form-control" })
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Tên khu neo đậu 
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.TEN_KHUNEODAU, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TEN_KHUNEODAU)
+                </div>
+            </div>
+
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">
+                    Loại khu neo đậu
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.DPHAN_LOAI_KHUNEODAUID, (SelectList)ViewBag.LOAIKHUNEODAUs, "--Chọn loại khu neo đậu--", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.DPHAN_LOAI_KHUNEODAUID)
+                </div>
+
+                <div class="col-md-2 control-label">
+                    Địa chỉ
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(model => model.DIA_CHI, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.DIA_CHI)
+                </div>
+            </div>
+
+
+            <p class="margin-top-05">
+               
+                <button type="submit" class="btn btn-primary btn-sm" name="SearchButton" value="Generate report">
+                    <i class='fa fa-file-excel-o'></i> Xem báo cáo
+                </button>
+            </p>
+        }
+
+
+
+    </div>
+</div>

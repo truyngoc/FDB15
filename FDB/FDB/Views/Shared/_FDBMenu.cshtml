@@ -1,0 +1,139 @@
+﻿
+@using FDB.Models
+@using System.Data.SqlClient
+
+
+@helper ShowTree(System.Collections.Generic.List<FDB.Models.MenuItemViewModel> Model)
+{
+
+    foreach (var item in Model)
+    {
+        @*<li class="divider"></li>*@
+        if (item.Parent_ID == "0" && item.ExistChild == true)
+        {
+            <li class="dropdown">
+
+                <a href="#" class="dropdown-toggle js-activated">@item.Item_name</a>
+
+                @if (item.Childens.Any())
+                {
+
+                    <ul class="dropdown-menu">
+                        @ShowTree(item.Childens)
+                    </ul>
+                }
+            </li>
+        }
+        else
+        {
+            if (item.isMenu == true)
+            {
+                <li class="@(item.Childens.Any() &&item.Parent_ID!="0" ? "dropdown-submenu" : "")">
+
+
+                    @if (item.Childens.Any())
+                    {
+                        <a href="#">@item.Item_name</a>
+                        if (item.Childens.Any())
+                        {
+                            <ul class="dropdown-menu">
+                                @ShowTree(item.Childens)
+                            </ul>
+                        }
+                    }
+                    else
+                    {
+                        @Html.ActionLink(item.Item_name, actionName: item.Item_Action, controllerName: item.Item_Controller)
+
+                    }
+
+
+                </li>
+
+            }
+            else
+            {
+                <li class="divider"></li>
+                if (item.Childens.Any())
+                {
+                    <ul class="dropdown-menu">
+                        @ShowTree(item.Childens)
+                    </ul>
+                }
+            }
+
+        }
+
+
+    }
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    if (Session["MyTreeMenu"] == null)
+    {
+        ApplicationDbContext db = new ApplicationDbContext();
+        var menubyUser = new List<MenuItem>();
+        if (User.Identity.Name.ToUpper() == "ADMIN")
+        {
+            menubyUser = db.Database.SqlQuery<MenuItem>(@"select * from MenuItems where isDisplay=1  Order by Order_No").ToList();
+           
+        }
+        else
+        {
+            //load menu:
+            menubyUser = db.Database.SqlQuery<MenuItem>(@"select distinct
+                                                             * from
+                                                             (
+  
+                                                              Select  d.*
+  
+                                                              from AspNetUsers a inner join ApplicationUserGroups b
+						                                                            on a.Id=b.UserId
+					                                                             inner join MenuItemGroups c
+						                                                            on b.GroupId =c.Group_ID
+					                                                             inner join MenuItems d
+						                                                            on c.MenuItem_ID=d.Item_ID
+                                                             where (@UserName is null or a.UserName=@UserName) and d.isDisplay=1
+  
+                                                              union all
+                                                             select c.*
+                                                             from AspNetUsers a inner join MenuItemUsers b
+						                                                            on a.Id=b.User_ID
+					                                                            inner join MenuItems c
+						                                                            on b.MenuItem_ID=c.Item_ID
+                                                             where (@UserName is null or a.UserName=@UserName) and c.isDisplay=1
+                                                             )t order by t.Order_No
+                                                           "
+           , new SqlParameter("@UserName", User.Identity.Name)
+           ).ToList();
+        }
+        var lstMenu = menubyUser.ToList();
+        MenuItemViewModel root = new MenuItemViewModel();
+        root.Item_ID = "0";
+        root.Item_name = "Đây là root node";
+        var lstViewMenu = new List<MenuItemViewModel>();
+        lstViewMenu.Add(root);
+        foreach(var item in lstMenu)
+        {
+            lstViewMenu.Add(new MenuItemViewModel(item));
+        }
+
+
+        var tree = lstViewMenu.ToTree();
+        Session["MyTreeMenu"] = tree;
+        Session["lstMenu"] = lstMenu;
+
+    }
+
+    if (Session["MyTreeMenu"] != null)
+    {
+        FDB.Models.MenuItemViewModel Model = Session["MyTreeMenu"] as FDB.Models.MenuItemViewModel;
+
+        <li class="dropdown">
+            @ShowTree(Model.Childens)
+        </li>
+
+    }
+
+}

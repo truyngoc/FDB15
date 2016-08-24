@@ -1,0 +1,515 @@
+﻿@model FDB.Models.ViewModelBaoCaoNT_NUOC_MANLO
+@using PagedList.Mvc;
+@using FDB.Helpers;
+
+<link rel="stylesheet" type="text/css" href="~/Content/PagedList.css" />
+@{
+    ViewBag.Title = "Tra cứu nuôi thủy sản nước mặn, lợ";
+}
+
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <h3 class="text-center fdb-title-search-form">Tra cứu nuôi thủy sản nước mặn, lợ</h3>
+    <br />
+    <div class="container">
+
+        @using (Html.BeginForm("Search", "NT_NUOC_MANLO", FormMethod.Get, new { @id = "formsubmit" }))
+        {
+            <br />
+            <fieldset class="fdb-scheduler-border">
+                <legend class="fdb-scheduler-search-border">Chỉ tiêu tìm kiếm</legend>
+
+                <div class="row">
+                    <div class="col-md-2 control-label">
+                        Loại báo cáo<label style="color:red">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(x => x.LoaiBaoCao, new List<SelectListItem>
+                            {                   new SelectListItem() {Text = "", Value=""},
+                                                new SelectListItem() {Text = "Báo cáo tuần", Value="1"},
+                                                new SelectListItem() {Text = "Báo cáo tháng", Value="2"}
+
+                            }, new { @class = "form-control" })
+                        <label style="color:red; display:none" id="lblLoaiBaoCao">Loại báo cáo bắt buộc nhập!</label>
+                    </div>
+                    <div class="col-md-2 control-label">
+                        Hình thức nuôi<label style="color:red">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.HinhThucNuoi, (SelectList)ViewBag.DMMoHinhNuoi, string.Empty, new { @class = "form-control", })
+                        <label style="color:red; display:none" id="lblHinhThucNuoi">Hình thức nuôi bắt buộc nhập!</label>
+                    </div>
+
+                </div>
+                <div class="row margin-top-05" id="divbaocaothang" style="@(Model.LoaiBaoCao!=null && Model.LoaiBaoCao == 2 ? "display:block" : "display:none")">
+                    <div class="col-md-2 control-label">
+                        Tháng
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(x => x.Thang, new List<SelectListItem>
+                    {                   new SelectListItem() {Text = "", Value=""},
+                                        new SelectListItem() {Text = "Tháng 1", Value="1"},
+                                        new SelectListItem() {Text = "Tháng 2", Value="2"},
+                                        new SelectListItem() {Text = "Tháng 3", Value="3"},
+                                        new SelectListItem() {Text = "Tháng 4", Value="4"},
+                                        new SelectListItem() {Text = "Tháng 5", Value="5"},
+                                        new SelectListItem() {Text = "Tháng 6", Value="6"},
+                                        new SelectListItem() {Text = "Tháng 7", Value="7"},
+                                        new SelectListItem() {Text = "Tháng 8", Value="8"},
+                                        new SelectListItem() {Text = "Tháng 9", Value="9"},
+                                        new SelectListItem() {Text = "Tháng 10", Value="10"},
+                                        new SelectListItem() {Text = "Tháng 11", Value="11"},
+                                        new SelectListItem() {Text = "Tháng 12", Value="12"}
+                    }, new { @class = "form-control", @style = "width:150px" })
+                    </div>
+                    <div class="col-md-2 control-label">
+                        Năm<label style="color:red">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(model => model.Nam, new { @class = "form-control", @type = "text", @min = "1900", @style = "width:150px" })
+                        <label style="color:red; display:none" id="lblNam">Năm bắt buộc nhập!</label>
+                    </div>
+                </div>
+                <div class="row margin-top-05" id="divbaocaotuan" style="@(Model.LoaiBaoCao!=null && Model.LoaiBaoCao == 1 ? "display:block" : "display:none")">
+                    <div class="col-md-2 control-label">
+                        Ngày báo cáo
+                    </div>
+                    <div class="col-md-1 control-label">
+                        Từ ngày<label style="color:red">(*)</label>
+                    </div>
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(m => m.TuNgay, "{0:dd/MM/yyyy}", new { @class = "form-control", @style = "width:120px" })
+                        <label style="color:red; display:none" id="lblTuNgay">Từ ngày bắt buộc nhập!</label>
+                    </div>
+                    <div class="col-md-2 control-label">
+                        Đến ngày<label style="color:red">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(m => m.DenNgay, "{0:dd/MM/yyyy}", new { @class = "form-control", @style = "width:120px" })
+                        <label style="color:red; display:none" id="lblDenNgay">Đến ngày bắt buộc nhập!</label>
+                    </div>
+                </div>
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Tỉnh/Thành phố
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.TThanhPho, (SelectList)ViewBag.DMTThanhPho, string.Empty, new { @class = "form-control", @id = "province_dll", @style = "width:150px" })
+                    </div>
+
+                </div>
+
+
+                <br />
+                <p class="margin-top-05">
+                    <button type="submit" class="btn btn-primary btn-sm" name="ReportButton" value="Thống kê" id="btnsubmit">
+                        <span class="glyphicon glyphicon-search"></span> Thống kê
+                    </button>
+
+
+                </p>
+
+            </fieldset>
+        }
+
+        <fieldset class="fdb-scheduler-border">
+            <legend class="fdb-scheduler-search-border">@ViewBag.strTitle </legend>
+
+            @*<label id="lblMessageTotal" style="color:blue; font-weight:bold">Tổng số bản ghi: @ViewBag.TotalRow</label>*@
+
+            <table class="table table-hover table-bordered table-condensed">
+
+                @{
+                    if (Model.HinhThucNuoi != null)
+                    {
+                        if (Model.HinhThucNuoi == 1)
+                        {
+                            <tr>
+                                <th style="text-align:center">
+                                    Đối tượng nuôi
+                                </th>
+                                <th style="text-align:center">
+                                    Thể tích lồng (m3)
+                                </th>
+                                <th style="text-align:center">
+                                    Sản lượng (tấn)
+                                </th>
+                                <th style="text-align:center">
+                                    Số lượng lồng (chiếc)
+                                </th>
+                                <th style="text-align:center">
+                                    Số lượng giống thả (triệu con)
+                                </th>
+
+                            </tr>
+                            if (Model.ReportResults != null)
+                            {
+                                foreach (var item in Model.ReportResults)
+                                {
+
+                                    <tr>
+                                        <td >
+
+                                            @Html.DisplayFor(modelItem => item.DOI_TUONG_NUOI)
+                                        </td>
+
+                                        <td style="text-align:right">
+
+                                            @Html.DisplayFor(modelItem => item.THE_TICH_LONG)
+                                        </td>
+                                        <td style="text-align:right">
+
+                                            @Html.DisplayFor(modelItem => item.SAN_LUONG_LONG)
+                                        </td>
+                                        <td style="text-align:right">
+
+                                            @Html.DisplayFor(modelItem => item.SO_LUONG_LONG)
+                                        </td>
+                                        <td style="text-align:right">
+
+                                            @Html.DisplayFor(modelItem => item.MAT_DO_THA)
+                                        </td>
+
+                                    </tr>
+                                }
+                                <tr>
+                                    <td><b>Tổng</b></td>
+                                    <td style="text-align:right">
+
+                                        @Html.Raw("<b>" + Model.ReportResults.Sum(m => m.THE_TICH_LONG) + "</b>")
+                                    </td>
+                                    <td style="text-align:right">
+                                        @Html.Raw("<b>" + Model.ReportResults.Sum(m => m.SAN_LUONG_LONG) + "</b>")
+
+                                    </td>
+                                    <td style="text-align:right">
+                                        @Html.Raw("<b>" + Model.ReportResults.Sum(m => m.SO_LUONG_LONG) + "</b>")
+
+                                    </td>
+                                    <td style="text-align:right">
+
+                                        @Html.Raw("<b>" + Model.ReportResults.Sum(m => m.MAT_DO_THA) + "</b>")
+                                    </td>
+                                   
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <th rowspan="2">
+                                    Đối tượng nuôi
+                                </th>
+                                <th colspan="6" style="text-align:center">
+                                    Nuôi bán thâm canh, thâm canh
+                                </th>
+                                <th colspan="6" style="text-align:center">
+                                    Nuôi quảng canh/quảng canh cải tiến
+                                </th>
+
+
+                            </tr>
+                            <tr>
+
+                                <th>
+                                    Diện tích thả nuôi trong kỳ (ha)
+                                </th>
+                                <th>
+                                    Nuôi trong quy hoạch (ha)
+                                </th>
+                                <th>
+                                    Nuôi ngoài quy hoạch (ha)
+                                </th>
+                                <th>
+                                    Diện tích GAP và tương tự (ha)
+                                </th>
+                                <th>
+                                    Sản lượng (tấn)
+                                </th>
+                                <th>
+                                    Số lượng giống thả(triệu con)
+                                </th>
+
+                                <th>
+                                    Diện tích thả nuôi trong kỳ (ha)
+                                </th>
+                                <th>
+                                    Nuôi trong quy hoạch (ha)
+                                </th>
+                                <th>
+                                    Nuôi ngoài quy hoạch (ha)
+                                </th>
+                                <th>
+                                    Diện tích GAP và tương tự (ha)
+                                </th>
+                                <th>
+                                    Sản lượng (tấn)
+                                </th>
+                                <th>
+                                    Số lượng giống thả(triệu con)
+                                </th>
+
+                            </tr>
+                            if (Model.ReportResults != null)
+                            {
+                                foreach (var item in Model.ReportResults)
+                                {
+                                    <tr>
+                                        <td >
+
+                                            @Html.DisplayFor(modelItem => item.DOI_TUONG_NUOI)
+                                        </td>
+
+                                        <td style="text-align:right">
+
+                                            @Html.DisplayFor(modelItem => item.DIEN_TICH_THANUOI_TRONGKY_KHAC_1)
+                                        </td>
+                                        <td style="text-align:right">
+
+                                            @Html.DisplayFor(modelItem => item.NUOI_TRONG_QUY_HOACH_KHAC_1)
+                                        </td>
+                                        <td style="text-align:right">
+
+                                            @Html.DisplayFor(modelItem => item.NUOI_NGOAI_QUY_HOACH_KHAC_1)
+                                        </td>
+                                        <td style="text-align:right">
+
+                                            @Html.DisplayFor(modelItem => item.DIEN_TICH_GAP_TUONGTU_KHAC_1)
+                                        </td>
+                                        <td style="text-align:right">
+
+                                            @Html.DisplayFor(modelItem => item.SAN_LUONG_KHAC_1)
+                                        </td>
+                                        <td style="text-align:right">
+
+                                            @Html.DisplayFor(modelItem => item.SO_LUONG_GIONG_THA_KHAC_1)
+                                        </td>
+
+
+                                        <td style="text-align:right">
+
+                                            @Html.DisplayFor(modelItem => item.DIEN_TICH_THANUOI_TRONGKY_KHAC_2)
+                                        </td>
+                                        <td style="text-align:right">
+
+                                            @Html.DisplayFor(modelItem => item.NUOI_TRONG_QUY_HOACH_KHAC_2)
+                                        </td>
+                                        <td style="text-align:right">
+
+                                            @Html.DisplayFor(modelItem => item.NUOI_NGOAI_QUY_HOACH_KHAC_2)
+                                        </td>
+                                        <td style="text-align:right">
+
+                                            @Html.DisplayFor(modelItem => item.DIEN_TICH_GAP_TUONGTU_KHAC_2)
+                                        </td>
+                                        <td style="text-align:right">
+
+                                            @Html.DisplayFor(modelItem => item.SAN_LUONG_KHAC_2)
+                                        </td>
+                                        <td style="text-align:right">
+
+                                            @Html.DisplayFor(modelItem => item.SO_LUONG_GIONG_THA_KHAC_2)
+                                        </td>
+
+                                    </tr>
+                                }
+                                <tr>
+                                    <td><b>Tổng</b></td>
+                                    <td style="text-align:right">
+
+                                        @Html.Raw("<b>" + Model.ReportResults.Sum(m => m.DIEN_TICH_THANUOI_TRONGKY_KHAC_1) + "</b>")
+                                    </td>
+                                    <td style="text-align:right">
+                                        @Html.Raw("<b>" + Model.ReportResults.Sum(m => m.NUOI_TRONG_QUY_HOACH_KHAC_1) + "</b>")
+
+                                    </td>
+                                    <td style="text-align:right">
+                                        @Html.Raw("<b>" + Model.ReportResults.Sum(m => m.NUOI_NGOAI_QUY_HOACH_KHAC_1) + "</b>")
+
+                                    </td>
+                                    <td style="text-align:right">
+
+                                        @Html.Raw("<b>" + Model.ReportResults.Sum(m => m.DIEN_TICH_GAP_TUONGTU_KHAC_1) + "</b>")
+                                    </td>
+                                    <td style="text-align:right">
+
+                                        @Html.Raw("<b>" + Model.ReportResults.Sum(m => m.SAN_LUONG_KHAC_1) + "</b>")
+                                    </td>
+                                    <td style="text-align:right">
+
+                                        @Html.Raw("<b>" + Model.ReportResults.Sum(m => m.SO_LUONG_GIONG_THA_KHAC_1) + "</b>")
+                                    </td>
+
+                                    <td style="text-align:right">
+                                        @Html.Raw("<b>" + Model.ReportResults.Sum(m => m.DIEN_TICH_THANUOI_TRONGKY_KHAC_2) + "</b>")
+
+                                    </td>
+                                    <td style="text-align:right">
+                                        @Html.Raw("<b>" + Model.ReportResults.Sum(m => m.NUOI_TRONG_QUY_HOACH_KHAC_2) + "</b>")
+
+                                    </td>
+                                    <td style="text-align:right">
+                                        @Html.Raw("<b>" + Model.ReportResults.Sum(m => m.NUOI_NGOAI_QUY_HOACH_KHAC_2) + "</b>")
+
+                                    </td>
+                                    <td style="text-align:right">
+                                        @Html.Raw("<b>" + Model.ReportResults.Sum(m => m.DIEN_TICH_GAP_TUONGTU_KHAC_2) + "</b>")
+
+                                    </td>
+                                    <td style="text-align:right">
+                                        @Html.Raw("<b>" + Model.ReportResults.Sum(m => m.SAN_LUONG_KHAC_2) + "</b>")
+
+                                    </td>
+                                    <td style="text-align:right">
+
+                                        @Html.Raw("<b>" + Model.ReportResults.Sum(m => m.SO_LUONG_GIONG_THA_KHAC_2) + "</b>")
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    }
+
+
+                }
+
+            </table>
+
+            <br />
+            <br />
+            @*@Html.PagedListPager(Model.SearchResults, page => Url.Action("Index", new { page, Model.Thang, Model.Nam, Model.HinhThucNuoi, Model.TThanhPho, Model.TuNgay, Model.DenNgay, Model.LoaiBaoCao }))*@
+
+        </fieldset>
+    </div>
+</div>
+
+
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js" type="text/javascript"></script>
+<script src="~/Scripts/datepicker.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/jquery.maskMoney.js"></script>
+<script src="~/Scripts/jquery.number.js"></script>
+<script src="~/Scripts/jquery.masknumber.js"></script>
+<script type="text/javascript">
+
+    $("#TuNgay").datepicker({
+        changeMonth: true,
+        changeYear: true,
+
+        dateFormat: 'dd/mm/yy'
+    });
+    $("#TuNgay").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+
+    $("#DenNgay").datepicker({
+        changeMonth: true,
+        changeYear: true,
+
+        dateFormat: 'dd/mm/yy'
+    });
+    $("#DenNgay").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+
+    $('#Nam').maskNumber({ integer: true, decimal: '', thousands: '' });
+
+    $(function () {
+        $(document).tooltip();
+    });
+
+</script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        //var _val = $("#lblLoaiBaoCao").val();
+        //if (_val == null || _val == "") {
+        //    $("#divbaocaotuan").attr("style", "display:block");
+        //    $("#divbaocaothang").attr("style", "display:block");
+        //}
+        //else {
+        //    if (_val == "1") {
+        //        $("#divbaocaotuan").attr("style", "display:block");
+        //        $("#divbaocaothang").attr("style", "display:none");
+        //    }
+        //    else {
+        //        $("#divbaocaotuan").attr("style", "display:none");
+        //        $("#divbaocaothang").attr("style", "display:block");
+        //    }
+        //}
+
+        $("#btnsubmit").click(function () {
+
+            var v_return = true;
+
+            //validate form
+            $("#lblLoaiBaoCao").attr("style", "display:none");
+            $("#lblHinhThucNuoi").attr("style", "display:none");
+            $("#lblNam").attr("style", "display:none");
+            $("#lblTuNgay").attr("style", "display:none");
+            $("#lblDenNgay").attr("style", "display:none");
+
+            if ($("#HinhThucNuoi").val() == null || $("#HinhThucNuoi").val() == "") {
+                $("#lblHinhThucNuoi").attr("style", "display:block;color:red");
+                v_return = false;
+            }
+
+            var _valLoaiBaoCao = $("#LoaiBaoCao").val();
+            if (_valLoaiBaoCao == null || _valLoaiBaoCao == "") {
+                $("#lblLoaiBaoCao").attr("style", "display:block;color:red");
+                v_return = false
+            }
+            else {
+                if (_valLoaiBaoCao == "1") //tuần
+                {
+
+                    if ($("#TuNgay").val() == null || $("#TuNgay").val() == "") {
+                        $("#lblTuNgay").attr("style", "display:block;color:red");
+                        v_return = false;
+                    }
+                    if ($("#DenNgay").val() == null || $("#DenNgay").val() == "") {
+                        $("#lblDenNgay").attr("style", "display:block;color:red");
+                        v_return = false;
+                    }
+
+                }
+                else //Tháng
+                {
+                    if ($("#Nam").val() == null || $("#Nam").val() == "") {
+                        $("#lblNam").attr("style", "display:block;color:red");
+                        v_return = false;
+                    }
+
+
+                }
+            }
+
+            return v_return;
+        });
+
+        $("#LoaiBaoCao").change(function () {
+            $("#Thang").val('');
+            $("#Nam").val('');
+            $("#TuNgay").val('');
+            $("#DenNgay").val('');
+            var _val = $(this).val();
+            if (_val == null || _val == "") {
+                $("#divbaocaotuan").attr("style", "display:block");
+                $("#divbaocaothang").attr("style", "display:block");
+            }
+            else {
+                if (_val == "1") {
+                    $("#divbaocaotuan").attr("style", "display:block");
+                    $("#divbaocaothang").attr("style", "display:none");
+                }
+                else {
+                    $("#divbaocaotuan").attr("style", "display:none");
+                    $("#divbaocaothang").attr("style", "display:block");
+                }
+            }
+        });
+
+
+    });
+
+
+</script>

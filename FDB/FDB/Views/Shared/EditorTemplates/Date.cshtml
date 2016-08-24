@@ -1,0 +1,18 @@
+﻿@model DateTime?
+@{
+    var value = "";
+    if (Model.HasValue) {
+        value = String.Format("{0:d}", Model.Value.ToString("dd/MM/yyyy"));
+    }
+}
+@Html.TextBox("", value, new { @class = "datepicker form-control", type = "text" })
+
+
+@*@model DateTime?
+@Html.TextBox("", (Model.HasValue ? String.Format("{0:d}", Model.Value.ToString("dd/MM/yyyy")) : string.Empty), new
+{
+    @class = "datepicker", type = "text"
+    //,@type = "date"
+    //,
+    //data_date_format = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToLower()
+})*@

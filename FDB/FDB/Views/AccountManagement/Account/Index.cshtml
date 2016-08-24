@@ -1,0 +1,118 @@
+﻿@model PagedList.IPagedList<FDB.Models.EditUserViewModel>
+@using PagedList.Mvc;
+@using FDB.Helpers;
+
+<link rel="stylesheet" type="text/css" href="~/Content/PagedList.css" />
+
+@*@model IEnumerable<FDB.Models.EditUserViewModel>*@
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <h3 class="text-center fdb-title-search-form">Danh sách người dùng  @ViewBag.TenTTP</h3>
+    <br />
+    <label style="color:red">@TempData["tmpErrorDelete"]</label>
+    <hr class="fdb-hr" />
+
+    @using (Html.BeginForm("Index", "Account", FormMethod.Get))
+    {
+        <div class="row">
+            <div class="col-md-2 control-label">
+                Tên đăng nhập
+            </div>
+            <div class="col-md-4">
+                <input type="text" name="txtUserName" class="form-control" />
+            </div>
+
+            <div class="col-md-2 control-label">
+                Email
+            </div>
+            <div class="col-md-4">
+                <input type="text" name="txtEmail" class="form-control" />
+            </div>
+        </div>
+
+        <div class="row margin-top-05">
+            <div class="col-md-2 control-label">
+                Họ và tên
+            </div>
+            <div class="col-md-4">
+                <input type="text" name="txtHoTen" class="form-control" />
+            </div>
+
+            <div class="col-md-2 control-label">
+
+            </div>
+            <div class="col-md-4">
+
+            </div>
+        </div>
+
+
+        <p class="margin-top-05">            
+            <button type="submit" class="btn btn-primary btn-sm">
+                <span class="glyphicon glyphicon-search"></span> Tìm kiếm
+            </button>
+
+            @Html.NoEncodeActionLink("<span class='glyphicon glyphicon-plus'></span> Thêm mới", "Thêm mới", "Register", "Account", null, htmlAttributes: new { @class = "btn btn-primary btn-sm" })
+        </p>
+    }
+
+    <label id="lblMessageTotal" style="color:blue; font-weight:bold">Tổng số bản ghi: @ViewBag.TotalRow</label>
+    <table class="table table-hover table-striped table-condensed">
+        <tr>
+            <th>
+                Tên đang nhập
+            </th>
+            <th>
+                Họ đệm
+            </th>
+            <th>
+                Tên
+            </th>
+            <th>
+                Email
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.ActionLink("Sửa", "Edit", new { id = item.UserName }) |
+                    @Html.ActionLink("Nhóm", "UserGroups", new { id = item.UserName }) |
+                    @*@Html.ActionLink("Phân quyền", "UserPermissions", new { id = item.UserName }) |*@
+                    @Html.ActionLink("Xóa", "Delete", new { id = item.UserName }) |
+                    @Html.ActionLink("Phân quyền chức năng", "UserAddMenu", new { id = item.UserName })
+                </td>
+            </tr>
+        }
+
+    </table>
+    <br />
+
+    @*Total record: @Model.TotalItemCount*@
+    <br />
+
+    @*The current page and total number of pages are displayed.*@
+    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @*The paging buttons are displayed by the PagedListPager helper*@
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+</div>

@@ -1,0 +1,386 @@
+﻿@model FDB.Models.ViewModelSearchKT_CANGCA_THONGKE
+@using PagedList.Mvc;
+@using FDB.Helpers;
+
+<link rel="stylesheet" type="text/css" href="~/Content/PagedList.css" />
+@{
+    ViewBag.Title = "Tra cứu thực trạng hoạt động cảng cá";
+}
+
+<script src="~/Scripts/datepicker.js"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script>
+    $(document).ready(function () {
+        var url = "";
+
+        $("#dialog-delete-confirm").dialog({
+            autoOpen: false,
+            resizable: false,
+            height: 170,
+            width: 350,
+            show: { effect: 'drop', direction: "up" },
+            modal: true,
+            draggable: true,
+            open: function (event, ui) {
+                $(".ui-dialog-titlebar-close").hide();
+            },
+            buttons: {
+                "OK": function () {
+                    $(this).dialog("close");
+                    window.location.href = url;
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        // hien thi confirm dialog khi click delete tren grid
+        $(".lnkDelete").click(function () {
+            url = $(this).attr('href');
+            $("#dialog-delete-confirm").dialog('open');
+
+
+
+            return false;
+        });
+
+        //$("#TU_NGAY").datepicker({
+        //    changeMonth: true,
+        //    changeYear: true,
+
+        //    dateFormat: 'dd/mm/yy'
+        //});
+
+        //$("#DEN_NGAY").datepicker({
+        //    changeMonth: true,
+        //    changeYear: true,
+
+        //    dateFormat: 'dd/mm/yy'
+        //});
+
+        $("#TU_NGAY").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+        $("#DEN_NGAY").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+    });
+</script>
+
+
+
+<!-- Cac div de chua noi dung cho dialog -->
+<div id="dialog-delete-confirm" style="display: none">
+    <p>
+        <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+        Bạn có chắc chắn muốn xóa không?
+    </p>
+</div>
+
+
+<div class="container fdb-div-content fdb-div-corner-all">
+    <h3 class="text-center fdb-title-search-form">Tra cứu thực trạng hoạt động cảng cá</h3>
+    <br />
+    <div class="container">
+        @using (Html.BeginForm("Search", "KT_CANGCA", FormMethod.Get))
+        {
+            <fieldset class="fdb-scheduler-border">
+                <legend class="fdb-scheduler-search-border">Chỉ tiêu tra cứu</legend>
+
+                <div class="row">
+                    <div class="col-md-2 control-label">
+                        Tên cảng
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.DM_CANGCAID, (SelectList)ViewBag.DM_CANGCAs, "--Chọn cảng cá--", new { @class = "form-control" })
+
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+                </div>
+
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">
+                        Ngày ghi nhận từ
+                    </div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.TU_NGAY)
+                        @Html.ValidationMessageFor(model => model.TU_NGAY)
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        Đến ngày
+                    </div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.DEN_NGAY)
+                        @Html.ValidationMessageFor(model => model.DEN_NGAY)
+                    </div>
+                </div>
+
+                <p class="margin-top-05">
+
+
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <span class="glyphicon glyphicon-search"></span> Thống kê
+                    </button>
+
+
+                </p>
+
+            </fieldset>
+        }
+        <fieldset class="fdb-scheduler-border">
+            <legend class="fdb-scheduler-search-border"></legend>
+
+            <div class="col-md-8 center-table">
+                <table class="table table-hover table-bordered table-condensed">
+
+                    <tr>
+                        <th style="text-align:center">
+                            TT
+                        </th>
+                        <th style="text-align:center;">
+                            Phương tiện,hàng hóa
+                        </th>
+                        <th style="text-align:center">
+                            ĐVT
+                        </th>
+                        <th style="text-align:center">
+                            @*&nbsp; @ViewBag.strTitle*@
+                            Số lượng
+                        </th>
+
+                    </tr>
+
+
+                    <tr>
+                        <td style="text-align: center;font-weight:bold; font-style: italic">
+                            I
+                        </td>
+                        <td style="font-weight:bold;font-style:italic">
+                            Tàu thuyền
+                        </td>
+                        <td></td>
+                        <td></td>
+
+                    </tr>
+                    <tr>
+                        <td style="text-align:center;">
+                            1
+                        </td>
+                        <td>
+                            < 20 CV
+                        </td>
+                        <td style="text-align:center;">Lượt</td>
+                        <td class="text-right" style="color:blue;font-weight:bold">@Model.TAU_20CV</td>
+
+                    </tr>
+
+                    <tr>
+                        <td style="text-align:center;">
+                            2
+                        </td>
+                        <td>
+                            20-< 50 CV
+                        </td>
+                        <td style="text-align:center;">Lượt</td>
+                        <td class="text-right" style="color:blue;font-weight:bold">@Model.TAU_50V</td>
+
+                    </tr>
+
+                    <tr>
+                        <td style="text-align:center;">
+                            3
+                        </td>
+                        <td>
+                            50 -< 90 CV
+                        </td>
+                        <td style="text-align:center;">Lượt</td>
+                        <td class="text-right" style="color:blue;font-weight:bold">@Model.TAU_90CV</td>
+
+                    </tr>
+
+                    <tr>
+                        <td style="text-align:center;">
+                            4
+                        </td>
+                        <td>
+                            90 -< 250 CV
+                        </td>
+                        <td style="text-align:center;">Lượt</td>
+                        <td class="text-right" style="color:blue;font-weight:bold">@Model.TAU_250V</td>
+
+                    </tr>
+
+                    <tr>
+                        <td style="text-align:center;">
+                            5
+                        </td>
+                        <td>
+                            250 -< 400 CV
+                        </td>
+                        <td style="text-align:center;">Lượt</td>
+                        <td class="text-right" style="color:blue;font-weight:bold">@Model.TAU_400V</td>
+
+                    </tr>
+
+                    <tr>
+                        <td style="text-align:center;">
+                            6
+                        </td>
+                        <td>
+                            > 400 CV
+                        </td>
+                        <td style="text-align:center;">Lượt</td>
+                        <td class="text-right" style="color:blue;font-weight:bold">@Model.TAU_TREN_400V</td>
+
+                    </tr>
+
+                    <tr>
+                        <td style="text-align:center;">
+                            7
+                        </td>
+                        <td>
+                            Tàu khác
+                        </td>
+                        <td style="text-align:center;">Lượt</td>
+                        <td class="text-right" style="color:blue;font-weight:bold">@Model.TAU_KHAC</td>
+
+                    </tr>
+
+                    <tr>
+                        <td style="text-align: center; font-weight: bold; font-style: italic">
+                            II
+                        </td>
+                        <td style="font-weight:bold;font-style:italic">
+                            Sản lượng thủy sản
+                        </td>
+                        <td></td>
+                        <td></td>
+
+                    </tr>
+
+                    <tr>
+                        <td style="text-align:center;">
+                            1
+                        </td>
+                        <td>
+                            Sản lượng Cá
+                        </td>
+                        <td style="text-align:center;">Tấn</td>
+                        <td class="text-right" style="color:blue;font-weight:bold">@Model.SANLUONG_CA</td>
+
+                    </tr>
+                    <tr>
+                        <td style="text-align:center;">
+                            2
+                        </td>
+                        <td>
+                            Sản lượng Mực
+                        </td>
+                        <td style="text-align:center;">Tấn</td>
+                        <td class="text-right" style="color:blue;font-weight:bold">@Model.SANLUONG_MUC</td>
+
+                    </tr>
+
+                    <tr>
+                        <td style="text-align:center;">
+                            3
+                        </td>
+                        <td>
+                            Sản lượng Tôm
+                        </td>
+                        <td style="text-align:center;">Tấn</td>
+                        <td class="text-right" style="color:blue;font-weight:bold">@Model.SANLUONG_TOM</td>
+
+                    </tr>
+
+                    <tr>
+                        <td style="text-align:center;">
+                            4
+                        </td>
+                        <td>
+                            Thủy sản khác
+                        </td>
+                        <td style="text-align:center;">Tấn</td>
+                        <td class="text-right" style="color:blue;font-weight:bold">@Model.SANLUONG_KHAC</td>
+
+                    </tr>
+
+                    <tr>
+                        <td style="text-align: center; font-weight: bold; font-style: italic">
+                            III
+                        </td>
+                        <td style="font-weight:bold;font-style:italic">
+                            Hàng hóa qua cảng
+                        </td>
+                        <td></td>
+                        <td></td>
+
+                    </tr>
+
+                    <tr>
+                        <td style="text-align:center;">
+                            1
+                        </td>
+                        <td>
+                            Nước đá
+                        </td>
+                        <td style="text-align:center;">Tấn</td>
+                        <td class="text-right" style="color:blue;font-weight:bold">@Model.HANG_NUOCDA</td>
+
+                    </tr>
+
+                    <tr>
+                        <td style="text-align:center;">
+                            2
+                        </td>
+                        <td>
+                            Xăng dầu
+                        </td>
+                        <td style="text-align:center;">Lít</td>
+                        <td class="text-right" style="color:blue;font-weight:bold">@Model.HANG_XANGDAU</td>
+
+                    </tr>
+
+                    <tr>
+                        <td style="text-align:center;">
+                            3
+                        </td>
+                        <td>
+                            Nước ngọt
+                        </td>
+                        <td style="text-align:center;">Khối</td>
+                        <td class="text-right" style="color:blue;font-weight:bold">@Model.HANG_NUOCNGOT</td>
+
+                    </tr>
+
+                    <tr>
+                        <td style="text-align:center;">
+                            4
+                        </td>
+                        <td>
+                            Hàng hóa khác
+                        </td>
+                        <td style="text-align:center;">Tấn</td>
+                        <td class="text-right" style="color:blue;font-weight:bold">@Model.HANG_KHAC</td>
+
+                    </tr>
+
+
+
+
+
+                </table>
+            </div>
+        </fieldset>
+        <br />
+
+
+        <br />
+
+
+
+    </div>
+
+</div>

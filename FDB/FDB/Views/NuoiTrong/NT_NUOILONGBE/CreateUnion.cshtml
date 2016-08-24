@@ -1,0 +1,311 @@
+﻿@{
+    ViewBag.Title = "Báo cáo diện tích, nuôi/trồng thủy sản nước ngọt, nước lợ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    fieldset.scheduler-border {
+        /*border: 1px solid #dddddd;*/
+        padding: 0 1.4em 1.4em 1.4em !important;
+        /*margin: 0 0 1.5em 0 !important;*/
+        -webkit-box-shadow: 0px 0px 0px 0px #000;
+        box-shadow: 0px 0px 0px 0px #000;
+    }
+
+    legend.scheduler-border {
+        font-size: 14px;
+        text-align: left !important;
+        /*width: auto;*/
+        /*padding: 0 10px;*/
+        /*border-bottom: none;*/
+        margin: 0px;
+        color: #006bc1;
+        font-style: italic;
+    }
+
+    .strike {
+        display: block;
+        text-align: left;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+        .strike > span {
+            position: relative;
+            display: inline-block;
+        }
+
+            .strike > span:before,
+            .strike > span:after {
+                content: "";
+                position: absolute;
+                top: 50%;
+                width: 9999px;
+                height: 1px;
+                background: rgba(0, 0, 0, 0.35);
+            }
+
+            .strike > span:before {
+                right: 100%;
+                margin-right: 15px;
+            }
+
+            .strike > span:after {
+                left: 100%;
+                margin-left: 15px;
+            }
+
+    .sup {
+        position: relative;
+        bottom: 1ex;
+        font-size: 80%;
+    }
+</style>
+<style>
+    div.divLongBe1 {
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12) !important;
+        padding: 20px 5px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        background-color: #f1f1f1;
+    }
+
+    div.divKhac1 {
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12) !important;
+        padding: 20px 5px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        background-color: #f1f1f1;
+    }
+</style>
+
+@using (Html.BeginForm("CreateUnion", "NT_NUOCNGOT_MANNO", FormMethod.Post, new { @id = "formCreate" }))
+{
+    <div class="container fdb-div-content fdb-div-corner-all">
+
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+
+
+        <div class="fdb-title-form-24 text-center col-md-12">
+            Báo cáo diện tích, nuôi/trồng thủy sản nước ngọt, nước lợ<br />
+            <div class="text-center fdb-title-form-14 col-md-12">
+                (Tần suất thu thập 1 tháng/1 lần)
+            </div>
+        </div>
+
+
+        <div class="form-horizontal">
+            <fieldset class="scheduler-border">
+                <legend class="scheduler-border">Nhập thông tin  báo cáo</legend>
+                <fieldset style=" margin-top: 15px; ">
+                    <legend style="font-size: 12px; font-weight: bold !important; width: 130px; margin-left: 20px; margin-bottom: 15px; margin-top: 15px; font-style: italic; ">Thông tin chung</legend>
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-10"><label id="lblValidThangQuy" style="color: #b94a48"></label></div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-2 control-label">
+                            Tháng <label style="color:red;">(*)</label>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-control">
+                                <option value="1">Tháng 1</option>
+                                <option value="2">Tháng 2</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 control-label">
+                            Năm <label style="color:red;">(*)</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-2 control-label">
+                            Tỉnh/Thành phố <label style="color:red;">(*)</label>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-control">
+                                <option value="1">Thanh hóa</option>
+                                <option value="2">Nghệ an</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 control-label">
+                            Ngày nhập <label style="color:red;">(*)</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" />
+
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset style=" margin-top: 15px; " id="fidDetail">
+                    <legend style="font-size: 12px; font-weight: bold !important; width: 130px; margin-left: 20px; margin-bottom: 15px; margin-top: 15px; font-style: italic; ">Thông tin chi tiết
+                       &nbsp; &nbsp;  <label class="BtnPlus" style="cursor: pointer;  text-align: center"><img src="@Url.Content("~/fonts/button-add-icon.png")" title="Thêm mới" /></label>
+                    </legend>
+                    @*<div class="strike">
+                            <span>1</span>
+                        </div>*@
+                   
+                </fieldset>
+            </fieldset>
+        </div>
+
+    </div>
+
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-danger btn-sm" id="btnsubmit">
+                <span class="glyphicon glyphicon-floppy-disk"></span> Cập nhật
+            </button>
+            &nbsp;&nbsp;
+            @Html.ActionLink("Quay lại", "Index", "NT_NUOCNGOT_MANNO", null, new { @class = "btn btn-primary btn-sm" })
+        </div>
+    </div>
+}
+<input id="txtDMLoaiMatNuoc" style="display:none" value="@ViewBag.DMLoaiMatNuoc" />
+<input id="txtDMMoHinhNuoi" style="display:none" value="@ViewBag.DMMoHinhNuoi" />
+<input id="txtDMNhomDoiTuongNuoi" style="display:none" value="@ViewBag.DMNhomDoiTuongNuoi" />
+<input id="txtDMDoiTuongNuoi" style="display:none" value="@ViewBag.DMDoiTuongNuoi" />
+<label id="lblID" style="display:none">@ViewBag.sMaxID </label>
+
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script src="~/Scripts/datepicker.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/jquery.maskMoney.js"></script>
+<script src="~/Scripts/jquery.number.js"></script>
+<script src="~/Scripts/jquery.masknumber.js"></script>
+<script src="~/Scripts/moment.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //$("#Table1").find('input').number(true, 2);
+
+        var lblID = "lblDetail_1";
+        var ID = 1;
+
+
+        function addRow() {
+            var html =
+                '<div class="divLongBe1">' +
+                    '<div class="form-group">' +
+                    '<div class="col-md-2 control-label" name="ddlDOI_TUONG_NUOI_' + ID + '">Đối tượng:</div>' +
+                    '<div class="col-md-4"><select class="form-control"><option value="1">Cá tra/Basa</option><option value="2">Cá ngừ đại dương</option></select></div>' +
+                    '<div class="col-md-2 control-label">Hình thức nuôi:</div>' +
+                    '<div class="col-md-3"><select class="selectNhomNghe" id="ddlHINH_THUC_NUOI_' + ID + '" name="ddlHINH_THUC_NUOI_' + ID + '"><option value="1">Nuôi lồng bè</option><option value="2">Khác</option></select></div> ' +
+                    '</div>' +
+                    '<div id="divLongBe' + ID + '" style="display:block">' +
+                        '<div class="form-group">' +
+                        '<div class="col-md-2 control-label">Số lượng lồng:</div>' +
+                        '<div class="col-md-2"><input type="text" class="form-control" name="txtSO_LUONG_LONG_LONGBE_' + ID + '" /></div>' +
+                        '<div class="col-md-2"></div>' +
+                        '<div class="col-md-2 control-label">Tổng thể tích lồng(m3):</div>' +
+                        '<div class="col-md-2"><input type="text" class="form-control" name="txtTHE_TICH_LONG_LONGBE_' + ID + '" /></div> ' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<div class="col-md-2 control-label">Mật độ thả(m3):</div>' +
+                        '<div class="col-md-2"><input type="text" class="form-control" name="txtMAT_DO_THA_LONGBE_' + ID + '"/></div>' +
+                        '<div class="col-md-2"></div>' +
+                        '<div class="col-md-2 control-label">Sản lượng(tấn):</div>' +
+                        '<div class="col-md-2"><input type="text" class="form-control" name="txtSAN_LUONG_LONGBE_' + ID + '" /></div> ' +
+                        '</div>' +
+                    '</div>' +
+                    '<div id="divKhac' + ID + '" style="display:none">' +
+                        '<div class="form-group">' +
+                        '<div class="col-md-2 control-label">Diện tích thả nuôi trong kỳ(ha):</div>' +
+                        '<div class="col-md-2"><input type="text" class="form-control" name="txtDIEN_TICH_THANUOI_TRONGKY_KHAC' + ID + '" /></div>' +
+                        '<div class="col-md-2"></div>' +
+                        '<div class="col-md-2 control-label">Diện tích thả nuôi lũy kế(ha):</div>' +
+                        '<div class="col-md-2"><input type="text" class="form-control" name="txtDIEN_TICH_THANUOI_LUYKE_KHAC' + ID + '" /></div> ' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<div class="col-md-2 control-label">Nuôi trong qui hoạch:</div>' +
+                        '<div class="col-md-2"><input type="text" class="form-control" name="txtNUOI_TRONG_QUY_HOACH_KHAC' + ID + '" /></div>' +
+                        '<div class="col-md-2"></div>' +
+                        '<div class="col-md-2 control-label">Nuôi ngoài qui hoạch:</div>' +
+                        '<div class="col-md-2"><input type="text" class="form-control" name="txtNUOI_NGOAI_QUY_HOACH_KHAC' + ID + '" /></div> ' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<div class="col-md-2 control-label">Diện tích GAP và tương tự(ha):</div>' +
+                        '<div class="col-md-2"><input type="text" class="form-control" name="txtDIEN_TICH_GAP_TUONGTU_KHAC' + ID + '" /></div>' +
+                        '<div class="col-md-2"></div>' +
+                        '<div class="col-md-2 control-label">Số lượng giống thả:</div>' +
+                        '<div class="col-md-2"><input type="text" class="form-control" name="txtSO_LUONG_GIONG_THA_KHAC' + ID + '" /></div> ' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<div class="col-md-2 control-label">Phương thức nuôi:</div>' +
+                        '<div class="col-md-4"><select class="form-control" id="ddl_PHUONG_THUC_NUOI_KHAC_' + ID + '" name="ddlPHUONG_THUC_NUOI_KHAC_' + ID + '"><option value="1">Bán thâm canh/Thâm canh</option><option value="2">Quảng canh/Quảng canh cải tiến</option></select></div>' +
+                        '<div class="col-md-2 control-label">Sản lượng(tấn):</div>' +
+                        '<div class="col-md-2"><input type="text" class="form-control" name="txtSAN_LUONG_KHAC_' + ID + '"/></div> ' +
+                        '</div>' +
+                    '</div>' +
+                    '<div style="float:right; margin-right:10px; margin-bottom:10px; padding-bottom:10px;">' +
+                        '<label class="BtnPlus" style="cursor: pointer;  text-align: center"><img src="@Url.Content("~/fonts/button-add-icon.png")" title="Thêm mới" /></label>' +
+                        '&nbsp;&nbsp;&nbsp;' +
+                        '<label class="BtnMinus" id="lblDetail_' + ID + '" style="cursor:pointer"><img src="@Url.Content("~/fonts/DELETE.GIF")" title="Xóa" /></label>' +
+                    '</div' +
+                '</div>'
+            ;
+
+            $(html).appendTo($("#fidDetail"));
+            //  alert("1");
+
+            // mask decimal ở đây:
+            $("#fidDetail").find('input[type=text]').number(true, 2);
+            ID++;
+
+        };
+        $("#fidDetail").on("click", ".BtnPlus", addRow);
+
+        $("#fidDetail").on("click", ".BtnMinus", deleteRow);
+
+
+        function deleteRow() {
+            lblID = $(this).attr('id');
+            // alert(lblID);
+            lblID = "#" + lblID.toString().trim();
+            if (confirm("Bạn chắc chắn muốn xóa?")) {
+                var par = $(this).parent().parent();
+                par.remove();
+            }
+
+            return false;
+
+        };
+
+        //Sự kiện on change hình thức nuôi:
+        $(document).on('change', ".selectNhomNghe", function () {
+            // alert($(this).val());
+            var hiVal = $(this).val();
+            var thisID = $(this).attr('id');
+          //  alert(thisID);
+            var lastNumber = thisID.split('_');
+            var divKhacID = 'divKhac' + lastNumber[lastNumber.length - 1].toString();
+            var divLongBeID = 'divLongBe' + lastNumber[lastNumber.length - 1].toString();
+            if(hiVal=="2")
+            {
+                $("#" + divKhacID).attr("style", "display:block");
+                $("#" + divLongBeID).attr("style", "display:none");
+            }
+            else
+            {
+                $("#" + divKhacID).attr("style", "display:none");
+                $("#" + divLongBeID).attr("style", "display:block");
+            }
+
+        });
+
+    });
+</script>
+
+

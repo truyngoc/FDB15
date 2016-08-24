@@ -1,0 +1,20 @@
+﻿@using FDB.Common
+@{
+    var notifys = TempData.ContainsKey(Notify.TempDataKey)
+                ? (List<Notify>)TempData[Notify.TempDataKey]
+                : new List<Notify>();
+               
+    <script>
+    $(document).ready(function () {
+
+        @foreach (var n in notifys)
+        {
+            string notifytType = n.NotifyType.ToString("F").ToLower();
+
+            @:toastr.options.positionClass = "toast-bottom-right";
+            @:toastr.options.closeButton = true;
+            @:toastr['@notifytType']('@n.Message', '@n.Title');
+                }
+    });
+    </script>      
+}

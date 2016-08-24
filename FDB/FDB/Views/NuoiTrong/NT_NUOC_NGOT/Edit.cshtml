@@ -1,0 +1,858 @@
+﻿@model FDB.Models.NT_NUOC_NGOT
+@{
+    ViewBag.Title = "Báo cáo nuôi thủy sản nước ngọt";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    fieldset.scheduler-border {
+        /*border: 1px solid #dddddd;*/
+        padding: 0 1.4em 1.4em 1.4em !important;
+        /*margin: 0 0 1.5em 0 !important;*/
+        -webkit-box-shadow: 0px 0px 0px 0px #000;
+        box-shadow: 0px 0px 0px 0px #000;
+    }
+
+    legend.scheduler-border {
+        font-size: 14px;
+        text-align: left !important;
+        /*width: auto;*/
+        /*padding: 0 10px;*/
+        /*border-bottom: none;*/
+        margin: 0px;
+        color: #006bc1;
+        font-style: italic;
+    }
+
+    .strike {
+        display: block;
+        text-align: left;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+        .strike > span {
+            position: relative;
+            display: inline-block;
+        }
+
+            .strike > span:before,
+            .strike > span:after {
+                content: "";
+                position: absolute;
+                top: 50%;
+                width: 9999px;
+                height: 1px;
+                background: rgba(0, 0, 0, 0.35);
+            }
+
+            .strike > span:before {
+                right: 100%;
+                margin-right: 15px;
+            }
+
+            .strike > span:after {
+                left: 100%;
+                margin-left: 15px;
+            }
+
+    .sup {
+        position: relative;
+        bottom: 1ex;
+        font-size: 80%;
+    }
+</style>
+<style>
+    div.divLongBe1 {
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12) !important;
+        padding: 40px 5px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        background-color: #f1f1f1;
+        background: #f2f5f7 url("images/ui-bg_highlight-hard_100_f2f5f7_1x100.png") 50% top repeat-x;
+        position: relative;
+    }
+
+    div.divKhac1 {
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12) !important;
+        padding: 20px 5px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        background-color: #f1f1f1;
+        position: relative;
+    }
+</style>
+
+@using (Html.BeginForm("Edit", "NT_NUOC_NGOT", FormMethod.Post, new { @id = "formCreate" }))
+{
+    
+    <div class="container fdb-div-content fdb-div-corner-all">
+
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        @Html.HiddenFor(m => m.ID)
+
+        <div class="fdb-title-form-24 text-center col-md-12">
+            Báo cáo nuôi thủy sản nước ngọt<br />
+           
+        </div>
+
+
+        <div class="form-horizontal">
+            <fieldset class="fdb-scheduler-border">
+                <legend class="fdb-scheduler-border">Thông tin chung</legend>
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-10"><label id="lblValidThangQuy" style="color: #b94a48"></label></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 control-label">
+                        Loại báo cáo <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4 rdseleted">
+                        @Html.RadioButtonFor(m => m.LOAI_BAO_CAO, 1, new { @class = "cloaibaocao" }) Báo cáo theo tuần &nbsp;
+                        @Html.RadioButtonFor(m => m.LOAI_BAO_CAO, 2, new { @class = "cloaibaocao" }) Báo cáo theo tháng &nbsp;
+                        <br />
+                        @Html.ValidationMessageFor(m => m.LOAI_BAO_CAO)
+                        @Html.HiddenFor(m => m.LOAI_BAO_CAO, new { @id = "hidLoaiBaoCao" })
+                        <div class="help-tip">
+                            <p>
+                                Bạn phải chọn loại báo cáo(theo tuần hoặc theo tháng) trước khi thực hiện các thao tác nhập liệu khác!
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="divBaoCaoTuan" style="@(Model.LOAI_BAO_CAO==1?"display:block":"display:none")">
+                    <div class="form-group">
+                        <div class="col-md-2 control-label">
+                            Ngày báo cáo <label style="color:red;"></label>
+                        </div>
+                        <div class="col-md-1 control-label">
+                            Từ ngày:
+                        </div>
+                        <div class="col-md-3">
+                            @Html.TextBoxFor(m => m.NGAY_BAO_CAO_TU, "{0:dd/MM/yyyy}", new { @class = "form-control", @style = "width:120px" })
+                            <span id="lblValidateBaoCaoTuNgay" style="color: #b94a48; display: none"></span>
+                        </div>
+                        <div class="col-md-2 control-label">
+                            Đến ngày:
+                        </div>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(m => m.NGAY_BAO_CAO_DEN, "{0:dd/MM/yyyy}", new { @class = "form-control", @style = "width:120px" })
+                            @Html.ValidationMessageFor(model => model.NGAY_BAO_CAO_DEN)
+                            <span id="lblValidateBaoCaoDenNgay" style="color: #b94a48; display: none"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" id="divBaoCaoThang" style="@(Model.LOAI_BAO_CAO==2?"display:block":"display:none")">
+                    <div>
+                        <div class="col-md-2 control-label">
+                            Tháng <label style="color:red;">(*)</label>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.DropDownListFor(m => m.THANG, new List<SelectListItem>
+                                {                   new SelectListItem() {Text = "", Value=""},
+                                                    new SelectListItem() {Text = "Tháng 1", Value="1"},
+                                                    new SelectListItem() {Text = "Tháng 2", Value="2"},
+                                                    new SelectListItem() {Text = "Tháng 3", Value="3"},
+                                                    new SelectListItem() {Text = "Tháng 4", Value="4"},
+                                                    new SelectListItem() {Text = "Tháng 5", Value="5"},
+                                                    new SelectListItem() {Text = "Tháng 6", Value="6"},
+                                                    new SelectListItem() {Text = "Tháng 7", Value="7"},
+                                                    new SelectListItem() {Text = "Tháng 8", Value="8"},
+                                                    new SelectListItem() {Text = "Tháng 9", Value="9"},
+                                                    new SelectListItem() {Text = "Tháng 10", Value="10"},
+                                                    new SelectListItem() {Text = "Tháng 11", Value="11"},
+                                                    new SelectListItem() {Text = "Tháng 12", Value="12"}
+                                }, new { @class = "form-control", @style = "width:150px" })
+                            @*@Html.ValidationMessageFor(model => model.THANG)*@
+                            <span id="lblValidateTHANG" style="color:red;display:none"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 control-label">
+                        Năm <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(m => m.NAM, new { @class = "form-control", @type = "text", @style = "width:150px" })
+                        @Html.ValidationMessageFor(model => model.NAM)
+                        <span id="lblValidateNAM" style="color: #b94a48; display: none"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-2 control-label">
+                        Tỉnh/Thành phố <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.MA_TINHTP, (SelectList)ViewBag.DMTThanhPho,  new { @class = "form-control", @id = "province_dll" })
+                        @Html.ValidationMessageFor(model => model.MA_TINHTP)
+                    </div>
+                    <div class="col-md-2 control-label">
+                        Ngày nhập <label style="color:red;">(*)</label>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(m => m.NGAY_NHAP, "{0:dd/MM/yyyy}", new { @class = "form-control", @readonly = true })
+
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="fdb-scheduler-border" style=" margin-top: 15px; " id="fidDetail">
+                <legend class="fdb-scheduler-border" >
+                    Thông tin chi tiết
+                    &nbsp; &nbsp;  <label class="BtnPlus" style="cursor: pointer; text-align: center;" ><img src="@Url.Content("~/fonts/document_add2.png")" title="Click vào đây để thêm mới bản ghi chi tiết" /></label>
+                </legend>
+                <label id="lblValidateDETAIL" style="color: #b94a48"></label>
+                @{
+
+    List<FDB.Models.NT_NUOC_NGOT_DETAIL> lstDetail = Model.DSNT_NuocNgotDetail.ToList();
+    List<FDB.Models.DM_HINHTHUC_NUOI> lstDMHinhThuc = (new FDB.DataAccessLayer.FDBContext()).DM_HINHTHUC_NUOI.ToList();
+    List<FDB.Models.DM_DOITUONG_NUOI_NGOT> lstDoiTuongNuoiLongBe = (new FDB.DataAccessLayer.FDBContext()).DM_DOITUONG_NUOI_NGOT.Where(o => o.LOAI_DOI_TUONG == 1).ToList();
+    List<FDB.Models.DM_DOITUONG_NUOI_NGOT> lstDoiTuongNuoiKhac = (new FDB.DataAccessLayer.FDBContext()).DM_DOITUONG_NUOI_NGOT.Where(o => o.LOAI_DOI_TUONG == 2).ToList();
+
+    int Index = 1;
+    int ID = 1;
+    string disabledLongBe = "";
+    string disabledKhac = "";
+    string idDivLongBe = "divLongBe1";
+    string idDivKhac = "divKhac1";
+    //class="@(item.Childens.Any() &&item.Parent_ID!="0" ? "dropdown-submenu" : "")"
+    foreach (var item in lstDetail)
+    {
+        disabledLongBe = item.ID_HINHTHUC_NUOI == 1 ? "" : "disabled";
+        disabledKhac = item.ID_HINHTHUC_NUOI == 2 ? "" : "disabled";
+        idDivKhac = "divKhac" + ID.ToString();
+        idDivLongBe = "divLongBe" + ID.ToString();
+
+        <div class="divLongBe1">
+            <span class="spanindex" style="float:left; position:absolute;top:5px; left:10px; color:#333333;font-weight: bold;font-size: 14px;font-style: italic; ">(@Index.ToString())</span>
+            <div class="row margin-top-05">
+                <div class="col-md-2 control-label">Hình thức nuôi:</div>
+                <div class="col-md-3">
+                    <select class="selectNhomNghe" id="ddlID_HINHTHUC_NUOI_@ID.ToString()" name="ddlID_HINHTHUC_NUOI_@ID.ToString()">
+                        @foreach (var itemDM in lstDMHinhThuc)
+                        {
+                            <option value="@itemDM.ID.ToString()" @(itemDM.ID == item.ID_HINHTHUC_NUOI ? "selected" : "")>@itemDM.TEN_HINH_THUC</option>
+                        }
+
+
+                    </select>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-2 control-label">Đối tượng:</div>
+                <div class="col-md-3">
+                    <select class="form-control" name="ddlID_DOITUONG_NUOI_NGOT_@ID.ToString()" id="ddlID_DOITUONG_NUOI_NGOT_@ID.ToString()">
+                        @if (item.ID_HINHTHUC_NUOI == 1)
+                        {
+                            foreach (var itemDT in lstDoiTuongNuoiLongBe)
+                            {
+                                <option value="@itemDT.ID.ToString()" @(itemDT.ID == item.ID_DOITUONG_NUOI_NGOT ? "selected" : "")>@itemDT.TEN_DOI_TUONG</option>
+                            }
+                        }
+                        else
+                        {
+                            foreach (var itemDT in lstDoiTuongNuoiKhac)
+                            {
+                                <option value="@itemDT.ID.ToString()" @(itemDT.ID == item.ID_DOITUONG_NUOI_NGOT ? "selected" : "")>@itemDT.TEN_DOI_TUONG</option>
+                            }
+                        }
+
+
+                    </select>
+                </div>
+
+            </div>
+            <div id="@idDivLongBe" style="@(item.ID_HINHTHUC_NUOI==1?"display:block":"display:none")" class="div1">
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">Số lượng lồng(chiếc):</div>
+                    <div class="col-md-2"><input type="number" class="form-control" value="@item.SO_LUONG_LONG_LONGBE" name="txtSO_LUONG_LONG_LONGBE_@ID.ToString()" @disabledLongBe /></div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2 control-label">Tổng thể tích lồng(m3):</div>
+                    <div class="col-md-2"><input type="text" class="form-control" value="@item.THE_TICH_LONG_LONGBE" name="txtTHE_TICH_LONG_LONGBE_@ID.ToString()" alt="ischeck" @disabledLongBe /></div>
+                </div>
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">Mật độ thả(con/m3):</div>
+                    <div class="col-md-2"><input type="number" class="form-control" value="@item.MAT_DO_THA_LONGBE" name="txtMAT_DO_THA_LONGBE_@ID.ToString()" @disabledLongBe /></div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2 control-label">Sản lượng thu hoạch trong kỳ (tấn):</div>
+                    <div class="col-md-2"><input type="text" class="form-control" value="@item.SAN_LUONG_LONGBE" name="txtSAN_LUONG_LONGBE_@ID.ToString()" alt="ischeck" @disabledLongBe /></div>
+                </div>
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">Số lượng giống thả(triệu con):</div>
+                    <div class="col-md-2"><input type="text" class="form-control" value="@item.SO_LUONG_GIONG_THA_LONGBE" name="txtSO_LUONG_GIONG_THA_LONGBE_@ID.ToString()" @disabledLongBe /></div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2 control-label"></div>
+                    <div class="col-md-2"></div>
+                </div>
+            </div>
+            <div id="@idDivKhac" style="@(item.ID_HINHTHUC_NUOI==2?"display:block":"display:none")" class="div1">
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">Diện tích thả nuôi trong kỳ(ha):</div>
+                    <div class="col-md-2"><input type="text" class="form-control" value="@item.DIEN_TICH_THANUOI_TRONGKY_KHAC" name="txtDIEN_TICH_THANUOI_TRONGKY_KHAC_@ID.ToString()" alt="ischeck" @disabledKhac /></div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2 control-label">Diện tích thả nuôi lũy kế(ha):</div>
+                    <div class="col-md-2"><input type="text" class="form-control" value="@item.DIEN_TICH_THANUOI_LUYKE_KHAC" name="txtDIEN_TICH_THANUOI_LUYKE_KHAC_@ID.ToString()" @disabledKhac /></div>
+                </div>
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">Nuôi trong qui hoạch(ha):</div>
+                    <div class="col-md-2"><input type="text" class="form-control" value="@item.NUOI_TRONG_QUY_HOACH_KHAC" name="txtNUOI_TRONG_QUY_HOACH_KHAC_@ID.ToString()" @disabledKhac /></div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2 control-label">Nuôi ngoài qui hoạch(ha):</div>
+                    <div class="col-md-2"><input type="text" class="form-control" value="@item.NUOI_NGOAI_QUY_HOACH_KHAC" name="txtNUOI_NGOAI_QUY_HOACH_KHAC_@ID.ToString()" @disabledKhac /></div>
+                </div>
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">Diện tích GAP và tương tự(ha):</div>
+                    <div class="col-md-2"><input type="text" class="form-control" value="@item.DIEN_TICH_GAP_TUONGTU_KHAC" name="txtDIEN_TICH_GAP_TUONGTU_KHAC_@ID.ToString()" @disabledKhac /></div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2 control-label">Số lượng giống thả(triệu con):</div>
+                    <div class="col-md-2"><input type="text" class="form-control" value="@item.SO_LUONG_GIONG_THA_KHAC" name="txtSO_LUONG_GIONG_THA_KHAC_@ID.ToString()" alt="ischeck" @disabledKhac /></div>
+                </div>
+                <div class="row margin-top-05">
+                    <div class="col-md-2 control-label">Phương thức nuôi:</div>
+                    <div class="col-md-4">
+                        <select class="form-control" id="ddl_ID_PHUONG_THUC_NUOI_KHAC_@ID.ToString()" name="ddlID_PHUONG_THUC_NUOI_KHAC_@ID.ToString()" @disabledKhac>
+                            <option value="1" @(item.ID_PHUONG_THUC_NUOI_KHAC == 1 ? "selected" : "")>Bán thâm canh/Thâm canh</option>
+                            <option value="2" @(item.ID_PHUONG_THUC_NUOI_KHAC == 2 ? "selected" : "")>Quảng canh/Quảng canh cải tiến</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 control-label">Sản lượng thu hoạch trong kỳ (tấn):</div>
+                    <div class="col-md-2"><input type="text" class="form-control" value="@item.SAN_LUONG_KHAC" name="txtSAN_LUONG_KHAC_@ID.ToString()" alt="ischeck" @disabledKhac /></div>
+                </div>
+            </div>
+            <div style="float:right; margin-right:10px; margin-bottom:10px; padding-bottom:10px;">
+                <label class="BtnPlus" style="cursor: pointer;  text-align: center"><img src="@Url.Content("~/fonts/document_add2.png")" title="Thêm mới" /></label>
+                &nbsp;&nbsp;&nbsp;
+                <label class="BtnMinus" id="lblDetail_@ID.ToString()" style="cursor:pointer"><img src="@Url.Content("~/fonts/list_delete.png")" title="Xóa" /></label>
+            </div>
+        </div>
+
+                        Index++;
+                        ID++;
+    }
+    ViewBag.sMaxID = ID;
+    ViewBag.sMaxIndex = Index;
+                }
+            </fieldset>
+            
+        </div>
+
+    </div>
+
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-danger btn-sm" id="btnsubmit1">
+                <span class="glyphicon glyphicon-floppy-disk"></span> Cập nhật
+            </button>
+            &nbsp;&nbsp;
+            @Html.ActionLink("Quay lại", "Index", "NT_NUOC_NGOT", null, new { @class = "btn btn-primary btn-sm" })
+        </div>
+    </div>
+}
+
+<input id="txtDMHinhThucNuoi" style="display:none" value="@ViewBag.DMHinhThucNuoi" />
+<input id="txtDMDoiTuongNuoiLongBe" style="display:none" value="@ViewBag.DMDoiTuongNuoiLongBe" />
+<input id="txtDMDoiTuongNuoiKhac" style="display:none" value="@ViewBag.DMDoiTuongNuoiKhac" />
+<label id="lblID" style="display:none">@ViewBag.sMaxID </label>
+<label id="lblIndex" style="display:none">@ViewBag.sMaxIndex </label>
+
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script src="~/Scripts/datepicker.js"></script>
+<script src="~/Scripts/jquery-ui-1.11.4.js"></script>
+<script src="~/Scripts/jquery.maskedinput.js"></script>
+<script src="~/Scripts/jquery.maskMoney.js"></script>
+<script src="~/Scripts/jquery.number.js"></script>
+<script src="~/Scripts/jquery.masknumber.js"></script>
+<script src="~/Scripts/moment.js"></script>
+
+<script type="text/javascript">
+    $("#NGAY_BAO_CAO_TU").datepicker({
+        changeMonth: true,
+        changeYear: true,
+
+        dateFormat: 'dd/mm/yy'
+    });
+    $("#NGAY_BAO_CAO_TU").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+
+    $("#NGAY_BAO_CAO_DEN").datepicker({
+        changeMonth: true,
+        changeYear: true,
+
+        dateFormat: 'dd/mm/yy'
+    });
+    $("#NGAY_BAO_CAO_DEN").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+    $("#NGAY_NHAP").mask("99/99/9999", { placeholder: "dd/mm/yyyy" });
+    $('#NAM').maskNumber({ integer: true, decimal: '', thousands: '' });
+    $(function () {
+        $(document).tooltip();
+    });
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //$("#Table1").find('input').number(true, 2);
+        $("#fidDetail").find('input[type=text]').number(true, 2);
+
+        var lblID = "lblDetail_1";
+        var ID = 1;
+        var Index = 1;
+        if ($('#lblID').html().trim() != "") {
+            ID = parseInt($('#lblID').html().toString());
+        }
+        if ($('#lblIndex').html().trim() != "") {
+            Index = parseInt($('#lblIndex').html().toString());
+        }
+
+        var strDMHinhThucNuoi = $('#txtDMHinhThucNuoi').val();
+        var strDDL1 = strDMHinhThucNuoi + '</select>';
+        var strDMDoiTuongNuoiLongBe = $('#txtDMDoiTuongNuoiLongBe').val();
+        var strDDL2 = strDMDoiTuongNuoiLongBe + '</select>';
+        var strDMDoiTuongNuoiKhac = $('#txtDMDoiTuongNuoiKhac').val();
+        var strDDL3 = strDMDoiTuongNuoiKhac + '</select>';
+
+        function addRow() {
+            var html =
+                '<div class="divLongBe1" >' +
+                    '<span class="spanindex" style="float:left; position:absolute;top:5px; left:10px; color:#333333;font-weight: bold;font-size: 14px;font-style: italic; " >(' + Index.toString() + ')</span>' +
+                    '<div class="row margin-top-05">' +
+                        '<div class="col-md-2 control-label">Hình thức nuôi:</div>' +
+                        '<div class="col-md-3"><select class="selectNhomNghe" id="ddlID_HINHTHUC_NUOI_' + ID + '" name="ddlID_HINHTHUC_NUOI_' + ID + '">' + strDDL1 + '</div> ' +
+                        '<div class="col-md-1"></div>' +
+                        '<div class="col-md-2 control-label" >Đối tượng:</div>' +
+                        '<div class="col-md-3"><select class="form-control" name="ddlID_DOITUONG_NUOI_NGOT_' + ID + '" id="ddlID_DOITUONG_NUOI_NGOT_' + ID + '">' + strDDL2 + '</div>' +
+                        
+                    '</div>' +
+                    '<div id="divLongBe' + ID + '" style="display:block" class="div1">' +
+                        '<div class="row margin-top-05">' +
+                            '<div class="col-md-2 control-label">Số lượng lồng(chiếc):</div>' +
+                            '<div class="col-md-2"><input type="number" class="form-control" name="txtSO_LUONG_LONG_LONGBE_' + ID + '" /></div>' +
+                            '<div class="col-md-2"></div>' +
+                            '<div class="col-md-2 control-label">Tổng thể tích lồng(m3)<label style="color:red">(*)</label>:</div>' +
+                            '<div class="col-md-2"><input type="text" class="form-control" name="txtTHE_TICH_LONG_LONGBE_' + ID + '" alt="ischeck" /></div> ' +
+                        '</div>' +
+                        '<div class="row margin-top-05">' +
+                            '<div class="col-md-2 control-label">Mật độ thả(con/m3):</div>' +
+                            '<div class="col-md-2"><input type="number" class="form-control" name="txtMAT_DO_THA_LONGBE_' + ID + '"/></div>' +
+                            '<div class="col-md-2"></div>' +
+                            '<div class="col-md-2 control-label">Sản lượng thu hoạch trong kỳ (tấn)<label style="color:red">(*)</label>:</div>' +
+                            '<div class="col-md-2"><input type="text" class="form-control" name="txtSAN_LUONG_LONGBE_' + ID + '" alt="ischeck" /></div> ' +
+                        '</div>' +
+                        '<div class="row margin-top-05">' +
+                            '<div class="col-md-2 control-label">Số lượng giống thả(triệu con):</div>' +
+                            '<div class="col-md-2"><input type="number" class="form-control" name="txtSO_LUONG_GIONG_THA_LONGBE_' + ID + '"   /></div> ' +
+                            '<div class="col-md-2"></div>' +
+                            '<div class="col-md-2 control-label"></div>' +
+                            '<div class="col-md-2"></div> ' +
+                        '</div>' +
+                    '</div>' +
+                    '<div id="divKhac' + ID + '" style="display:none" class="div1">' +
+                        '<div class="row margin-top-05">' +
+                            '<div class="col-md-2 control-label">Diện tích thả nuôi trong kỳ(ha)<label style="color:red">(*)</label>:</div>' +
+                            '<div class="col-md-2"><input type="text" class="form-control" name="txtDIEN_TICH_THANUOI_TRONGKY_KHAC_' + ID + '" alt="ischeck" /></div>' +
+                            '<div class="col-md-2"></div>' +
+                            '<div class="col-md-2 control-label">Diện tích thả nuôi lũy kế(ha):</div>' +
+                            '<div class="col-md-2"><input type="text" class="form-control" name="txtDIEN_TICH_THANUOI_LUYKE_KHAC_' + ID + '" /></div> ' +
+                        '</div>' +
+                        '<div class="row margin-top-05">' +
+                            '<div class="col-md-2 control-label">Nuôi trong qui hoạch(ha):</div>' +
+                            '<div class="col-md-2"><input type="text" class="form-control" name="txtNUOI_TRONG_QUY_HOACH_KHAC_' + ID + '" /></div>' +
+                            '<div class="col-md-2"></div>' +
+                            '<div class="col-md-2 control-label">Nuôi ngoài qui hoạch(ha):</div>' +
+                            '<div class="col-md-2"><input type="text" class="form-control" name="txtNUOI_NGOAI_QUY_HOACH_KHAC_' + ID + '" /></div> ' +
+                        '</div>' +
+                        '<div class="row margin-top-05">' +
+                            '<div class="col-md-2 control-label">Diện tích GAP và tương tự(ha):</div>' +
+                            '<div class="col-md-2"><input type="text" class="form-control" name="txtDIEN_TICH_GAP_TUONGTU_KHAC_' + ID + '" /></div>' +
+                            '<div class="col-md-2"></div>' +
+                            '<div class="col-md-2 control-label">Số lượng giống thả(triệu con):</div>' +
+                            '<div class="col-md-2"><input type="text" class="form-control" name="txtSO_LUONG_GIONG_THA_KHAC_' + ID + '"   /></div> ' +
+                        '</div>' +
+                        '<div class="row margin-top-05">' +
+                            '<div class="col-md-2 control-label">Phương thức nuôi:</div>' +
+                            '<div class="col-md-4"><select class="form-control" id="ddl_ID_PHUONG_THUC_NUOI_KHAC_' + ID + '" name="ddlID_PHUONG_THUC_NUOI_KHAC_' + ID + '"><option value="1">Bán thâm canh/Thâm canh</option><option value="2">Quảng canh/Quảng canh cải tiến</option></select></div>' +
+                            '<div class="col-md-2 control-label">Sản lượng thu hoạch trong kỳ (tấn)<label style="color:red">(*)</label>:</div>' +
+                            '<div class="col-md-2"><input type="text" class="form-control" name="txtSAN_LUONG_KHAC_' + ID + '" alt="ischeck"/></div> ' +
+                        '</div>' +
+                    '</div>' +
+                    '<div style="float:right; margin-right:10px; margin-bottom:10px; padding-bottom:10px;">' +
+                        '<label class="BtnPlus" style="cursor: pointer;  text-align: center"><img src="@Url.Content("~/fonts/document_add2.png")" title="Thêm mới" /></label>' +
+                        '&nbsp;&nbsp;&nbsp;' +
+                        '<label class="BtnMinus" id="lblDetail_' + ID + '" style="cursor:pointer"><img src="@Url.Content("~/fonts/list_delete.png")" title="Xóa" /></label>' +
+                    '</div' +
+                '</div>'
+            ;
+
+            $(html).appendTo($("#fidDetail"));
+            //  alert("1");
+
+            // mask decimal ở đây:
+            $("#fidDetail").find('input[type=text]').number(true, 2);
+            // $("#fidDetail").find('input[type=number]').number(true, 2);
+            $('#divKhac' + ID).find('input').prop('disabled', true);
+            $('#divKhac' + ID).find('select').prop('disabled', true);
+
+            ID++;
+            Index++;
+
+        };
+        $("#fidDetail").on("click", ".BtnPlus", addRow);
+
+        $("#fidDetail").on("click", ".BtnMinus", deleteRow);
+
+
+        function deleteRow() {
+            lblID = $(this).attr('id');
+            // alert(lblID);
+            lblID = "#" + lblID.toString().trim();
+            if (confirm("Bạn chắc chắn muốn xóa?")) {
+                var count = 0;
+                var par = $(this).parent().parent();
+                var par2 = par.parent().parent().parent();
+
+                //count danh sách span
+                //par.parent().find("span[class='spanindex']").each(function () {
+                //    count++;
+                //});
+
+                par.remove();
+
+                var count2 = 0;
+                par2.find("span[class='spanindex']").each(function () {
+                    $(this).html('');
+                    count2++;
+                });
+
+                if (count2 > 0) {
+                    for (var i = 0; i < count2; i++) {
+                        var k = i + 1;
+
+                        par2.find("span[class='spanindex']").each(function () {
+                            var valThis = $(this).html();
+                            par2.find("span[class='spanindex']").eq(i).html('(' + k.toString() + ')');
+
+                        });
+
+                    }
+
+                    Index = count2 + 1;
+                }
+                else {
+                    Index = 1;
+                }
+
+            }
+
+            return false;
+
+        };
+
+        //Sự kiện on change hình thức nuôi:
+        $(document).on('change', ".selectNhomNghe", function () {
+            var hiVal = $(this).val();
+            var thisID = $(this).attr('id');
+            var lastNumber = thisID.split('_');
+            //set option cho select ddlID_DOITUONG_NUOI_MANLO_
+            var strDMDoiTuongNuoiLongBe = $('#txtDMDoiTuongNuoiLongBe').val();
+            var strDDLLongBe = strDMDoiTuongNuoiLongBe + '</select>';
+            var strDMDoiTuongNuoiKhac = $('#txtDMDoiTuongNuoiKhac').val();
+            var strDDLKhac = strDMDoiTuongNuoiKhac + '</select>';
+            // alert(strDDLKhac);
+            var ID_DOITUONG_NUOI = 'ddlID_DOITUONG_NUOI_NGOT_' + lastNumber[lastNumber.length - 1].toString();
+
+            //ẩn hiện, disabled, enabled cho các thẻ div
+            var divKhacID = 'divKhac' + lastNumber[lastNumber.length - 1].toString();
+            var divLongBeID = 'divLongBe' + lastNumber[lastNumber.length - 1].toString();
+
+            if (hiVal == "2") {
+                $("#" + divKhacID).attr("style", "display:block");
+                $("#" + divKhacID).find('input').prop('disabled', false);
+                $("#" + divKhacID).find('select').prop('disabled', false);
+
+                $("#" + ID_DOITUONG_NUOI).html(strDDLKhac);
+
+                $("#" + divLongBeID).attr("style", "display:none");
+                $("#" + divLongBeID).find('input').prop('disabled', true);
+                $("#" + divLongBeID).find('select').prop('disabled', true);
+            }
+            else {
+                $("#" + divKhacID).attr("style", "display:none");
+                $("#" + divKhacID).find('input').prop('disabled', true);
+                $("#" + divKhacID).find('select').prop('disabled', true);
+
+
+                $("#" + divLongBeID).attr("style", "display:block");
+                $("#" + divLongBeID).find('input').prop('disabled', false);
+                $("#" + divLongBeID).find('select').prop('disabled', false);
+
+                $("#" + ID_DOITUONG_NUOI).html(strDDLLongBe);
+
+            }
+
+        });
+
+
+        //Sự kiện click:
+        var validateNGAYNHAP = true;
+        var valRadio = $('#hidLoaiBaoCao').val();
+        $('#btnsubmit1,#btnsubmit2').click(function () {
+            var currentTime = new Date();
+            var currentMonth = currentTime.getMonth() + 1;
+            var currentYear = currentTime.getFullYear();
+
+            var lblValidateTHANG = $('#lblValidateTHANG');
+            var lblValidateNAM = $('#lblValidateNAM');
+            lblValidateNAM.html('');
+            lblValidateTHANG.html('');
+
+            if (valRadio == "2") {
+                var txtTHANG = $('#THANG').val();
+                if (txtTHANG == null || txtTHANG == "") {
+                    lblValidateTHANG.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+                    lblValidateTHANG.html('Tháng là bắt buộc nhập!');
+                    lblValidateNAM.html('');
+                    lblValidateNAM.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+                    return false;
+                }
+                else {
+                    var txtNAM = $('#NAM').val();
+                    if (txtNAM > currentYear) {
+                        lblValidateNAM.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+                        lblValidateNAM.html('Năm không được lớn hơn năm hiện tại');
+                        lblValidateTHANG.html('');
+                        lblValidateTHANG.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+                        $('#NAM').focus();
+                        return false;
+                    }
+                    if (txtNAM == currentYear && txtTHANG > currentMonth) {
+                        lblValidateTHANG.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+                        lblValidateTHANG.html('Tháng không được lớn hơn tháng hiện tại');
+                        lblValidateNAM.html('');
+                        lblValidateNAM.attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+                        $('#THANG').focus();
+                        return false;
+                    }
+                }
+
+            }
+
+            var isEmpty = 0;
+            if (valRadio == "1") {
+                var valNgayDen = $("#NGAY_BAO_CAO_DEN").val();
+                var valNgayTu = $("#NGAY_BAO_CAO_TU").val();
+
+                $('#lblValidateBaoCaoDenNgay').html('');
+                $('#lblValidateBaoCaoTuNgay').html('');
+
+                if (valNgayTu == "" || valNgayTu == null) {
+                    $('#lblValidateBaoCaoTuNgay').html('Báo cáo từ ngày bắt buộc nhập!');
+                    $('#lblValidateBaoCaoTuNgay').attr("style", "display:block;color: #b94a48;font-size: 12px;line-height: 1.428");
+                    $('#lblValidateBaoCaoDenNgay').html('');
+                    return false;
+                }
+                if (valNgayDen == "" || valNgayDen == null) {
+                    $('#lblValidateBaoCaoDenNgay').html('Báo cáo đến ngày bắt buộc nhập!');
+                    $('#lblValidateBaoCaoDenNgay').attr("style", "display:block;color: #b94a48;font-size: 12px;line-height: 1.428");
+                    $('#lblValidateBaoCaoTuNgay').html('');
+                    return false;
+                }
+                if ((valNgayDen == "" || valNgayDen == null) && (valNgayTu == "" || valNgayTu == null)) {
+                    $('#lblValidateBaoCaoDenNgay').html('Báo cáo đến ngày bắt buộc nhập!');
+                    $('#lblValidateBaoCaoDenNgay').attr("style", "display:block;color: #b94a48;font-size: 12px;line-height: 1.428");
+                    $('#lblValidateBaoCaoTuNgay').html('Báo cáo từ ngày bắt buộc nhập!');
+                    $('#lblValidateBaoCaoTuNgay').attr("style", "display:block;color: #b94a48;font-size: 12px;line-height: 1.428");
+                    return false;
+                }
+
+
+                //validate báo cáo từ <báo cáo đến
+                if (validateNGAYNHAP == false) {
+                    $('#lblValidateBaoCaoDenNgay').html('Báo cáo đến ngày phải lơn hơn hoặc bằng báo cáo từ ngày!<br/> và Báo cáo từ và báo cáo đến ngày phải cùng 1 tháng');
+                    $('#lblValidateBaoCaoDenNgay').attr("style", "display:block;color: #b94a48;font-size: 12px;line-height: 1.428");
+                    return false;
+                }
+                else {
+                    $('#lblValidateBaoCaoDenNgay').html('');
+                    $('#lblValidateBaoCaoDenNgay').attr("style", "display:none");
+
+                }
+            }
+
+            //-----------END validate báo cáo từ <báo cáo đến
+
+            //Validate cac text box, bắt buộc phải nhập 1 trong 5 textbox
+            var fidDetail = $("#fidDetail");
+            var countAll = 0;
+            var countVal = 0;
+            var countCheck = 0;
+            var vReturn = true;
+
+            // $('div[id^="divLongBe"]')
+            $(fidDetail).find('div.divLongBe1').each(function () {
+                $(this).find('div.div1').each(function () {
+                    var div1ID = $(this).attr('id').toString();
+                    //  alert(div1ID);
+                    if ($('#' + div1ID).css('display') == 'block') {
+                        //alert(div1ID + "block");
+                        $(this).find('div div input[alt="ischeck"]:not(:disabled)').each(function () {
+                            var txt = $(this).val();
+
+                            if (txt == "") {
+                                countVal++;
+                            }
+                            if (div1ID.substring(0, div1ID.length - 1) == "divLongBe") {
+                                countCheck = 2
+                            }
+                            else {
+                                countCheck = 2;
+                            }
+                            if (countVal == countCheck) {
+                                $(this).parent().parent().parent().find('input[alt="ischeck"]:not(:disabled)').css("border", "solid 1px #b94a48");
+                                $(this).parent().parent().parent().find('input[alt="ischeck"]:not(:disabled)').eq(0).focus();
+                                vReturn = false;
+                            }
+                            else {
+                                $(this).css("border", "solid 1px #cccccc");
+
+                            }
+                        });
+                    }
+
+                    countVal = 0;
+
+                });
+
+                //biến này dùng để đếm những div có class =divLongBe1, dùng để validate nhập chi tiết, nếu =0 thì thông báo bắt buộc nhập chi tiết
+                countAll++;
+            });
+
+
+            if (countAll == 0) {
+                $('#lblValidateDETAIL').html('Bạn phải nhập danh sách chi tiết!');
+                $('#lblValidateDETAIL').attr("style", "display:block;color:#b94a48;font-size: 12px;line-height: 1.428;font-weight: normal;");
+                vReturn = false;
+            }
+            else {
+                $('#lblValidateDETAIL').html('');
+
+            }
+
+            return vReturn;
+        }
+       );
+
+        //lblValidateBaoCaoDenNgay
+        //$("#NGAY_BAO_CAO_DEN").change(function () {
+        //    var NgayDen = $("#NGAY_BAO_CAO_DEN").val();
+        //    var NgayTu = $("#NGAY_BAO_CAO_TU").val();
+
+        //    //so sánh tháng
+        //    //var from = NgayDen.split("/");
+        //    //var date = new Date(from[2], from[1], from[0]);
+        //    //alert('tháng: ' +date.getMonth() );
+
+        //    if (valRadio == "1" && NgayDen != "" && NgayDen != null && NgayTu != "" && NgayTu != null) {
+        //        var fromThang = NgayDen.split("/")[1];
+        //        var toThang = NgayTu.split("/")[1];
+        //        $('#lblValidateBaoCaoDenNgay').html('');
+        //        $('#lblValidateBaoCaoDenNgay').attr("style", "display:none");
+        //        if (toThang != fromThang) {
+        //            $('#lblValidateBaoCaoDenNgay').html('Tháng của Báo cáo đến ngày phải bằng tháng báo cáo từ ngày!');
+        //            $('#lblValidateBaoCaoDenNgay').attr("style", "display:block;color: #b94a48;font-size: 12px;line-height: 1.428");
+        //            validateNGAYNHAP = false;
+        //        }
+        //        else {
+        //            $('#lblValidateBaoCaoDenNgay').html('');
+        //            $('#lblValidateBaoCaoDenNgay').attr("style", "display:none");
+        //            if ((moment(NgayDen, 'DD/MM/YYYY') < moment(NgayTu, 'DD/MM/YYYY'))) {
+        //                $('#lblValidateBaoCaoDenNgay').html('Báo cáo đến ngày phải lơn hơn hoặc bằng báo cáo từ ngày!');
+        //                $('#lblValidateBaoCaoDenNgay').attr("style", "display:block;color: #b94a48;font-size: 12px;line-height: 1.428");
+        //                validateNGAYNHAP = false;
+        //            }
+
+        //            else {
+        //                $('#lblValidateBaoCaoDenNgay').html('');
+        //                $('#lblValidateBaoCaoDenNgay').attr("style", "display:none");
+        //                validateNGAYNHAP = true;
+        //            }
+        //        }
+
+        //    }
+
+
+
+        //});
+
+        //lblValidateBaoCaoDenNgay
+        //$("#NGAY_BAO_CAO_TU").change(function () {
+        //    var NgayDen = $("#NGAY_BAO_CAO_DEN").val();
+        //    var NgayTu = $("#NGAY_BAO_CAO_TU").val();
+
+        //    //so sánh tháng
+        //    //var from = NgayDen.split("/");
+        //    //var date = new Date(from[2], from[1], from[0]);
+        //    //alert('tháng: ' +date.getMonth() );
+
+        //    if (valRadio == "1" && NgayDen != "" && NgayDen != null && NgayTu != "" && NgayTu != null) {
+        //        var fromThang = NgayDen.split("/")[1];
+        //        var toThang = NgayTu.split("/")[1];
+        //        $('#lblValidateBaoCaoDenNgay').html('');
+        //        $('#lblValidateBaoCaoDenNgay').attr("style", "display:none");
+        //        if (toThang != fromThang) {
+        //            $('#lblValidateBaoCaoDenNgay').html('Tháng của Báo cáo đến ngày phải bằng tháng báo cáo từ ngày!');
+        //            $('#lblValidateBaoCaoDenNgay').attr("style", "display:block;color: #b94a48;font-size: 12px;line-height: 1.428");
+        //            validateNGAYNHAP = false;
+        //        }
+        //        else {
+        //            $('#lblValidateBaoCaoDenNgay').html('');
+        //            $('#lblValidateBaoCaoDenNgay').attr("style", "display:none");
+        //            if ((moment(NgayDen, 'DD/MM/YYYY') < moment(NgayTu, 'DD/MM/YYYY'))) {
+        //                $('#lblValidateBaoCaoDenNgay').html('Báo cáo đến ngày phải lơn hơn hoặc bằng báo cáo từ ngày!');
+        //                $('#lblValidateBaoCaoDenNgay').attr("style", "display:block;color: #b94a48;font-size: 12px;line-height: 1.428");
+        //                validateNGAYNHAP = false;
+        //            }
+
+        //            else {
+        //                $('#lblValidateBaoCaoDenNgay').html('');
+        //                $('#lblValidateBaoCaoDenNgay').attr("style", "display:none");
+        //                validateNGAYNHAP = true;
+        //            }
+        //        }
+
+        //    }
+
+
+
+        //});
+
+        //Loai bao cao change:
+        $(".cloaibaocao").change(function () {
+            var Val = $(this).val();
+
+            if (Val != null && Val != "") {
+                if (Val == "1") {
+                    $("#divBaoCaoTuan").attr("style", "display:block");
+                    $("#divBaoCaoThang").attr("style", "display:none");
+                }
+                else {
+                    $("#divBaoCaoTuan").attr("style", "display:none");
+                    $("#divBaoCaoThang").attr("style", "display:block");
+                }
+
+                valRadio = Val;
+
+            }
+
+
+        });
+
+    });
+</script>
